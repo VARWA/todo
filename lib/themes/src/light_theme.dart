@@ -10,10 +10,14 @@ ThemeData lightThemeData() {
     textTheme: createTextTheme(),
     scaffoldBackgroundColor: LightThemeColors.backPrimary,
     cardColor: LightThemeColors.white,
-
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: LightThemeColors.blue,
       shape: CircleBorder(),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      checkColor: MaterialStateProperty.all<Color>(
+        LightThemeColors.green,
+      ),
     ),
   );
 }
