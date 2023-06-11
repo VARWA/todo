@@ -5,6 +5,8 @@ class MainScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final list =
+        List<TaskInListWidget>.generate(20, (i) => TaskInListWidget(index: i));
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -26,21 +28,12 @@ class MainScreenWidget extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return ListTile(
-                    leading: Checkbox(
-                      value: false,
-                      onChanged: (bool? value) {},
-                    ),
-                    title: Text(
-                      '$index',
-                    ),
-                    trailing: Icon(Icons.info_outline_rounded),
-                  );
-                },
-                childCount: 20,
+            SliverToBoxAdapter(
+              child: Card(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: list,
+                ),
               ),
             ),
           ],
@@ -50,6 +43,26 @@ class MainScreenWidget extends StatelessWidget {
           child: const Icon(Icons.add, weight: 56),
         ),
       ),
+    );
+  }
+}
+
+class TaskInListWidget extends StatelessWidget {
+  final int index;
+
+  const TaskInListWidget({super.key, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Checkbox(
+        value: false,
+        onChanged: (bool? value) {},
+      ),
+      title: Text(
+        '$index',
+      ),
+      trailing: const Icon(Icons.info_outline_rounded),
     );
   }
 }
