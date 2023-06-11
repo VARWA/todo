@@ -30,6 +30,7 @@ class MainScreenWidget extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Card(
+                color: Theme.of(context).cardColor,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: list,
@@ -40,7 +41,11 @@ class MainScreenWidget extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          child: const Icon(Icons.add, weight: 56),
+          child: const Icon(
+            Icons.add,
+            weight: 56,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -62,7 +67,9 @@ class TaskInListWidget extends StatelessWidget {
       title: Text(
         '$index',
       ),
-      trailing: const Icon(Icons.info_outline_rounded),
+      trailing: const Icon(
+        Icons.info_outline_rounded,
+      ),
     );
   }
 }

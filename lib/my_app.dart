@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/navigation/routes.dart';
+import 'package:todo/themes/src/light_theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,10 +10,7 @@ class MyApp extends StatelessWidget {
       title: 'To-do',
       initialRoute: RouteNames.initialRoute,
       routes: RoutesBuilder.routes,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: lightThemeData(),
     );
   }
 }

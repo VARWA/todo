@@ -1,4 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:todo/themes/src/text_theme.dart';
+
+ThemeData lightThemeData() {
+  return ThemeData(
+    brightness: Brightness.light,
+    useMaterial3: true,
+    primaryColor: Colors.orange,
+    fontFamily: 'Roboto',
+    textTheme: createTextTheme(),
+    scaffoldBackgroundColor: LightThemeColors.backPrimary,
+    cardColor: LightThemeColors.white,
+
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: LightThemeColors.blue,
+      shape: CircleBorder(),
+    ),
+  );
+}
 
 abstract class LightThemeColors {
   static const supportSeparator = Color(0x33000000);
@@ -14,6 +32,7 @@ abstract class LightThemeColors {
   static const blue = Color(0xFF007AFF);
   static const gray = Color(0xFF8E8E93);
   static const lightGray = Color(0xFFD1D1D6);
+  static const white = Color(0xFFFFFFFF);
 
   static const backPrimary = Color(0xFFF7F6F2);
   static const backSecondary = Color(0xFFFFFFFF);
