@@ -61,8 +61,9 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     // final _tasks_list = context.read<MainScreenModel>().global_list_tasks;
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.only(right: 8,left: 8, top: 18),
         child: Card(
+          elevation: 4,
           shadowColor: Colors.black,
           color: Theme.of(context).cardColor,
           child: Column(
@@ -79,7 +80,6 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                         ),
                     background: Container(
                       color: LightThemeColors.green,
-                      child: Icon(Icons.abc),
                     ),
                     secondaryBackground: Container(
                       color: LightThemeColors.red,
@@ -137,13 +137,12 @@ class CompletedCountWidget extends StatelessWidget {
         padding: EdgeInsets.only(
           left: 60,
           right: 25,
-          bottom: 18,
         ),
         child: SizedBox(
           height: 20,
           child: ListTile(
             title: Text('Выполнено - 0'),
-            trailing: Icon(Icons.remove_red_eye),
+            trailing: Icon(Icons.remove_red_eye, color: LightThemeColors.blue,),
           ),
         ),
       ),
@@ -179,6 +178,7 @@ class TaskInListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      horizontalTitleGap: 0,
       leading: Checkbox(
         value: task.completed,
         checkColor: LightThemeColors.green,

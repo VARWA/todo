@@ -34,7 +34,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () {
               Navigator.of(context).pop();
             }),
@@ -43,7 +43,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Сохранить'),
+            child: const Text('Сохранить'),
           ),
         ],
       ),
@@ -64,12 +64,23 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                         priorityValue = value!;
                       });
                     },
-                    items: ['Нет', 'Низкий', 'Высокий']
+                    items: ['Нет', 'Низкий', '!! Высокий']
                         .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
+                      if (value == '!! Высокий') {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                                color: LightThemeColors.red),
+                          ),
+                        );
+                      } else {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }
                     }).toList(),
                   ),
                   const SizedBox(height: 16),
@@ -77,10 +88,11 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                   SizedBox(
                     height: 64,
                     child: SwitchListTile(
-                        title: Text('Сделать до'),
+                        title: const Text('Сделать до'),
                         visualDensity: VisualDensity(vertical: -3),
                         // to compact
                         subtitle: Text('2 июня 2021'),
+                        // todo: Rechange deadline
                         value: haveDeadline,
                         onChanged: (bool value) {
                           _selectDate(context);
