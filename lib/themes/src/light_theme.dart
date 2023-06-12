@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/themes/src/constants.dart';
 import 'package:todo/themes/src/text_theme.dart';
 
 ThemeData lightThemeData() {
@@ -7,7 +8,7 @@ ThemeData lightThemeData() {
     useMaterial3: true,
     primaryColor: Colors.orange,
     fontFamily: 'Roboto',
-    textTheme: createTextTheme(),
+    // textTheme: createTextTheme(),
     scaffoldBackgroundColor: LightThemeColors.backPrimary,
     cardColor: LightThemeColors.white,
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -19,6 +20,7 @@ ThemeData lightThemeData() {
         LightThemeColors.green,
       ),
     ),
+    appBarTheme: const AppBarTheme(backgroundColor: LightThemeColors.backPrimary)
   );
 }
 

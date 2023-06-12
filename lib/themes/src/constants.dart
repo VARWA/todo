@@ -11,5 +11,3 @@ const bodyTextStyle =
 const subheadTextStyle =
     TextStyle(fontWeight: FontWeight.w400, fontSize: 14, height: 20);
 
-abstract class AppColors {
-}

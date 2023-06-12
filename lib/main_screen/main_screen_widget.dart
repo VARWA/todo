@@ -20,7 +20,9 @@ class MainScreenWidget extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, RouteNames.changeTask);
+          },
           child: const Icon(
             Icons.add,
             weight: 56,
@@ -51,7 +53,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
     Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
     Task(index: 4, task_name: 'Наконец-то сделать верстку'),
-    Task(index: 5, task_name: 'Наконец-то сделать фон у МОИ ДЕЛА'),
+    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
   ];
 
   @override

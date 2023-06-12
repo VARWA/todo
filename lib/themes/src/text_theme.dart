@@ -6,6 +6,6 @@ TextTheme createTextTheme() {
     titleMedium: titleTextStyle,
     // button: buttonTextStyle,
     bodyMedium: bodyTextStyle,
-    //subtitle1: subheadTextStyle,
+    // subtitle1: subheadTextStyle,
   );
 }
