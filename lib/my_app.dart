@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'To-do',
+      debugShowCheckedModeBanner: false,
       initialRoute: RouteNames.initialRoute,
       routes: RoutesBuilder.routes,
       theme: lightThemeData(),

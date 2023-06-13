@@ -59,6 +59,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                   DescriptionWriteTaskWidget(),
                   DropdownButton<String>(
                     value: priorityValue,
+                    isExpanded: true,
                     onChanged: (String? value) {
                       setState(() {
                         priorityValue = value!;
@@ -71,8 +72,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(
-                                color: LightThemeColors.red),
+                            style: TextStyle(color: LightThemeColors.red),
                           ),
                         );
                       } else {
@@ -85,18 +85,19 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                   ),
                   const SizedBox(height: 16),
                   const Divider(),
-                  SizedBox(
-                    height: 64,
-                    child: SwitchListTile(
-                        title: const Text('Сделать до'),
-                        visualDensity: VisualDensity(vertical: -3),
-                        // to compact
-                        subtitle: Text('2 июня 2021'),
-                        // todo: Rechange deadline
-                        value: haveDeadline,
-                        onChanged: (bool value) {
-                          _selectDate(context);
-                        }),
+                  SwitchListTile(
+                    title: const Text('Сделать до'),
+                    subtitle: Text('2 июня 2021'),
+                    // todo: Rechange deadline
+                    value: haveDeadline,
+                    onChanged: (bool value) {
+                      print(haveDeadline);
+                      if (haveDeadline) {
+                        haveDeadline = false;
+                      } else {
+                        _selectDate(context);
+                      }
+                    },
                   ),
                   const Divider(),
                   const DeleteTaskWidget(),

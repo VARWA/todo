@@ -15,7 +15,7 @@ class MainScreenWidget extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             const MainAppBarWidget(),
-            const CompletedCountWidget(),
+            // SizedBox(height: 18),
             TasksListWidget(),
           ],
         ),
@@ -54,74 +54,88 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
     Task(index: 4, task_name: 'Наконец-то сделать верстку'),
     Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
+    Task(index: 1, task_name: 'Наконец-то сделать экран'),
+    Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
+    Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
+    Task(index: 4, task_name: 'Наконец-то сделать верстку'),
+    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
+    Task(index: 1, task_name: 'Наконец-то сделать экран'),
+    Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
+    Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
+    Task(index: 4, task_name: 'Наконец-то сделать верстку'),
+    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
   ];
 
   @override
   Widget build(BuildContext context) {
     // final _tasks_list = context.read<MainScreenModel>().global_list_tasks;
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8,left: 8, top: 18),
-        child: Card(
-          elevation: 4,
-          shadowColor: Colors.black,
-          color: Theme.of(context).cardColor,
-          child: Column(
-            children: [
-              ListView.builder(
-                itemCount: _tasks_list.length,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                itemBuilder: (BuildContext context, int index) {
-                  return Dismissible(
-                    key: UniqueKey(
-                        // 'key_${context.read<MainScreenModel>().global_list_tasks[index]}',
+        child: Column(
+      children: [
+        CompletedCountWidget(),
+        SizedBox(
+          height: 30,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8, left: 8),
+          child: Card(
+            elevation: 4,
+            shadowColor: Colors.black,
+            color: Theme.of(context).cardColor,
+            child: Column(
+              children: [
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _tasks_list.length + 1,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index != _tasks_list.length) {
+                      return Dismissible(
+                        key: UniqueKey(),
+                        background: Container(
+                          color: LightThemeColors.green, child: Icon(Icons.done, color: LightThemeColors.white,),
                         ),
-                    background: Container(
-                      color: LightThemeColors.green,
-                    ),
-                    secondaryBackground: Container(
-                      color: LightThemeColors.red,
-                    ),
-                    onDismissed: (DismissDirection direction) {
-                      if (direction == DismissDirection.startToEnd) {
-                        print("Add to favorite");
-                      } else {
-                        print('Remove item');
-                      }
+                        secondaryBackground: Container(
+                          color: LightThemeColors.red,child: Icon(Icons.delete, color: LightThemeColors.white,),
+                        ),
+                        onDismissed: (DismissDirection direction) {
+                          if (direction == DismissDirection.startToEnd) {
+                            print("Add to favorite");
+                          } else {
+                            print('Remove item');
+                          }
 
-                      setState(() {
-                        // updateList(context);
-                        // context.read<MainScreenModel>().deleteTask(index);
-                        _tasks_list.removeAt(index);
-                      });
-                    },
-                    child: TaskInListWidget(
-                      task: _tasks_list[index],
-                    ),
-                  );
-                },
-              ),
-              Material(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, RouteNames.changeTask);
+                          setState(() {
+                            _tasks_list.removeAt(index);
+                          });
+                        },
+                        child: TaskInListWidget(
+                          task: _tasks_list[index],
+                        ),
+                      );
+                    } else {
+                      return ListTile(
+                        horizontalTitleGap: 24,
+                        leading: const Icon(
+                          Icons.add,
+                          color: Colors.transparent,
+                        ),
+                        title: Text('Новое'),
+                        onTap: () {
+                          Navigator.pushNamed(context, RouteNames.changeTask);
+                        },
+                      );
+                    }
                   },
-                  child: const ListTile(
-                    leading: Icon(
-                      Icons.add,
-                      color: Colors.transparent,
-                    ),
-                    title: Text('Новое'),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 }
 
@@ -132,17 +146,18 @@ class CompletedCountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 60,
-          right: 25,
-        ),
-        child: SizedBox(
-          height: 20,
-          child: ListTile(
-            title: Text('Выполнено - 0'),
-            trailing: Icon(Icons.remove_red_eye, color: LightThemeColors.blue,),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 60,
+        right: 25,
+      ),
+      child: SizedBox(
+        height: 20,
+        child: ListTile(
+          title: Text('Выполнено - 0'),
+          trailing: Icon(
+            Icons.remove_red_eye,
+            color: LightThemeColors.blue,
           ),
         ),
       ),
@@ -178,18 +193,22 @@ class TaskInListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      horizontalTitleGap: 0,
-      leading: Checkbox(
-        value: task.completed,
-        checkColor: LightThemeColors.green,
-        onChanged: (bool? value) {},
-      ),
-      title: Text(
-        task.task_name,
-      ),
-      trailing: const Icon(
-        Icons.info_outline_rounded,
-      ),
-    );
+        horizontalTitleGap: 0,
+        leading: Checkbox(
+          value: task.completed,
+          checkColor: LightThemeColors.green,
+          onChanged: (bool? value) {},
+        ),
+        title: Text(
+          task.task_name,
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.info_outline_rounded,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, RouteNames.changeTask);
+          },
+        ));
   }
 }
