@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo/models/task_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
+
+import '../data/db_helper.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
   const ChangeTaskScreenWidget({Key? key}) : super(key: key);
@@ -9,6 +12,9 @@ class ChangeTaskScreenWidget extends StatefulWidget {
 }
 
 class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
+  // DBHelper? dbHelper;
+  // late List<Task> _tasks_list;
+
   String priorityValue = 'Нет';
   bool haveDeadline = false;
   DateTime currentDate = DateTime.now();
@@ -27,6 +33,16 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       });
     }
   }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   dbHelper = DBHelper();
+  //   loadData();
+  // }
+  //
+  // loadData() async {
+  //   _tasks_list = await dbHelper!.getDataList();
+  // }
 
   @override
   Widget build(BuildContext context) {

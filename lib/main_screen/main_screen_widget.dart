@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todo/main_screen/main_screen_model.dart';
+import 'package:logger/logger.dart';
 import 'package:todo/navigation/routes.dart';
-import 'package:todo/themes/src/constants.dart';
 import 'package:todo/themes/src/light_theme.dart';
 
-class MainScreenWidget extends StatelessWidget {
+import '../models/task_model.dart';
+
+class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
 
+  @override
+  State<MainScreenWidget> createState() => _MainScreenWidgetState();
+}
+
+class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,23 +53,58 @@ class TasksListWidget extends StatefulWidget {
 // }
 
 class _TasksListWidgetState extends State<TasksListWidget> {
+  Logger logger = Logger(printer: PrettyPrinter());
+
+  // DBHelper? dbHelper;
+  // late Future<List<Task>> _tasks_list;
+
   final _tasks_list = <Task>[
-    Task(index: 1, task_name: 'Наконец-то сделать экран'),
-    Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
-    Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
-    Task(index: 4, task_name: 'Наконец-то сделать верстку'),
-    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
-    Task(index: 1, task_name: 'Наконец-то сделать экран'),
-    Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
-    Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
-    Task(index: 4, task_name: 'Наконец-то сделать верстку'),
-    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
-    Task(index: 1, task_name: 'Наконец-то сделать экран'),
-    Task(index: 2, task_name: 'Наконец-то сделать кнопки'),
-    Task(index: 3, task_name: 'Наконец-то сделать все остальное'),
-    Task(index: 4, task_name: 'Наконец-то сделать верстку'),
-    Task(index: 5, task_name: 'Наконец-то сделать фон Приоритет у дела'),
+    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 0),
+    Task(id: 2, task_name: 'Наконец-то сделать кнопки', priority_level: 0),
+    Task(
+        id: 3,
+        task_name: 'Наконец-то сделать все остальное',
+        priority_level: 0),
+    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
+    Task(
+        id: 5,
+        task_name: 'Наконец-то сделать фон Приоритет у дела',
+        priority_level: 0),
+    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 0),
+    Task(id: 2, task_name: 'Наконец-то сделать кнопки', priority_level: 0),
+    Task(
+        id: 3,
+        task_name: 'Наконец-то сделать все остальное',
+        priority_level: 0),
+    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
+    Task(
+        id: 5,
+        task_name: 'Наконец-то сделать фон Приоритет у дела',
+        priority_level: 0),
+    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 0),
+    Task(id: 2, task_name: 'Наконец-то сделать кнопки', priority_level: 0),
+    Task(
+        id: 3,
+        task_name: 'Наконец-то сделать все остальное',
+        priority_level: 0),
+    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
+    Task(
+        id: 5,
+        task_name: 'Наконец-то сделать фон Приоритет у дела',
+        priority_level: 0),
   ];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // dbHelper = DBHelper();
+  //   // loadData();
+  // }
+  //
+  // loadData() async {
+  //   // _tasks_list = dbHelper!.getDataList();
+  //   // logger.i("GETTED LIST: $_tasks_list");
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +112,8 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     return SliverToBoxAdapter(
         child: Column(
       children: [
-        CompletedCountWidget(),
-        SizedBox(
-          height: 30,
-        ),
+        const CompletedCountWidget(),
+        const SizedBox(height: 30),
         Padding(
           padding: const EdgeInsets.only(right: 8, left: 8),
           child: Card(
@@ -95,16 +133,24 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                       return Dismissible(
                         key: UniqueKey(),
                         background: Container(
-                          color: LightThemeColors.green, child: Icon(Icons.done, color: LightThemeColors.white,),
+                          color: LightThemeColors.green,
+                          child: const Icon(
+                            Icons.done,
+                            color: LightThemeColors.white,
+                          ),
                         ),
                         secondaryBackground: Container(
-                          color: LightThemeColors.red,child: Icon(Icons.delete, color: LightThemeColors.white,),
+                          color: LightThemeColors.red,
+                          child: const Icon(
+                            Icons.delete,
+                            color: LightThemeColors.white,
+                          ),
                         ),
                         onDismissed: (DismissDirection direction) {
                           if (direction == DismissDirection.startToEnd) {
-                            print("Add to favorite");
+                            logger.i('Task with id $index completed');
                           } else {
-                            print('Remove item');
+                            logger.i('Task with id $index removed');
                           }
 
                           setState(() {
@@ -122,7 +168,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                           Icons.add,
                           color: Colors.transparent,
                         ),
-                        title: Text('Новое'),
+                        title: const Text('Новое'),
                         onTap: () {
                           Navigator.pushNamed(context, RouteNames.changeTask);
                         },
@@ -146,7 +192,7 @@ class CompletedCountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(
         left: 60,
         right: 25,
@@ -203,7 +249,7 @@ class TaskInListWidget extends StatelessWidget {
           task.task_name,
         ),
         trailing: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.info_outline_rounded,
           ),
           onPressed: () {
