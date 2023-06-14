@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:todo/themes/src/constants.dart';
 
 TextTheme createTextTheme() {
-  return const TextTheme(titleLarge: largeTitleTextStyle,
-    titleMedium: titleTextStyle,
-    // button: buttonTextStyle,
+  return const TextTheme(
+    titleLarge: largeTitleTextStyle,
+    // titleMedium: titleTextStyle,
+    displayMedium: titleTextStyle,
+
     bodyMedium: bodyTextStyle,
-    // subtitle1: subheadTextStyle,
+    titleMedium: subheadTextStyle,
+
+    titleSmall: subheadTextStyle,
+    labelLarge: buttonTextStyle,
   );
 }

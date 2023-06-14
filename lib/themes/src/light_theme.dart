@@ -5,10 +5,10 @@ import 'package:todo/themes/src/text_theme.dart';
 ThemeData lightThemeData() {
   return ThemeData(
     brightness: Brightness.light,
-    useMaterial3: true,
-    primaryColor: Colors.orange,
+    // useMaterial3: true,
+    primaryColor: LightThemeColors.blue,
     fontFamily: 'Roboto',
-    // textTheme: createTextTheme(),
+    textTheme: createTextTheme(),
     scaffoldBackgroundColor: LightThemeColors.backPrimary,
     cardColor: LightThemeColors.white,
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
