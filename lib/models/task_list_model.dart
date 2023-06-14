@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
-import 'models/task_model.dart';
+import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
   final _tasks_list = <Task>[
@@ -15,9 +15,9 @@ class TasksListModel with ChangeNotifier {
     ),
     Task(
         id: 2,
-        completed: true,
+        completed: false,
         task_name: 'Наконец-то сделать кнопки',
-        priority_level: 0,
+        priority_level: 2,
         date_deadline: DateTime.tryParse('2033.10.3'),
     ),
     Task(

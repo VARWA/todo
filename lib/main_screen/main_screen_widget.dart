@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/navigation/routes.dart';
-import 'package:todo/task_list_model.dart';
+import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
 
 import '../models/task_model.dart';
@@ -87,9 +86,13 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                           color: LightThemeColors.green,
                           child: const Align(
                             alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.done,
-                              color: LightThemeColors.white,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 28),
+                              child: Icon(
+                                Icons.done,
+                                color: LightThemeColors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -97,9 +100,13 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                           color: LightThemeColors.red,
                           child: const Align(
                             alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.delete,
-                              color: LightThemeColors.white,
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 28),
+                              child: Icon(
+                                Icons.delete,
+                                color: LightThemeColors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -145,7 +152,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 }
 
 class CompletedCountWidget extends StatefulWidget {
-  CompletedCountWidget({Key? key}) : super(key: key);
+  const CompletedCountWidget({Key? key}) : super(key: key);
 
   @override
   State<CompletedCountWidget> createState() => _CompletedCountWidgetState();
@@ -165,7 +172,7 @@ class _CompletedCountWidgetState extends State<CompletedCountWidget> {
           title: Text(
               'Выполнено - ${context.read<TasksListModel>().completed_count}'),
           trailing: IconButton(
-            icon: Icon(Icons.face),
+            icon: const Icon(Icons.visibility),
             onPressed: () {
               print(222);
             },
@@ -211,15 +218,23 @@ class TaskInListWidget extends StatefulWidget {
 
 class _TaskInListWidgetState extends State<TaskInListWidget> {
   Text setTextStyle(Task task) {
-    if (task.priority_level == 0) {
-      if (task.completed == true) {
+    if (task.completed == true) {
+      if (task.priority_level == 0) {
         return Text(
           task.task_name,
           style: const TextStyle(
             decoration: TextDecoration.lineThrough,
+            color: OtherColors.comlitedTaskInList
           ),
         );
       }
+      return Text(
+        task.task_name,
+        style: const TextStyle(
+            decoration: TextDecoration.lineThrough,
+            color: OtherColors.comlitedTaskInList
+        ),
+      );
     }
     return Text(task.task_name);
   }
@@ -231,12 +246,26 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     final Task task = model.tasks_list[id];
     final Text formattedText = setTextStyle(task);
     final deadline = task.date_deadline;
+    // final Color unselectedColorForImportant =  as Color;
+    print(deadline);
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
         leading: Checkbox(
           value: task.completed,
-          checkColor: LightThemeColors.green,
+          activeColor: LightThemeColors.green,
+          checkColor: LightThemeColors.white,
+          fillColor:
+              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return task.priority_level == 2
+                  ? OtherColors.redCheckboxFillColor
+                  : Theme.of(context).cardColor;
+            }
+          }),
+          side: task.priority_level == 2
+              ? const BorderSide(color: LightThemeColors.red)
+              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
           onChanged: (bool? value) {
             if (value!) {
               model.makeCompleted(id);
@@ -245,7 +274,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
             }
           },
         ),
-        title:formattedText,
+        title: formattedText,
         subtitle: Text('444'),
         //Text(DateFormat('d MMMM yyyy').format(deadline)),
         trailing: IconButton(
@@ -263,7 +292,19 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
         horizontalTitleGap: 0,
         leading: Checkbox(
           value: task.completed,
-          checkColor: LightThemeColors.green,
+          activeColor: LightThemeColors.green,
+          checkColor: LightThemeColors.white,
+          fillColor:
+          MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+            if (!states.contains(MaterialState.selected)) {
+              return task.priority_level == 2
+                  ? OtherColors.redCheckboxFillColor
+                  : Theme.of(context).cardColor;
+            }
+          }),
+          side: task.priority_level == 2
+              ? const BorderSide(color: LightThemeColors.red)
+              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
           onChanged: (bool? value) {
             if (value!) {
               model.makeCompleted(id);

@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/change_task_screen/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
-import 'package:todo/task_list_model.dart';
+import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {

@@ -4,25 +4,38 @@ import 'package:todo/themes/src/text_theme.dart';
 
 ThemeData lightThemeData() {
   return ThemeData(
-    brightness: Brightness.light,
-    // useMaterial3: true,
-    primaryColor: LightThemeColors.blue,
-    fontFamily: 'Roboto',
-    textTheme: createTextTheme(),
-    scaffoldBackgroundColor: LightThemeColors.backPrimary,
-    cardColor: LightThemeColors.white,
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: LightThemeColors.blue,
-      shape: CircleBorder(),
-    ),
-    checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all<Color>(
-        LightThemeColors.green,
+      brightness: Brightness.light,
+      // useMaterial3: true,
+      // colorScheme: _shrineColorScheme,
+      primaryColor: LightThemeColors.blue,
+      fontFamily: 'Roboto',
+      textTheme: createTextTheme(),
+      scaffoldBackgroundColor: LightThemeColors.backPrimary,
+      cardColor: LightThemeColors.white,
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: LightThemeColors.blue,
+        shape: CircleBorder(),
       ),
-    ),
-    appBarTheme: const AppBarTheme(backgroundColor: LightThemeColors.backPrimary)
-  );
+      checkboxTheme: CheckboxThemeData(
+      ),
+      unselectedWidgetColor: LightThemeColors.supportSeparator,
+      appBarTheme:
+          const AppBarTheme(backgroundColor: LightThemeColors.backPrimary));
 }
+// const ColorScheme _shrineColorScheme = ColorScheme(
+//   primary: shrinePink100,
+//   secondary: shrinePink50,
+//   surface: shrineSurfaceWhite,
+//   background: LightThemeColors.backPrimary,
+//
+//   error: shrineErrorRed,
+//   onPrimary: shrineBrown900,
+//   onSecondary: shrineBrown900,
+//   onSurface: shrineBrown900,
+//   onBackground: shrineBrown900,
+//   onError: shrineSurfaceWhite,
+//   brightness: Brightness.light,
+// );
 
 abstract class LightThemeColors {
   static const supportSeparator = Color(0x33000000);
@@ -43,4 +56,9 @@ abstract class LightThemeColors {
   static const backPrimary = Color(0xFFF7F6F2);
   static const backSecondary = Color(0xFFFFFFFF);
   static const backElevated = Color(0xFFFFFFFF);
+}
+
+abstract class OtherColors{
+  static const redCheckboxFillColor = Color(0xFFFF3B30);
+  static const comlitedTaskInList = Color.fromRGBO(0, 0, 0, 0.3);
 }
