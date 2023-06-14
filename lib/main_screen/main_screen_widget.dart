@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/navigation/routes.dart';
 import 'package:todo/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
+
+import '../models/task_model.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -52,11 +56,11 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = TasksListModel();
+    final model = context.watch<TasksListModel>();
     return SliverToBoxAdapter(
         child: Column(
       children: [
-        CompletedCountWidget(model: model),
+        CompletedCountWidget(),
         const SizedBox(height: 30),
         Padding(
           padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
@@ -71,7 +75,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               children: [
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: model.tasks_list.length + 1,
+                  itemCount: model.tasks_list_for_menu.length + 1,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -81,16 +85,22 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                         key: UniqueKey(),
                         background: Container(
                           color: LightThemeColors.green,
-                          child: const Icon(
-                            Icons.done,
-                            color: LightThemeColors.white,
+                          child: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(
+                              Icons.done,
+                              color: LightThemeColors.white,
+                            ),
                           ),
                         ),
                         secondaryBackground: Container(
                           color: LightThemeColors.red,
-                          child: const Icon(
-                            Icons.delete,
-                            color: LightThemeColors.white,
+                          child: const Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.delete,
+                              color: LightThemeColors.white,
+                            ),
                           ),
                         ),
                         onDismissed: (DismissDirection direction) {
@@ -101,12 +111,13 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                             logger.i('Task with id $index removed');
                           }
 
-                          setState(() {
-                            model.removeTask(index);
-                          });
+                          // setState(
+                          //   () {
+                          model.removeTask(index);
+                          //   },
+                          // );
                         },
                         child: TaskInListWidget(
-                          model: model,
                           id: model.tasks_list[index].id,
                         ),
                       );
@@ -134,9 +145,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 }
 
 class CompletedCountWidget extends StatefulWidget {
-  final TasksListModel model;
-
-  CompletedCountWidget({Key? key, required this.model}) : super(key: key);
+  CompletedCountWidget({Key? key}) : super(key: key);
 
   @override
   State<CompletedCountWidget> createState() => _CompletedCountWidgetState();
@@ -145,7 +154,6 @@ class CompletedCountWidget extends StatefulWidget {
 class _CompletedCountWidgetState extends State<CompletedCountWidget> {
   @override
   Widget build(BuildContext context) {
-    final model = widget.model;
     return Padding(
       padding: const EdgeInsets.only(
         left: 60,
@@ -154,18 +162,12 @@ class _CompletedCountWidgetState extends State<CompletedCountWidget> {
       child: SizedBox(
         height: 20,
         child: ListTile(
-          title: Text('Выполнено - ${model.completed_count}'),
+          title: Text(
+              'Выполнено - ${context.read<TasksListModel>().completed_count}'),
           trailing: IconButton(
-            icon: Icon(
-              Icons.visibility_off,
-              color: LightThemeColors.blue,
-            ),
+            icon: Icon(Icons.face),
             onPressed: () {
-              setState(() {
-              model.rechangeShowCompleted;
-              // print(widget.model.showCompleted);
-
-            });
+              print(222);
             },
           ),
         ),
@@ -200,51 +202,88 @@ class MainAppBarWidget extends StatelessWidget {
 
 class TaskInListWidget extends StatefulWidget {
   final int id;
-  final TasksListModel model;
 
-  const TaskInListWidget({super.key, required this.model, required this.id});
+  const TaskInListWidget({super.key, required this.id});
 
   @override
   State<TaskInListWidget> createState() => _TaskInListWidgetState();
 }
 
 class _TaskInListWidgetState extends State<TaskInListWidget> {
+  Text setTextStyle(Task task) {
+    if (task.priority_level == 0) {
+      if (task.completed == true) {
+        return Text(
+          task.task_name,
+          style: const TextStyle(
+            decoration: TextDecoration.lineThrough,
+          ),
+        );
+      }
+    }
+    return Text(task.task_name);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = widget.model;
+    final model = context.read<TasksListModel>();
     final id = widget.id;
-    final task = model.tasks_list[id];
-    // final deadlineText = task.date_deadline
-    return ListTile(
-      horizontalTitleGap: 0,
-      leading: Checkbox(
-        value: task.completed,
-        checkColor: LightThemeColors.green,
-        onChanged: (bool? value) {
-          print('СМЕНА ЗНАЧЕНИЯ');
-          if (value!) {
-            widget.model.makeCompleted(id);
-          } else {
-            widget.model.makeUncompleted(id);
-          }
-        },
-      ),
-      title: Text(
-        task.task_name,
-      ),
-      subtitle: Text(task.date_deadline.toString()),
-      trailing: IconButton(
-        icon: const Icon(
-          Icons.info_outline_rounded,
+    final Task task = model.tasks_list[id];
+    final Text formattedText = setTextStyle(task);
+    final deadline = task.date_deadline;
+    if (deadline != null) {
+      return ListTile(
+        horizontalTitleGap: 0,
+        leading: Checkbox(
+          value: task.completed,
+          checkColor: LightThemeColors.green,
+          onChanged: (bool? value) {
+            if (value!) {
+              model.makeCompleted(id);
+            } else {
+              model.makeUncompleted(id);
+            }
+          },
         ),
-        onPressed: () {
-          // Navigator.pushNamed(context, RouteNames.changeTask);
-          Navigator.pushNamed(
-              context,
-              RouteNames.changeTask,
-              arguments: [model, task]);
-        }
-      ),
-    );
+        title:formattedText,
+        subtitle: Text('444'),
+        //Text(DateFormat('d MMMM yyyy').format(deadline)),
+        trailing: IconButton(
+            icon: const Icon(
+              Icons.info_outline_rounded,
+            ),
+            onPressed: () {
+              // Navigator.pushNamed(context, RouteNames.changeTask);
+              Navigator.pushNamed(context, RouteNames.changeTask,
+                  arguments: task.id);
+            }),
+      );
+    } else {
+      return ListTile(
+        horizontalTitleGap: 0,
+        leading: Checkbox(
+          value: task.completed,
+          checkColor: LightThemeColors.green,
+          onChanged: (bool? value) {
+            if (value!) {
+              model.makeCompleted(id);
+            } else {
+              model.makeUncompleted(id);
+            }
+          },
+        ),
+        title: formattedText,
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.info_outline_rounded,
+          ),
+          onPressed: () {
+            // Navigator.pushNamed(context, RouteNames.changeTask);
+            Navigator.pushNamed(context, RouteNames.changeTask,
+                arguments: task.id);
+          },
+        ),
+      );
+    }
   }
 }
