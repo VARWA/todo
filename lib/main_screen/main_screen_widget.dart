@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:todo/navigation/routes.dart';
+import 'package:todo/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
-
-import '../models/task_model.dart';
-import '../themes/src/constants.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -52,57 +50,13 @@ class TasksListWidget extends StatefulWidget {
 class _TasksListWidgetState extends State<TasksListWidget> {
   Logger logger = Logger(printer: PrettyPrinter());
 
-  final _tasks_list = <Task>[
-    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 1),
-    Task(
-        id: 2,
-        completed: true,
-        task_name: 'Наконец-то сделать кнопки',
-        priority_level: 0),
-    Task(
-        id: 3,
-        task_name: 'Наконец-то сделать все остальное',
-        priority_level: 0),
-    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
-    Task(
-        id: 5,
-        task_name: 'Наконец-то сделать фон Приоритет у дела',
-        priority_level: 0),
-    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 2),
-    Task(
-        id: 2,
-        task_name: 'Наконец-то сделать кнопки',
-        priority_level: 0,
-        date_deadline: DateTime.tryParse('2002.2.3')),
-    Task(
-        id: 3,
-        task_name: 'Наконец-то сделать все остальное',
-        priority_level: 0),
-    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
-    Task(
-        id: 5,
-        task_name: 'Наконец-то сделать фон Приоритет у дела',
-        priority_level: 0),
-    Task(id: 1, task_name: 'Наконец-то сделать экран', priority_level: 0),
-    Task(id: 2, task_name: 'Наконец-то сделать кнопки', priority_level: 0),
-    Task(
-        id: 3,
-        task_name: 'Наконец-то сделать все остальное',
-        priority_level: 0),
-    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
-    Task(
-        id: 5,
-        task_name: 'Наконец-то сделать фон Приоритет у дела',
-        priority_level: 0),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    // final _tasks_list = context.read<MainScreenModel>().global_list_tasks;
+    final model = TasksListModel();
     return SliverToBoxAdapter(
         child: Column(
       children: [
-        const CompletedCountWidget(),
+        CompletedCountWidget(model: model),
         const SizedBox(height: 30),
         Padding(
           padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
@@ -117,12 +71,12 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               children: [
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _tasks_list.length + 1,
+                  itemCount: model.tasks_list.length + 1,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   itemBuilder: (BuildContext context, int index) {
-                    if (index != _tasks_list.length) {
+                    if (index != model.tasks_list.length) {
                       return Dismissible(
                         key: UniqueKey(),
                         background: Container(
@@ -142,16 +96,18 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                         onDismissed: (DismissDirection direction) {
                           if (direction == DismissDirection.startToEnd) {
                             logger.i('Task with id $index completed');
+                            model.makeCompleted(model.tasks_list[index].id);
                           } else {
                             logger.i('Task with id $index removed');
                           }
 
                           setState(() {
-                            _tasks_list.removeAt(index);
+                            model.removeTask(index);
                           });
                         },
                         child: TaskInListWidget(
-                          task: _tasks_list[index],
+                          model: model,
+                          id: model.tasks_list[index].id,
                         ),
                       );
                     } else {
@@ -178,9 +134,9 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 }
 
 class CompletedCountWidget extends StatefulWidget {
-  const CompletedCountWidget({
-    super.key,
-  });
+  final TasksListModel model;
+
+  CompletedCountWidget({Key? key, required this.model}) : super(key: key);
 
   @override
   State<CompletedCountWidget> createState() => _CompletedCountWidgetState();
@@ -189,18 +145,28 @@ class CompletedCountWidget extends StatefulWidget {
 class _CompletedCountWidgetState extends State<CompletedCountWidget> {
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(
+    final model = widget.model;
+    return Padding(
+      padding: const EdgeInsets.only(
         left: 60,
         right: 25,
       ),
       child: SizedBox(
         height: 20,
         child: ListTile(
-          title: Text('Выполнено - 0'),
-          trailing: Icon(
-            Icons.remove_red_eye,
-            color: LightThemeColors.blue,
+          title: Text('Выполнено - ${model.completed_count}'),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.visibility_off,
+              color: LightThemeColors.blue,
+            ),
+            onPressed: () {
+              setState(() {
+              model.rechangeShowCompleted;
+              // print(widget.model.showCompleted);
+
+            });
+            },
           ),
         ),
       ),
@@ -215,7 +181,7 @@ class MainAppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return const SliverAppBar(
       backgroundColor: LightThemeColors.backPrimary,
       pinned: true,
       snap: false,
@@ -233,9 +199,10 @@ class MainAppBarWidget extends StatelessWidget {
 }
 
 class TaskInListWidget extends StatefulWidget {
-  final Task task;
+  final int id;
+  final TasksListModel model;
 
-  const TaskInListWidget({super.key, required this.task});
+  const TaskInListWidget({super.key, required this.model, required this.id});
 
   @override
   State<TaskInListWidget> createState() => _TaskInListWidgetState();
@@ -244,36 +211,40 @@ class TaskInListWidget extends StatefulWidget {
 class _TaskInListWidgetState extends State<TaskInListWidget> {
   @override
   Widget build(BuildContext context) {
-    if (widget.task.completed) {
-      Color checkBoxColor = LightThemeColors.green;
-    } else {
-      if (widget.task.priority_level == 3) {
-        Color checkBoxColor = LightThemeColors.red;
-      }
-    }
-
+    final model = widget.model;
+    final id = widget.id;
+    final task = model.tasks_list[id];
+    // final deadlineText = task.date_deadline
     return ListTile(
-        horizontalTitleGap: 0,
-        leading: Checkbox(
-          value: widget.task.completed,
-          checkColor: LightThemeColors.green,
-          onChanged: (bool? value) {
-            setState() {
-              widget.task.completed = !widget.task.completed;
-            }
-          },
+      horizontalTitleGap: 0,
+      leading: Checkbox(
+        value: task.completed,
+        checkColor: LightThemeColors.green,
+        onChanged: (bool? value) {
+          print('СМЕНА ЗНАЧЕНИЯ');
+          if (value!) {
+            widget.model.makeCompleted(id);
+          } else {
+            widget.model.makeUncompleted(id);
+          }
+        },
+      ),
+      title: Text(
+        task.task_name,
+      ),
+      subtitle: Text(task.date_deadline.toString()),
+      trailing: IconButton(
+        icon: const Icon(
+          Icons.info_outline_rounded,
         ),
-        title: Text(
-          widget.task.task_name,
-        ),
-        subtitle: Text(widget.task.date_deadline.toString()),
-        trailing: IconButton(
-          icon: const Icon(
-            Icons.info_outline_rounded,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, RouteNames.changeTask);
-          },
-        ));
+        onPressed: () {
+          // Navigator.pushNamed(context, RouteNames.changeTask);
+          Navigator.pushNamed(
+              context,
+              RouteNames.changeTask,
+              arguments: [model, task]);
+        }
+      ),
+    );
   }
 }

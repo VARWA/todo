@@ -1,12 +1,12 @@
 class Task {
-  int? id;
+  int id;
   String task_name;
   bool completed;
   DateTime? date_deadline;
   int priority_level = 0;
 
   Task(
-      {this.id,
+      {required this.id,
       required this.task_name,
       this.completed = false,
       this.date_deadline,

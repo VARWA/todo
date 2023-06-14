@@ -45,8 +45,18 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
   //   _tasks_list = await dbHelper!.getDataList();
   // }
 
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments;
+    // if (args != null){
+    //   final old_task = (args as List)[1];
+    //   Task new_task = old_task;
+    // } else {
+    //   Task new_task =
+    // }
+    print(args);
+
     Logger logging = Logger(printer: PrettyPrinter());
     var textController = TextEditingController();
 
