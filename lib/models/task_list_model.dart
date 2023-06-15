@@ -11,14 +11,14 @@ class TasksListModel with ChangeNotifier {
       id: 1,
       task_name: 'Наконец-то сделать экран',
       priority_level: 1,
-      date_deadline: DateTime.tryParse('2002.2.2'),
+      date_deadline: DateTime.parse('2013-02-23'),
     ),
     Task(
       id: 2,
       completed: false,
       task_name: 'Наконец-то сделать кнопки',
       priority_level: 2,
-      date_deadline: DateTime.tryParse('2033.10.3'),
+      date_deadline: DateTime.parse('2012-12-27 13:27:00'),
     ),
     Task(
         id: 3,
@@ -100,7 +100,6 @@ class TasksListModel with ChangeNotifier {
     notifyListeners();
   }
   int searchTaskIndexById (id){
-    int ind = -1;
     for (int i = 0; i < _tasks_list.length; i++){
       if (_tasks_list[i].id == id){
         return i;
@@ -124,15 +123,17 @@ class TasksListModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void makeCompleted(index) {
+  void makeCompleted(id) {
+    final index = searchTaskIndexById(id);
     _tasks_list[index].completed = true;
-    logger.i('Task with index $index comleted');
+    logger.i('Task with id $id comleted');
     notifyListeners();
   }
 
-  void makeUncompleted(index) {
+  void makeUncompleted(id) {
+    final index = searchTaskIndexById(id);
     _tasks_list[index].completed = false;
-    logger.i('Task with index $index uncomleted');
+    logger.i('Task with id $id uncomleted');
     notifyListeners();
   }
 

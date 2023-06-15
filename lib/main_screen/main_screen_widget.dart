@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/navigation/routes.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
-
+import 'package:intl/intl.dart';
 import '../models/task_model.dart';
 
 class MainScreenWidget extends StatefulWidget {
@@ -163,7 +163,7 @@ class _CompletedCountWidgetState extends State<CompletedCountWidget> {
         height: 20,
         child: ListTile(
           title: Text(
-              'Выполнено - ${context.read<TasksListModel>().completedCount}'),
+              'Выполнено - ${context.watch<TasksListModel>().completedCount}'),
           trailing: IconButton(
             icon: const Icon(Icons.visibility),
             onPressed: () {
@@ -232,12 +232,12 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<TasksListModel>();
+    final model = context.watch<TasksListModel>();
     final id = widget.id;
     final Task task = model.tasksList[model.searchTaskIndexById(id)];
     final Text formattedText = setTextStyle(task);
-    final deadline = task.date_deadline;
-    print(task);
+    final DateTime? deadline = task.date_deadline;
+    print('$deadline $task');
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
@@ -265,8 +265,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           },
         ),
         title: formattedText,
-        subtitle: Text('444'),
-        //Text(DateFormat('d MMMM yyyy').format(deadline)),
+        subtitle: Text(DateFormat('d MMMM yyyy').format(deadline)),
         trailing: IconButton(
             icon: const Icon(
               Icons.info_outline_rounded,
@@ -284,14 +283,15 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           value: task.completed,
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
-          fillColor:
-              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-            if (!states.contains(MaterialState.selected)) {
-              return task.priority_level == 2
-                  ? OtherColors.redCheckboxFillColor
-                  : Theme.of(context).cardColor;
-            }
-          }),
+          fillColor: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> states) {
+              if (!states.contains(MaterialState.selected)) {
+                return task.priority_level == 2
+                    ? OtherColors.redCheckboxFillColor
+                    : Theme.of(context).cardColor;
+              }
+            },
+          ),
           side: task.priority_level == 2
               ? const BorderSide(color: LightThemeColors.red)
               : BorderSide(color: Theme.of(context).unselectedWidgetColor),
