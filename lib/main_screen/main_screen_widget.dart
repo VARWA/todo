@@ -120,25 +120,25 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     print(items);
     return SliverToBoxAdapter(
         child: Column(
-      children: [
-        CompletedCountWidget(),
-        const SizedBox(height: 30),
-        Padding(
-          padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+          children: [
+            CompletedCountWidget(),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                elevation: 4,
+                shadowColor: Colors.black,
+                color: Theme.of(context).cardColor,
+                child: Column(
+                  children: items,
+                ),
+              ),
             ),
-            elevation: 4,
-            shadowColor: Colors.black,
-            color: Theme.of(context).cardColor,
-            child: Column(
-              children: items,
-            ),
-          ),
-        ),
-      ],
-    ));
+          ],
+        ));
   }
 }
 
@@ -244,7 +244,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor:
-              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          MaterialStateProperty.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return task.priority_level == 2
                   ? OtherColors.redCheckboxFillColor
@@ -282,7 +282,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (!states.contains(MaterialState.selected)) {
                 return task.priority_level == 2
                     ? OtherColors.redCheckboxFillColor
