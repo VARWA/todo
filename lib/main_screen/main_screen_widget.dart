@@ -56,100 +56,97 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     final model = context.read<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
     logger.d('Downloaded to list $lenList tasks');
-    final items = List<Widget>.generate(lenList + 1, (index) {
-      if (index != lenList) {
-        return Dismissible(
-          key: UniqueKey(),
-          background: Container(
-            color: LightThemeColors.green,
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 28),
-                child: Icon(
-                  Icons.done,
-                  color: LightThemeColors.white,
-                  size: 18,
+    final items = List<Widget>.generate(
+      lenList + 1,
+      (index) {
+        if (index != lenList) {
+          return Dismissible(
+            key: UniqueKey(),
+            background: Container(
+              color: LightThemeColors.green,
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 28),
+                  child: Icon(
+                    Icons.done,
+                    color: LightThemeColors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
-          ),
-          secondaryBackground: Container(
-            color: LightThemeColors.red,
-            child: const Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.only(right: 28),
-                child: Icon(
-                  Icons.delete,
-                  color: LightThemeColors.white,
-                  size: 18,
+            secondaryBackground: Container(
+              color: LightThemeColors.red,
+              child: const Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 28),
+                  child: Icon(
+                    Icons.delete,
+                    color: LightThemeColors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
-          ),
-          onDismissed: (DismissDirection direction) {
-            if (direction == DismissDirection.startToEnd) {
-              model.makeCompleted(model.tasksListForMenu[index].id);
-            } else {
-              model.removeTask(index);
-            }
+            onDismissed: (DismissDirection direction) {
+              if (direction == DismissDirection.startToEnd) {
+                model.makeCompleted(model.tasksListForMenu[index].id);
+              } else {
+                model.removeTask(index);
+              }
 
-            // setState(
-            //   () {
-            //   },
-            // );
-          },
-          child: TaskInListWidget(
-            id: model.tasksListForMenu[index].id,
-          ),
-        );
-      } else {
-        return ListTile(
-          leading: const Icon(
-            Icons.add,
-            color: Colors.transparent,
-          ),
-          title: const Text('Новое'),
-          onTap: () {
-            Navigator.pushNamed(context, RouteNames.changeTask);
-          },
-        );
-      }
-    });
-    print(items);
+              // setState(
+              //   () {
+              //   },
+              // );
+            },
+            child: TaskInListWidget(
+              id: model.tasksListForMenu[index].id,
+            ),
+          );
+        } else {
+          return ListTile(
+            leading: const Icon(
+              Icons.add,
+              color: Colors.transparent,
+            ),
+            title: const Text('Новое'),
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.changeTask);
+            },
+          );
+        }
+      },
+    );
     return SliverToBoxAdapter(
         child: Column(
-          children: [
-            CompletedCountWidget(),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                elevation: 4,
-                shadowColor: Colors.black,
-                color: Theme.of(context).cardColor,
-                child: Column(
-                  children: items,
-                ),
-              ),
+      children: [
+        CompletedCountWidget(),
+        const SizedBox(height: 30),
+        Padding(
+          padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-          ],
-        ));
+            elevation: 4,
+            shadowColor: Colors.black,
+            color: Theme.of(context).cardColor,
+            child: Column(
+              children: items,
+            ),
+          ),
+        ),
+      ],
+    ));
   }
 }
 
-class CompletedCountWidget extends StatefulWidget {
+class CompletedCountWidget extends StatelessWidget {
   const CompletedCountWidget({Key? key}) : super(key: key);
 
-  @override
-  State<CompletedCountWidget> createState() => _CompletedCountWidgetState();
-}
-
-class _CompletedCountWidgetState extends State<CompletedCountWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -162,11 +159,12 @@ class _CompletedCountWidgetState extends State<CompletedCountWidget> {
         child: ListTile(
           title: Text(
               'Выполнено - ${context.watch<TasksListModel>().completedCount}'),
-          trailing: IconButton(
-            icon: const Icon(Icons.visibility),
-            onPressed: () {
-              print(222);
-            },
+          trailing: InkWell(
+            onTap: () => print("2"),
+            child: const Padding(
+              padding: EdgeInsets.all(2.0),
+              child: Icon(Icons.visibility),
+            ),
           ),
         ),
       ),
@@ -235,7 +233,6 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     final Task task = model.tasksList[model.searchTaskIndexById(id)];
     final Text formattedText = setTextStyle(task);
     final DateTime? deadline = task.date_deadline;
-    print('$deadline $task');
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
@@ -244,7 +241,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor:
-          MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return task.priority_level == 2
                   ? OtherColors.redCheckboxFillColor
@@ -282,7 +279,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor: MaterialStateProperty.resolveWith(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (!states.contains(MaterialState.selected)) {
                 return task.priority_level == 2
                     ? OtherColors.redCheckboxFillColor
