@@ -43,7 +43,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     logger.i('Start arguments for task remaker = $args');
     if (args != null) {
       final Task newTask =
-          context.read<TasksListModel>().tasks_list[args as int];
+          context.read<TasksListModel>().tasksList[args as int];
     } else {
       int? maxId = context.read<TasksListModel>().maxId;
     }
@@ -177,22 +177,23 @@ class DeleteTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: const ListTile(
-        leading: Icon(
-          Icons.delete,
+    return ListTile(
+      onTap: () {
+        context
+            .read<TasksListModel>()
+            .deleteTaskWithId(context.read<NewTaskModel>().newTaskModel.id);
+        Navigator.of(context).pop(); // todo: complete this
+      },
+      leading: const Icon(
+        Icons.delete,
+        color: LightThemeColors.red,
+      ),
+      title: const Text(
+        'Удалить',
+        style: TextStyle(
           color: LightThemeColors.red,
         ),
-        title: Text(
-          'Удалить',
-          style: TextStyle(
-            color: LightThemeColors.red,
-          ),
-        ),
       ),
-      onTap: () {
-        Navigator.of(context).pop();
-      },
     );
   }
 }

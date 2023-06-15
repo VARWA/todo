@@ -55,7 +55,71 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<TasksListModel>();
+    final model = context.read<TasksListModel>();
+    final lenList = model.tasksListForMenu.length;
+    logger.d('Downloaded to list $lenList tasks');
+    final items = List<Widget>.generate(lenList + 1, (index) {
+      if (index != lenList) {
+        return Dismissible(
+          key: UniqueKey(),
+          background: Container(
+            color: LightThemeColors.green,
+            child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 28),
+                child: Icon(
+                  Icons.done,
+                  color: LightThemeColors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+          secondaryBackground: Container(
+            color: LightThemeColors.red,
+            child: const Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 28),
+                child: Icon(
+                  Icons.delete,
+                  color: LightThemeColors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.startToEnd) {
+              model.makeCompleted(model.tasksListForMenu[index].id);
+            } else {
+              model.removeTask(index);
+            }
+
+            // setState(
+            //   () {
+            //   },
+            // );
+          },
+          child: TaskInListWidget(
+            id: model.tasksListForMenu[index].id,
+          ),
+        );
+      } else {
+        return ListTile(
+          leading: const Icon(
+            Icons.add,
+            color: Colors.transparent,
+          ),
+          title: const Text('Новое'),
+          onTap: () {
+            Navigator.pushNamed(context, RouteNames.changeTask);
+          },
+        );
+      }
+    });
+    print(items);
     return SliverToBoxAdapter(
         child: Column(
       children: [
@@ -71,78 +135,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
             shadowColor: Colors.black,
             color: Theme.of(context).cardColor,
             child: Column(
-              children: [
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: model.tasks_list_for_menu.length + 1,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index != model.tasks_list.length) {
-                      return Dismissible(
-                        key: UniqueKey(),
-                        background: Container(
-                          color: LightThemeColors.green,
-                          child: const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 28),
-                              child: Icon(
-                                Icons.done,
-                                color: LightThemeColors.white,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                        secondaryBackground: Container(
-                          color: LightThemeColors.red,
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 28),
-                              child: Icon(
-                                Icons.delete,
-                                color: LightThemeColors.white,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onDismissed: (DismissDirection direction) {
-                          if (direction == DismissDirection.startToEnd) {
-                            logger.i('Task with id $index completed');
-                            model.makeCompleted(model.tasks_list[index].id);
-                          } else {
-                            logger.i('Task with id $index removed');
-                          }
-
-                          // setState(
-                          //   () {
-                          model.removeTask(index);
-                          //   },
-                          // );
-                        },
-                        child: TaskInListWidget(
-                          id: model.tasks_list_for_menu[index].id,
-                        ),
-                      );
-                    } else {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.add,
-                          color: Colors.transparent,
-                        ),
-                        title: const Text('Новое'),
-                        onTap: () {
-                          Navigator.pushNamed(context, RouteNames.changeTask);
-                        },
-                      );
-                    }
-                  },
-                ),
-              ],
+              children: items,
             ),
           ),
         ),
@@ -170,7 +163,7 @@ class _CompletedCountWidgetState extends State<CompletedCountWidget> {
         height: 20,
         child: ListTile(
           title: Text(
-              'Выполнено - ${context.read<TasksListModel>().completed_count}'),
+              'Выполнено - ${context.read<TasksListModel>().completedCount}'),
           trailing: IconButton(
             icon: const Icon(Icons.visibility),
             onPressed: () {
@@ -223,17 +216,15 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
         return Text(
           task.task_name,
           style: const TextStyle(
-            decoration: TextDecoration.lineThrough,
-            color: OtherColors.comlitedTaskInList
-          ),
+              decoration: TextDecoration.lineThrough,
+              color: OtherColors.comlitedTaskInList),
         );
       }
       return Text(
         task.task_name,
         style: const TextStyle(
             decoration: TextDecoration.lineThrough,
-            color: OtherColors.comlitedTaskInList
-        ),
+            color: OtherColors.comlitedTaskInList),
       );
     }
     return Text(task.task_name);
@@ -243,10 +234,10 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
   Widget build(BuildContext context) {
     final model = context.read<TasksListModel>();
     final id = widget.id;
-    final Task task = model.tasks_list[model.searchIndexById(id)];
+    final Task task = model.tasksList[model.searchTaskIndexById(id)];
     final Text formattedText = setTextStyle(task);
     final deadline = task.date_deadline;
-    // final Color unselectedColorForImportant =  as Color;
+    print(task);
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
@@ -294,7 +285,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor:
-          MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
             if (!states.contains(MaterialState.selected)) {
               return task.priority_level == 2
                   ? OtherColors.redCheckboxFillColor

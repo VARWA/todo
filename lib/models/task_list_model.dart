@@ -14,11 +14,11 @@ class TasksListModel with ChangeNotifier {
       date_deadline: DateTime.tryParse('2002.2.2'),
     ),
     Task(
-        id: 2,
-        completed: false,
-        task_name: 'Наконец-то сделать кнопки',
-        priority_level: 2,
-        date_deadline: DateTime.tryParse('2033.10.3'),
+      id: 2,
+      completed: false,
+      task_name: 'Наконец-то сделать кнопки',
+      priority_level: 2,
+      date_deadline: DateTime.tryParse('2033.10.3'),
     ),
     Task(
         id: 3,
@@ -61,9 +61,9 @@ class TasksListModel with ChangeNotifier {
 
   get showCompleted => _showCompleted;
 
-  List<Task> get tasks_list => _tasks_list;
+  List<Task> get tasksList => _tasks_list;
 
-  List<Task> get tasks_list_for_menu {
+  List<Task> get tasksListForMenu {
     if (_showCompleted == false) {
       return _tasks_list;
     } else {
@@ -77,7 +77,7 @@ class TasksListModel with ChangeNotifier {
     }
   }
 
-  int get completed_count {
+  int get completedCount {
     int counter = 0;
     for (int i = 0; i < _tasks_list.length; i++) {
       if (_tasks_list[i].completed) {
@@ -98,6 +98,25 @@ class TasksListModel with ChangeNotifier {
     _tasks_list.removeAt(index);
     logger.i('Task with index $index removed');
     notifyListeners();
+  }
+  int searchTaskIndexById (id){
+    int ind = -1;
+    for (int i = 0; i < _tasks_list.length; i++){
+      if (_tasks_list[i].id == id){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  void deleteTaskWithId(id){
+    id = -1;
+    for (int i = 0; i < _tasks_list.length; i++){
+      if (_tasks_list[i].id == i) {
+        removeTask(i);
+        break;
+      }
+    }
   }
 
   void changeComplete(index) {
