@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 import '../models/task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
   Task newTask;
-  Logger logger = Logger(printer: PrettyPrinter());
   String priorityLevelString = 'Нет';
   bool isNew;
 

@@ -58,7 +58,6 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       }
     }
 
-    Logger logging = Logger(printer: PrettyPrinter());
     final createdPreTask = createPreTask(maxId, newTaskFromList);
 
     return ListenableProvider(
@@ -66,14 +65,27 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       builder: (context, child) {
         final textController = TextEditingController(
             text: context.watch<NewTaskModel>().newTask.task_name);
+
         if (createdPreTask.date_deadline != null) {
           context.read<NewTaskModel>().setDeadlineStatus(true);
           context.read<NewTaskModel>().deadlineDate =
               createdPreTask.date_deadline;
         }
-        void addTask(Task task) {
-          context.read<TasksListModel>()
+        void addTask() {
+          final newModel = context.read<NewTaskModel>();
+          DateTime? deadlineLastValue;
+          if (newModel.haveDeadline && newModel.deadlineDate != null) {
+            deadlineLastValue = newModel.deadlineDate;
+          }
+
+          Task newTask = Task(
+              id: newModel.newTask.id,
+              task_name: newModel.newTask.task_name,
+              date_deadline: deadlineLastValue,
+              priority_level: newModel.formatPriorityLevel());
+          context.read<TasksListModel>().addTask(newTask, newModel.isNew);
         }
+
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
@@ -91,13 +103,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                 padding: const EdgeInsets.only(right: 16),
                 child: TextButton(
                   onPressed: () {
-                    Task newTask = Task(
-                      id: 4,
-                      task_name: textController.text,
-                      date_deadline: DateTime.now(),
-                      priority_level: 0,
-                    );
-                    logging.i('$newTask');
+                    addTask();
                     Navigator.of(context).pop();
                   },
                   child: const Text('Сохранить'),
@@ -123,11 +129,17 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                             filled: true,
                             fillColor: LightThemeColors.white,
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 0.0,
+                                style: BorderStyle.none,
+                              ),
                             ),
                             border: OutlineInputBorder(
-                              gapPadding: 8,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
                             ),
                             hintText: 'Что надо сделать...'),
                       ),
@@ -168,12 +180,12 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                   ],
                 ),
               ),
-              Column(
+              const Column(
                 children: [
-                  const Divider(),
+                  Divider(),
                   ChangeDateWidget(),
-                  const Divider(),
-                  const DeleteTaskWidget(),
+                  Divider(),
+                  DeleteTaskWidget(),
                 ],
               )
             ],
@@ -196,7 +208,7 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
   Widget build(BuildContext context) {
     final model = context.read<NewTaskModel>();
 
-    Future<void> _selectDate(BuildContext context) async {
+    Future<void> selectDate(BuildContext context) async {
       final DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: model.currentDate,
@@ -222,11 +234,10 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
       value: context.watch<NewTaskModel>().haveDeadline,
       onChanged: (bool value) {
         setState(() {
-          print(value);
           if (value == false) {
             model.setDeadlineStatus(false);
           } else {
-            _selectDate(context);
+            selectDate(context);
           }
         });
       },
@@ -241,23 +252,40 @@ class DeleteTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        context
-            .read<TasksListModel>()
-            .deleteTaskWithId(context.read<NewTaskModel>().newTask.id);
-        Navigator.of(context).pop(); // todo: complete this
-      },
-      leading: const Icon(
-        Icons.delete,
-        color: LightThemeColors.red,
-      ),
-      title: const Text(
-        'Удалить',
-        style: TextStyle(
+    if (!context.read<NewTaskModel>().isNew) {
+      return ListTile(
+        onTap: () {
+          context
+              .read<TasksListModel>()
+              .deleteTaskWithId(context.read<NewTaskModel>().newTask.id);
+          Navigator.of(context).pop(); // todo: complete this
+        },
+        leading: const Icon(
+          Icons.delete,
           color: LightThemeColors.red,
         ),
-      ),
-    );
+        minLeadingWidth: 0,
+        title: const Text(
+          'Удалить',
+          style: TextStyle(
+            color: LightThemeColors.red,
+          ),
+        ),
+      );
+    } else {
+      return const ListTile(
+        leading: Icon(
+          Icons.delete,
+          color: LightThemeColors.labelDisable,
+        ),
+        minLeadingWidth: 0,
+        title: Text(
+          'Удалить',
+          style: TextStyle(
+            color: LightThemeColors.labelDisable,
+          ),
+        ),
+      );
+    }
   }
 }

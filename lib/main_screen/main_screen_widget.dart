@@ -55,7 +55,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
   Widget build(BuildContext context) {
     final model = context.read<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
-    logger.d('Downloaded to list $lenList tasks');
+    logger.d('Downloaded to main list $lenList tasks');
     final items = List<Widget>.generate(
       lenList + 1,
       (index) {
@@ -96,11 +96,6 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               } else {
                 model.removeTask(index);
               }
-
-              // setState(
-              //   () {
-              //   },
-              // );
             },
             child: TaskInListWidget(
               id: model.tasksListForMenu[index].id,
@@ -108,11 +103,9 @@ class _TasksListWidgetState extends State<TasksListWidget> {
           );
         } else {
           return ListTile(
-            leading: const Icon(
-              Icons.add,
-              color: Colors.transparent,
-            ),
-            title: const Text('Новое'),
+            leading: const Icon(Icons.add, color: Colors.transparent),
+            title: const Text('Новое',
+                style: TextStyle(color: LightThemeColors.labelTertiary)),
             onTap: () {
               Navigator.pushNamed(context, RouteNames.changeTask);
             },
@@ -240,14 +233,15 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           value: task.completed,
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
-          fillColor:
-              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return task.priority_level == 2
-                  ? OtherColors.redCheckboxFillColor
-                  : Theme.of(context).cardColor;
-            }
-          }),
+          fillColor: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return task.priority_level == 2
+                    ? OtherColors.redCheckboxFillColor
+                    : Theme.of(context).cardColor;
+              }
+            },
+          ),
           side: task.priority_level == 2
               ? const BorderSide(color: LightThemeColors.red)
               : BorderSide(color: Theme.of(context).unselectedWidgetColor),
