@@ -17,24 +17,22 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const MainAppBarWidget(),
-            // SizedBox(height: 18),
-            TasksListWidget(),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, RouteNames.changeTask);
-          },
-          child: const Icon(
-            Icons.add,
-            weight: 56,
-            color: Colors.white,
-          ),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          const MainAppBarWidget(),
+          // SizedBox(height: 18),
+          TasksListWidget(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, RouteNames.changeTask);
+        },
+        child: const Icon(
+          Icons.add,
+          weight: 56,
+          color: Colors.white,
         ),
       ),
     );
