@@ -134,4 +134,12 @@ class TasksListModel with ChangeNotifier {
     }
     return -1;
   }
+  int searchIndexById(id) {
+    for (int i = 0; i <= _tasks_list.length; i++) {
+      if (_tasks_list[i].id == id) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }

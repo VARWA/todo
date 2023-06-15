@@ -125,7 +125,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
                           // );
                         },
                         child: TaskInListWidget(
-                          id: model.tasks_list[index].id,
+                          id: model.tasks_list_for_menu[index].id,
                         ),
                       );
                     } else {
@@ -243,11 +243,10 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
   Widget build(BuildContext context) {
     final model = context.read<TasksListModel>();
     final id = widget.id;
-    final Task task = model.tasks_list[id];
+    final Task task = model.tasks_list[model.searchIndexById(id)];
     final Text formattedText = setTextStyle(task);
     final deadline = task.date_deadline;
     // final Color unselectedColorForImportant =  as Color;
-    print(deadline);
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
