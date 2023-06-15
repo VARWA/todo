@@ -160,7 +160,7 @@ class CompletedCountWidget extends StatelessWidget {
           title: Text(
               'Выполнено - ${context.watch<TasksListModel>().completedCount}'),
           trailing: InkWell(
-            onTap: () => print("2"),
+            onTap: () => print("2"), //todo: fix untapping
             child: const Padding(
               padding: EdgeInsets.all(2.0),
               child: Icon(Icons.visibility),

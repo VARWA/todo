@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/change_task_screen/new_task_model.dart';
@@ -14,111 +15,132 @@ class ChangeTaskScreenWidget extends StatefulWidget {
 }
 
 class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
-  int? maxId;
-  Task? newTask;
-
-  String priorityValue = 'Нет';
-  bool haveDeadline = false;
-  DateTime currentDate = DateTime.now();
-  DateTime? deadlineDate;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate) {
-      setState(() {
-        haveDeadline = true;
-        deadlineDate = pickedDate; // todo: remake with task
-      });
-    }
-  }
+  Logger logger = Logger(printer: PrettyPrinter());
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
-    Logger logger = Logger(printer: PrettyPrinter());
-    logger.i('Start arguments for task remaker = $args');
+    final model = context.read<TasksListModel>();
+    int? maxId;
+    Task? newTaskFromList;
+    bool isNew = false;
+
     if (args != null) {
-      final Task newTask =
-          context.read<TasksListModel>().tasksList[args as int];
+      final oldTask = model.tasksList[model.searchTaskIndexById(args as int)];
+      newTaskFromList = Task(
+        id: oldTask.id,
+        task_name: oldTask.task_name,
+        priority_level: oldTask.priority_level,
+        date_deadline: oldTask.date_deadline,
+        completed: oldTask.completed,
+      );
     } else {
-      int? maxId = context.read<TasksListModel>().maxId;
+      maxId = context.read<TasksListModel>().maxId;
+      isNew = true;
+    }
+    logger.i('Args results: $newTaskFromList, $maxId');
+    Task createNewTask(id) {
+      return Task(
+        id: id + 1,
+        task_name: '',
+        priority_level: 0,
+        date_deadline: DateTime.now(),
+      );
+    }
+
+    Task createPreTask(int? maxId, Task? newTaskFromList) {
+      logger.i('Data for create PreNewTask max_Id from task_list: $maxId,'
+          ' task for recreating : $newTaskFromList');
+      if (newTaskFromList != null) {
+        return newTaskFromList;
+      } else {
+        return createNewTask(maxId);
+      }
     }
 
     Logger logging = Logger(printer: PrettyPrinter());
-    var textController = TextEditingController();
+    final createdPreTask = createPreTask(maxId, newTaskFromList);
 
-    return Provider(
-      create: (context) => NewTaskModel(max_id: maxId, newTask: newTask),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          leading: IconButton(
+    return ListenableProvider(
+      create: (_) => NewTaskModel(newTask: createdPreTask, isNew: isNew),
+      builder: (context, child) {
+        final textController = TextEditingController(
+            text: context.watch<NewTaskModel>().newTask.task_name);
+        if (createdPreTask.date_deadline != null) {
+          context.read<NewTaskModel>().setDeadlineStatus(true);
+          context.read<NewTaskModel>().deadlineDate =
+              createdPreTask.date_deadline;
+        }
+        void addTask(Task task) {
+          context.read<TasksListModel>()
+        }
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            leading: IconButton(
               icon: const Icon(
                 Icons.close,
               ),
               color: LightThemeColors.labelPrimary,
               onPressed: () {
                 Navigator.of(context).pop();
-              }),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: TextButton(
-                onPressed: () {
-                  Task newTask = Task(
-                    id: 4,
-                    task_name: textController.text,
-                    date_deadline: deadlineDate,
-                    priority_level: 0,
-                  );
-                  logging.i('$newTask');
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Сохранить'),
-              ),
+              },
             ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 20, right: 16, left: 16),
-          child: ListView(
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: TextButton(
+                  onPressed: () {
+                    Task newTask = Task(
+                      id: 4,
+                      task_name: textController.text,
+                      date_deadline: DateTime.now(),
+                      priority_level: 0,
+                    );
+                    logging.i('$newTask');
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Сохранить'),
+                ),
+              ),
+            ],
+          ),
+          body: ListView(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Material(
-                    elevation: 2,
-                    child: TextField(
-                      controller: textController,
-                      minLines: 4,
-                      maxLines: 50,
-                      decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: LightThemeColors.white,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                          ),
-                          border: OutlineInputBorder(
-                            gapPadding: 8,
-                          ),
-                          hintText: 'Что надо сделать...'),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, right: 16, left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Material(
+                      elevation: 2,
+                      child: TextField(
+                        controller: textController,
+                        minLines: 4,
+                        maxLines: 50,
+                        decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: LightThemeColors.white,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.0),
+                            ),
+                            border: OutlineInputBorder(
+                              gapPadding: 8,
+                            ),
+                            hintText: 'Что надо сделать...'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ListTile(
-                    title: const Text('Важность'),
-                    subtitle: DropdownButton<String>(
-                      value: priorityValue,
+                    const SizedBox(height: 16),
+                    const Text('Важность'),
+                    DropdownButton<String>(
+                      value: context.read<NewTaskModel>().priorityLevelString,
                       // isExpanded: true,
                       onChanged: (String? value) {
                         setState(() {
-                          priorityValue = value!;
+                          context.read<NewTaskModel>().priorityLevelString =
+                              value!;
                         });
                       },
                       items: ['Нет', 'Низкий', '!! Высокий']
@@ -142,30 +164,72 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                         },
                       ).toList(),
                     ),
-                  ),
-                  const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
                   const Divider(),
-                  SwitchListTile(
-                    title: const Text('Сделать до'),
-                    subtitle: Text('2 июня 2021'),
-                    value: haveDeadline,
-                    onChanged: (bool value) {
-                      print(haveDeadline);
-                      if (haveDeadline) {
-                        haveDeadline = false;
-                      } else {
-                        _selectDate(context);
-                      }
-                    },
-                  ),
+                  ChangeDateWidget(),
                   const Divider(),
                   const DeleteTaskWidget(),
                 ],
-              ),
+              )
             ],
           ),
-        ),
-      ),
+        );
+      },
+    );
+  }
+}
+
+class ChangeDateWidget extends StatefulWidget {
+  const ChangeDateWidget({Key? key}) : super(key: key);
+
+  @override
+  State<ChangeDateWidget> createState() => _ChangeDateWidgetState();
+}
+
+class _ChangeDateWidgetState extends State<ChangeDateWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<NewTaskModel>();
+
+    Future<void> _selectDate(BuildContext context) async {
+      final DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: model.currentDate,
+          firstDate: DateTime(2020),
+          lastDate: DateTime(2050));
+      if (pickedDate != null) {
+        model.setDeadlineStatus(true);
+        if (model.deadlineDate != pickedDate) {
+          model.deadlineDate = pickedDate;
+        }
+      }
+    }
+
+    late String subtitle;
+    if (model.haveDeadline == true && model.deadlineDate != null) {
+      subtitle = DateFormat('d MMMM yyyy').format(model.deadlineDate!);
+    } else {
+      subtitle = 'Нет';
+    }
+    return SwitchListTile(
+      title: const Text('Сделать до'),
+      subtitle: Text(subtitle),
+      value: context.watch<NewTaskModel>().haveDeadline,
+      onChanged: (bool value) {
+        setState(() {
+          print(value);
+          if (value == false) {
+            model.setDeadlineStatus(false);
+          } else {
+            _selectDate(context);
+          }
+        });
+      },
     );
   }
 }
@@ -181,7 +245,7 @@ class DeleteTaskWidget extends StatelessWidget {
       onTap: () {
         context
             .read<TasksListModel>()
-            .deleteTaskWithId(context.read<NewTaskModel>().newTaskModel.id);
+            .deleteTaskWithId(context.read<NewTaskModel>().newTask.id);
         Navigator.of(context).pop(); // todo: complete this
       },
       leading: const Icon(

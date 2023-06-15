@@ -4,28 +4,37 @@ import 'package:logger/logger.dart';
 import '../models/task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
-  late Task _newTaskModel;
+  Task newTask;
   Logger logger = Logger(printer: PrettyPrinter());
+  String priorityLevelString = 'Нет';
+  bool isNew;
 
-  NewTaskModel({required max_id, required newTask}) {
-    logger.i('Data for create PreNewTask max_Id from task_list: $max_id,'
-        ' task for recreating : $newTask');
-    if (newTask == null) {
-      createNewTask(max_id);
+  NewTaskModel({required this.newTask, required this.isNew});
+
+  bool _haveDeadline = false;
+
+  get haveDeadline => _haveDeadline;
+
+  DateTime currentDate = DateTime.now();
+  DateTime? deadlineDate;
+
+  void switchDeadline() {
+    _haveDeadline = !_haveDeadline;
+    notifyListeners();
+  }
+
+  void setDeadlineStatus(bool value) {
+    _haveDeadline = value;
+    notifyListeners();
+  }
+
+  int formatPriorityLevel() {
+    if (priorityLevelString == 'Нет') {
+      return 0;
+    } else if (priorityLevelString == 'Низкий') {
+      return 1;
     } else {
-      recreateOldTask(newTask);
+      return 2;
     }
-    logger.i('PreNewTask: $_newTaskModel');
-  }
-
-  get newTaskModel => _newTaskModel;
-
-  void recreateOldTask(task) {
-    _newTaskModel = task;
-  }
-
-  void createNewTask(id) {
-    _newTaskModel =
-        Task(id: id + 1, task_name: '', priority_level: 0, date_deadline: null);
   }
 }
