@@ -24,7 +24,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
           id: newModel.newTask.id,
           taskName: newModel.newTask.taskName,
           dateDeadline: deadlineLastValue,
-          priorityLevel: newModel.formatPriorityLevel());
+          priorityLevel: newModel.newTask.priorityLevel);
       context.read<TasksListModel>().addTask(newTask, newModel.isNew);
     }
 

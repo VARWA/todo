@@ -11,10 +11,10 @@ class ChangeImportanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: context.watch<NewTaskModel>().priorityLevelString,
-      // isExpanded: true,
+      value: PriorityValue.convertFromIntToString(context.watch<NewTaskModel>().newTask.priorityLevel),
       onChanged: (String? value) {
-        context.read<NewTaskModel>().setPriorityLevel(value);
+
+        context.read<NewTaskModel>().setPriorityLevel(PriorityValue.convertFromStringToInt(value!));
       },
       items: [PriorityValue.no, PriorityValue.low, PriorityValue.high]
           .map<DropdownMenuItem<String>>(

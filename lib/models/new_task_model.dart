@@ -5,7 +5,6 @@ import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
   Task newTask;
-  String priorityLevelString = PriorityValue.no;
   bool isNew;
 
   NewTaskModel({required this.newTask, required this.isNew});
@@ -27,12 +26,8 @@ class NewTaskModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int formatPriorityLevel() {
-    return PriorityValue.convertFromStringToInt(priorityLevelString);
-  }
-
-  void setPriorityLevel(value){
-    priorityLevelString = value;
+  void setPriorityLevel(value) {
+    newTask.priorityLevel = value;
     notifyListeners();
-}
+  }
 }

@@ -5,11 +5,11 @@ import 'package:todo/change_task_screen/widgets/change_importance_widget.dart';
 import 'package:todo/change_task_screen/widgets/change_time_widget.dart';
 import 'package:todo/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/change_task_screen/widgets/main_text_field_widget.dart';
+import 'package:todo/change_task_screen/widgets/priority_values.dart';
 import 'package:todo/change_task_screen/widgets/rechange_app_bar_widget.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
-import 'package:todo/themes/src/light_theme.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
   const ChangeTaskScreenWidget({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       return Task(
         id: id + 1,
         taskName: '',
-        priorityLevel: 0,
+        priorityLevel: PriorityValue.noInInt,
         dateDeadline: DateTime.now(),
       );
     }
