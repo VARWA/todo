@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/change_task_screen/new_task_model.dart';
+import 'package:todo/change_task_screen/widgets/change_time_widget.dart';
+import 'package:todo/change_task_screen/widgets/delete_task_widget.dart';
+import 'package:todo/change_task_screen/widgets/main_text_field_widget.dart';
+import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
@@ -17,6 +19,7 @@ class ChangeTaskScreenWidget extends StatefulWidget {
 class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
   Logger logger = Logger(printer: PrettyPrinter());
 
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -29,9 +32,9 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       final oldTask = model.tasksList[model.searchTaskIndexById(args as int)];
       newTaskFromList = Task(
         id: oldTask.id,
-        task_name: oldTask.task_name,
-        priority_level: oldTask.priority_level,
-        date_deadline: oldTask.date_deadline,
+        taskName: oldTask.taskName,
+        priorityLevel: oldTask.priorityLevel,
+        dateDeadline: oldTask.dateDeadline,
         completed: oldTask.completed,
       );
     } else {
@@ -42,9 +45,9 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     Task createNewTask(id) {
       return Task(
         id: id + 1,
-        task_name: '',
-        priority_level: 0,
-        date_deadline: DateTime.now(),
+        taskName: '',
+        priorityLevel: 0,
+        dateDeadline: DateTime.now(),
       );
     }
 
@@ -63,13 +66,9 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     return ListenableProvider(
       create: (_) => NewTaskModel(newTask: createdPreTask, isNew: isNew),
       builder: (context, child) {
-        final textController = TextEditingController(
-            text: context.watch<NewTaskModel>().newTask.task_name);
-
-        if (createdPreTask.date_deadline != null) {
-          context.read<NewTaskModel>().setDeadlineStatus(true);
+        if (createdPreTask.dateDeadline != null) {
           context.read<NewTaskModel>().deadlineDate =
-              createdPreTask.date_deadline;
+              createdPreTask.dateDeadline;
         }
         void addTask() {
           final newModel = context.read<NewTaskModel>();
@@ -80,9 +79,9 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
 
           Task newTask = Task(
               id: newModel.newTask.id,
-              task_name: newModel.newTask.task_name,
-              date_deadline: deadlineLastValue,
-              priority_level: newModel.formatPriorityLevel());
+              taskName: newModel.newTask.taskName,
+              dateDeadline: deadlineLastValue,
+              priorityLevel: newModel.formatPriorityLevel());
           context.read<TasksListModel>().addTask(newTask, newModel.isNew);
         }
 
@@ -119,31 +118,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Material(
-                      elevation: 2,
-                      child: TextField(
-                        controller: textController,
-                        minLines: 4,
-                        maxLines: 50,
-                        decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: LightThemeColors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                                width: 0.0,
-                                style: BorderStyle.none,
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                            hintText: 'Что надо сделать...'),
-                      ),
-                    ),
+                    const MainTextField(),
                     const SizedBox(height: 16),
                     const Text('Важность'),
                     DropdownButton<String>(
@@ -196,96 +171,3 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
   }
 }
 
-class ChangeDateWidget extends StatefulWidget {
-  const ChangeDateWidget({Key? key}) : super(key: key);
-
-  @override
-  State<ChangeDateWidget> createState() => _ChangeDateWidgetState();
-}
-
-class _ChangeDateWidgetState extends State<ChangeDateWidget> {
-  @override
-  Widget build(BuildContext context) {
-    final model = context.read<NewTaskModel>();
-
-    Future<void> selectDate(BuildContext context) async {
-      final DateTime? pickedDate = await showDatePicker(
-          context: context,
-          initialDate: model.currentDate,
-          firstDate: DateTime(2020),
-          lastDate: DateTime(2050));
-      if (pickedDate != null) {
-        model.setDeadlineStatus(true);
-        if (model.deadlineDate != pickedDate) {
-          model.deadlineDate = pickedDate;
-        }
-      }
-    }
-
-    late String subtitle;
-    if (model.haveDeadline == true && model.deadlineDate != null) {
-      subtitle = DateFormat('d MMMM yyyy').format(model.deadlineDate!);
-    } else {
-      subtitle = 'Нет';
-    }
-    return SwitchListTile(
-      title: const Text('Сделать до'),
-      subtitle: Text(subtitle),
-      value: context.watch<NewTaskModel>().haveDeadline,
-      onChanged: (bool value) {
-        setState(() {
-          if (value == false) {
-            model.setDeadlineStatus(false);
-          } else {
-            selectDate(context);
-          }
-        });
-      },
-    );
-  }
-}
-
-class DeleteTaskWidget extends StatelessWidget {
-  const DeleteTaskWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (!context.read<NewTaskModel>().isNew) {
-      return ListTile(
-        onTap: () {
-          context
-              .read<TasksListModel>()
-              .deleteTaskWithId(context.read<NewTaskModel>().newTask.id);
-          Navigator.of(context).pop(); // todo: complete this
-        },
-        leading: const Icon(
-          Icons.delete,
-          color: LightThemeColors.red,
-        ),
-        minLeadingWidth: 0,
-        title: const Text(
-          'Удалить',
-          style: TextStyle(
-            color: LightThemeColors.red,
-          ),
-        ),
-      );
-    } else {
-      return const ListTile(
-        leading: Icon(
-          Icons.delete,
-          color: LightThemeColors.labelDisable,
-        ),
-        minLeadingWidth: 0,
-        title: Text(
-          'Удалить',
-          style: TextStyle(
-            color: LightThemeColors.labelDisable,
-          ),
-        ),
-      );
-    }
-  }
-}

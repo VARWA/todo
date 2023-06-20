@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/task_model.dart';
+import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
   Task newTask;
@@ -9,7 +9,7 @@ class NewTaskModel extends ChangeNotifier {
 
   NewTaskModel({required this.newTask, required this.isNew});
 
-  bool _haveDeadline = false;
+  bool _haveDeadline = true;
 
   get haveDeadline => _haveDeadline;
 

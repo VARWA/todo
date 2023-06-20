@@ -6,88 +6,88 @@ import 'package:logger/logger.dart';
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
-  final _tasks_list = <Task>[
+  final _tasksList = <Task>[
     Task(
       id: 1,
-      task_name: 'Наконец-то сделать экран',
-      priority_level: 1,
-      date_deadline: DateTime.parse('2013-02-23'),
+      taskName: 'Наконец-то сделать экран',
+      priorityLevel: 1,
+      dateDeadline: DateTime.parse('2013-02-23'),
       completed: true,
     ),
     Task(
       id: 2,
       completed: false,
-      task_name: 'Наконец-то сделать кнопки',
-      priority_level: 2,
-      date_deadline: DateTime.parse('2012-12-27 13:27:00'),
+      taskName: 'Наконец-то сделать кнопки',
+      priorityLevel: 2,
+      dateDeadline: DateTime.parse('2012-12-27 13:27:00'),
     ),
     Task(
       id: 3,
-      task_name: 'Наконец-то сделать все остальное',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать все остальное',
+      priorityLevel: 0,
       completed: true,
     ),
-    Task(id: 4, task_name: 'Наконец-то сделать верстку', priority_level: 0),
+    Task(id: 4, taskName: 'Наконец-то сделать верстку', priorityLevel: 0),
     Task(
       id: 5,
-      task_name: 'Наконец-то сделать фон Приоритет у дела',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать фон Приоритет у дела',
+      priorityLevel: 0,
       completed: true,
     ),
-    Task(id: 19, task_name: 'Наконец-то сделать экран', priority_level: 2),
+    Task(id: 19, taskName: 'Наконец-то сделать экран', priorityLevel: 2),
     Task(
       id: 6,
-      task_name: 'Наконец-то сделать кнопки',
-      priority_level: 0,
-      date_deadline: DateTime.tryParse(
+      taskName: 'Наконец-то сделать кнопки',
+      priorityLevel: 0,
+      dateDeadline: DateTime.tryParse(
         '2002.2.3',
       ),
       completed: true,
     ),
     Task(
       id: 7,
-      task_name: 'Наконец-то сделать все остальное',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать все остальное',
+      priorityLevel: 0,
       completed: true,
     ),
     Task(
       id: 8,
-      task_name: 'Наконец-то сделать верстку',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать верстку',
+      priorityLevel: 0,
       completed: true,
     ),
     Task(
       id: 9,
-      task_name: 'Наконец-то сделать фон Приоритет у дела',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать фон Приоритет у дела',
+      priorityLevel: 0,
       completed: true,
     ),
     Task(
       id: 10,
-      task_name: 'Наконец-то сделать экран',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать экран',
+      priorityLevel: 0,
       completed: true,
     ),
     Task(
       id: 11,
-      task_name: 'Наконец-то сделать кнопки',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать кнопки',
+      priorityLevel: 0,
       completed: false,
     ),
     Task(
         id: 12,
-        task_name: 'Наконец-то сделать все остальное',
-        priority_level: 0),
+        taskName: 'Наконец-то сделать все остальное',
+        priorityLevel: 0),
     Task(
       id: 13,
-      task_name: 'Наконец-то сделать верстку',
-      priority_level: 0,
+      taskName: 'Наконец-то сделать верстку',
+      priorityLevel: 0,
       completed: true,
     ),
     Task(
         id: 14,
-        task_name: 'Наконец-то сделать фон Приоритет у дела',
-        priority_level: 0,
+        taskName: 'Наконец-то сделать фон Приоритет у дела',
+        priorityLevel: 0,
         completed: false),
   ];
   bool _showCompleted = false;
@@ -95,16 +95,16 @@ class TasksListModel with ChangeNotifier {
 
   get showCompleted => _showCompleted;
 
-  List<Task> get tasksList => _tasks_list;
+  List<Task> get tasksList => _tasksList;
 
   List<Task> get tasksListForMenu {
     if (_showCompleted == false) {
-      return _tasks_list;
+      return _tasksList;
     } else {
       List<Task> uncompletedTasks = [];
-      for (int i = 0; i < _tasks_list.length; i++) {
-        if (_tasks_list[i].completed == false) {
-          uncompletedTasks.add(_tasks_list[i]);
+      for (int i = 0; i < _tasksList.length; i++) {
+        if (_tasksList[i].completed == false) {
+          uncompletedTasks.add(_tasksList[i]);
         }
       }
       return uncompletedTasks;
@@ -113,12 +113,11 @@ class TasksListModel with ChangeNotifier {
 
   int get completedCount {
     int counter = 0;
-    for (int i = 0; i < _tasks_list.length; i++) {
-      if (_tasks_list[i].completed) {
+    for (int i = 0; i < _tasksList.length; i++) {
+      if (_tasksList[i].completed) {
         counter++;
       }
     }
-    notifyListeners();
     return counter;
   }
 
@@ -129,14 +128,14 @@ class TasksListModel with ChangeNotifier {
   }
 
   void removeTask(index) {
-    _tasks_list.removeAt(index);
+    _tasksList.removeAt(index);
     logger.i('Task with index $index removed');
     notifyListeners();
   }
 
   int searchTaskIndexById(id) {
-    for (int i = 0; i < _tasks_list.length; i++) {
-      if (_tasks_list[i].id == id) {
+    for (int i = 0; i < _tasksList.length; i++) {
+      if (_tasksList[i].id == id) {
         return i;
       }
     }
@@ -145,8 +144,8 @@ class TasksListModel with ChangeNotifier {
 
   void deleteTaskWithId(id) {
     id = -1;
-    for (int i = 0; i < _tasks_list.length; i++) {
-      if (_tasks_list[i].id == i) {
+    for (int i = 0; i < _tasksList.length; i++) {
+      if (_tasksList[i].id == i) {
         removeTask(i);
         break;
       }
@@ -154,36 +153,36 @@ class TasksListModel with ChangeNotifier {
   }
 
   void changeComplete(index) {
-    _tasks_list[index].completed = !_tasks_list[index].completed;
+    _tasksList[index].completed = !_tasksList[index].completed;
     notifyListeners();
   }
 
   void makeCompleted(id) {
     final index = searchTaskIndexById(id);
-    _tasks_list[index].completed = true;
+    _tasksList[index].completed = true;
     logger.i('Task with id $id comleted');
     notifyListeners();
   }
 
   void makeUncompleted(id) {
     final index = searchTaskIndexById(id);
-    _tasks_list[index].completed = false;
+    _tasksList[index].completed = false;
     logger.i('Task with id $id uncomleted');
     notifyListeners();
   }
 
-  int? get maxId {
+  int get maxId {
     int maxId = -1;
-    for (int i = 0; i < _tasks_list.length; i++) {
-      maxId = max(maxId, _tasks_list[i].id);
+    for (int i = 0; i < _tasksList.length; i++) {
+      maxId = max(maxId, _tasksList[i].id);
     }
-    if (maxId == -1) return null;
+    if (maxId == -1) return 0;
     return maxId;
   }
 
   int searchIndex(Task el) {
-    for (int i = 0; i < _tasks_list.length; i++) {
-      if (_tasks_list[i].id == el.id) {
+    for (int i = 0; i < _tasksList.length; i++) {
+      if (_tasksList[i].id == el.id) {
         return i;
       }
     }
@@ -192,11 +191,11 @@ class TasksListModel with ChangeNotifier {
 
   void addTask(Task task, isNew) {
     if (isNew) {
-      _tasks_list.insert(0, task);
+      _tasksList.insert(0, task);
       logger.i('Task saved, task: $task');
     } else {
       int ind = searchIndex(task);
-      _tasks_list[ind] = task;
+      _tasksList[ind] = task;
       logger.i('Task remake, task: $task');
     }
     notifyListeners();

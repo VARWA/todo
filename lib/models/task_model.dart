@@ -1,35 +1,36 @@
 class Task {
   int id;
-  String task_name;
+  String taskName;
   bool completed;
-  DateTime? date_deadline;
-  int priority_level = 0;
+  DateTime? dateDeadline;
+  int priorityLevel = 0;
 
   Task(
       {required this.id,
-      required this.task_name,
+      required this.taskName,
       this.completed = false,
-      this.date_deadline,
-      required this.priority_level});
+      this.dateDeadline,
+      required this.priorityLevel});
 
   Task.fromMap(Map<String, dynamic> res)
       : id = res['id'],
-        task_name = res['task_name'],
+        taskName = res['task_name'],
         completed = res['title'] == 1,
-        date_deadline = DateTime.parse(res['date_deadline']),
-        priority_level = res['priority_level'];
+        dateDeadline = DateTime.parse(res['date_deadline']),
+        priorityLevel = res['priority_level'];
 
   Map<String, Object?> toMap() {
     return {
       "id": id,
-      "task_name": task_name,
+      "task_name": taskName,
       "completed": completed ? 1 : 0,
-      "date_deadline": date_deadline.toString(),
-      "priority_level": priority_level,
+      "date_deadline": dateDeadline.toString(),
+      "priority_level": priorityLevel,
     };
   }
 
+  @override
   String toString() {
-    return 'Task: ${this.toMap()}';
+    return 'Task: ${toMap()}';
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/main_screen/widgets/task_in_list_widget.dart';
 import 'package:todo/navigation/routes.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
-import 'package:intl/intl.dart';
-import '../models/task_model.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -18,9 +17,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
+      body: const CustomScrollView(
         slivers: [
-          const MainAppBarWidget(),
+          MainAppBarWidget(),
           // SizedBox(height: 18),
           TasksListWidget(),
         ],
@@ -40,7 +39,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 }
 
 class TasksListWidget extends StatefulWidget {
-  TasksListWidget({
+  const TasksListWidget({
     super.key,
   });
 
@@ -53,7 +52,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<TasksListModel>();
+    final model = context.watch<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
     logger.d('Downloaded to main list $lenList tasks');
     final items = List<Widget>.generate(
@@ -116,7 +115,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     return SliverToBoxAdapter(
         child: Column(
       children: [
-        CompletedCountWidget(),
+        const CompletedCountWidget(),
         const SizedBox(height: 30),
         Padding(
           padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
@@ -186,124 +185,5 @@ class MainAppBarWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class TaskInListWidget extends StatefulWidget {
-  final int id;
-
-  const TaskInListWidget({super.key, required this.id});
-
-  @override
-  State<TaskInListWidget> createState() => _TaskInListWidgetState();
-}
-
-class _TaskInListWidgetState extends State<TaskInListWidget> {
-  Text setTextStyle(Task task) {
-    if (task.completed == true) {
-      if (task.priority_level == 0) {
-        return Text(
-          task.task_name,
-          style: const TextStyle(
-              decoration: TextDecoration.lineThrough,
-              color: OtherColors.comlitedTaskInList),
-        );
-      }
-      return Text(
-        task.task_name,
-        style: const TextStyle(
-            decoration: TextDecoration.lineThrough,
-            color: OtherColors.comlitedTaskInList),
-      );
-    }
-    return Text(task.task_name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final model = context.watch<TasksListModel>();
-    final id = widget.id;
-    final Task task = model.tasksList[model.searchTaskIndexById(id)];
-    final Text formattedText = setTextStyle(task);
-    final DateTime? deadline = task.date_deadline;
-    if (deadline != null) {
-      return ListTile(
-        horizontalTitleGap: 0,
-        leading: Checkbox(
-          value: task.completed,
-          activeColor: LightThemeColors.green,
-          checkColor: LightThemeColors.white,
-          fillColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return task.priority_level == 2
-                    ? OtherColors.redCheckboxFillColor
-                    : Theme.of(context).cardColor;
-              }
-            },
-          ),
-          side: task.priority_level == 2
-              ? const BorderSide(color: LightThemeColors.red)
-              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
-          onChanged: (bool? value) {
-            if (value!) {
-              model.makeCompleted(id);
-            } else {
-              model.makeUncompleted(id);
-            }
-          },
-        ),
-        title: formattedText,
-        subtitle: Text(DateFormat('d MMMM yyyy').format(deadline)),
-        trailing: IconButton(
-            icon: const Icon(
-              Icons.info_outline_rounded,
-            ),
-            onPressed: () {
-              // Navigator.pushNamed(context, RouteNames.changeTask);
-              Navigator.pushNamed(context, RouteNames.changeTask,
-                  arguments: task.id);
-            }),
-      );
-    } else {
-      return ListTile(
-        horizontalTitleGap: 0,
-        leading: Checkbox(
-          value: task.completed,
-          activeColor: LightThemeColors.green,
-          checkColor: LightThemeColors.white,
-          fillColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (!states.contains(MaterialState.selected)) {
-                return task.priority_level == 2
-                    ? OtherColors.redCheckboxFillColor
-                    : Theme.of(context).cardColor;
-              }
-            },
-          ),
-          side: task.priority_level == 2
-              ? const BorderSide(color: LightThemeColors.red)
-              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
-          onChanged: (bool? value) {
-            if (value!) {
-              model.makeCompleted(id);
-            } else {
-              model.makeUncompleted(id);
-            }
-          },
-        ),
-        title: formattedText,
-        trailing: IconButton(
-          icon: const Icon(
-            Icons.info_outline_rounded,
-          ),
-          onPressed: () {
-            // Navigator.pushNamed(context, RouteNames.changeTask);
-            Navigator.pushNamed(context, RouteNames.changeTask,
-                arguments: task.id);
-          },
-        ),
-      );
-    }
   }
 }
