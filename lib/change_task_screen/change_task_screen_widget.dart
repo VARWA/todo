@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/change_task_screen/widgets/change_importance_widget.dart';
 import 'package:todo/change_task_screen/widgets/change_time_widget.dart';
 import 'package:todo/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/change_task_screen/widgets/main_text_field_widget.dart';
+import 'package:todo/change_task_screen/widgets/rechange_app_bar_widget.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
@@ -70,92 +72,27 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
           context.read<NewTaskModel>().deadlineDate =
               createdPreTask.dateDeadline;
         }
-        void addTask() {
-          final newModel = context.read<NewTaskModel>();
-          DateTime? deadlineLastValue;
-          if (newModel.haveDeadline && newModel.deadlineDate != null) {
-            deadlineLastValue = newModel.deadlineDate;
-          }
-
-          Task newTask = Task(
-              id: newModel.newTask.id,
-              taskName: newModel.newTask.taskName,
-              dateDeadline: deadlineLastValue,
-              priorityLevel: newModel.formatPriorityLevel());
-          context.read<TasksListModel>().addTask(newTask, newModel.isNew);
-        }
 
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(
-                Icons.close,
-              ),
-              color: LightThemeColors.labelPrimary,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: TextButton(
-                  onPressed: () {
-                    addTask();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Сохранить'),
-                ),
-              ),
-            ],
-          ),
+          appBar: const RechangeAppBar(),
           body: ListView(
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(top: 20, right: 16, left: 16),
+                padding: EdgeInsets.only(top: 20, right: 16, left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const MainTextField(),
-                    const SizedBox(height: 16),
-                    const Text('Важность'),
-                    DropdownButton<String>(
-                      value: context.read<NewTaskModel>().priorityLevelString,
-                      // isExpanded: true,
-                      onChanged: (String? value) {
-                        setState(() {
-                          context.read<NewTaskModel>().priorityLevelString =
-                              value!;
-                        });
-                      },
-                      items: ['Нет', 'Низкий', '!! Высокий']
-                          .map<DropdownMenuItem<String>>(
-                        (String value) {
-                          if (value == '!! Высокий') {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: const TextStyle(
-                                    color: LightThemeColors.red),
-                              ),
-                            );
-                          } else {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }
-                        },
-                      ).toList(),
-                    ),
+                  children:  [
+                     MainTextField(),
+                     SizedBox(height: 16),
+                     Text('Важность'),
+                     ChangeImportanceWidget(),
                     // const SizedBox(height: 16),
                   ],
                 ),
               ),
-              const Column(
+               Column(
                 children: [
                   Divider(),
                   ChangeDateWidget(),
