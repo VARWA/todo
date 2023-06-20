@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/change_task_screen/widgets/priority_values.dart';
 import 'package:todo/models/new_task_model.dart';
 
 import '../../themes/src/light_theme.dart';
@@ -10,14 +11,15 @@ class ChangeImportanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: context.read<NewTaskModel>().priorityLevelString,
+      value: context.watch<NewTaskModel>().priorityLevelString,
       // isExpanded: true,
       onChanged: (String? value) {
-        context.read<NewTaskModel>().priorityLevelString = value!;
+        context.read<NewTaskModel>().setPriorityLevel(value);
       },
-      items: ['Нет', 'Низкий', '!! Высокий'].map<DropdownMenuItem<String>>(
+      items: [PriorityValue.no, PriorityValue.low, PriorityValue.high]
+          .map<DropdownMenuItem<String>>(
         (String value) {
-          if (value == '!! Высокий') {
+          if (value == PriorityValue.high) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(

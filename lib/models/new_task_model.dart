@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todo/change_task_screen/widgets/priority_values.dart';
 
 import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
   Task newTask;
-  String priorityLevelString = 'Нет';
+  String priorityLevelString = PriorityValue.no;
   bool isNew;
 
   NewTaskModel({required this.newTask, required this.isNew});
@@ -27,12 +28,11 @@ class NewTaskModel extends ChangeNotifier {
   }
 
   int formatPriorityLevel() {
-    if (priorityLevelString == 'Нет') {
-      return 0;
-    } else if (priorityLevelString == 'Низкий') {
-      return 1;
-    } else {
-      return 2;
-    }
+    return PriorityValue.convertFromStringToInt(priorityLevelString);
   }
+
+  void setPriorityLevel(value){
+    priorityLevelString = value;
+    notifyListeners();
+}
 }
