@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:todo/themes/src/constants.dart';
 import 'package:todo/themes/src/text_theme.dart';
 
 ThemeData lightThemeData() {
   return ThemeData(
-      brightness: Brightness.light,
-      // useMaterial3: true,
-      // colorScheme: _shrineColorScheme,
-      primaryColor: LightThemeColors.blue,
-      fontFamily: 'Roboto',
-      textTheme: createTextTheme(),
-      scaffoldBackgroundColor: LightThemeColors.backPrimary,
-      cardColor: LightThemeColors.white,
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: LightThemeColors.blue,
-        shape: CircleBorder(),
-      ),
-      checkboxTheme: CheckboxThemeData(
-      ),
-      unselectedWidgetColor: LightThemeColors.supportSeparator,
-      appBarTheme:
-          const AppBarTheme(backgroundColor: LightThemeColors.backPrimary));
+    brightness: Brightness.light,
+    // useMaterial3: true,
+    // colorScheme: _shrineColorScheme,
+    primaryColor: LightThemeColors.blue,
+    fontFamily: 'Roboto',
+    textTheme: createTextTheme(),
+    scaffoldBackgroundColor: LightThemeColors.backPrimary,
+    cardColor: LightThemeColors.white,
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: LightThemeColors.blue,
+      shape: CircleBorder(),
+    ),
+    unselectedWidgetColor: LightThemeColors.supportSeparator,
+    appBarTheme:
+        const AppBarTheme(backgroundColor: LightThemeColors.backPrimary),
+  );
 }
 // const ColorScheme _shrineColorScheme = ColorScheme(
 //   primary: shrinePink100,
@@ -58,7 +56,7 @@ abstract class LightThemeColors {
   static const backElevated = Color(0xFFFFFFFF);
 }
 
-abstract class OtherColors{
+abstract class OtherColors {
   static const redCheckboxFillColor = Color(0xFFFF3B30);
   static const comlitedTaskInList = Color.fromRGBO(0, 0, 0, 0.3);
 }

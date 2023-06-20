@@ -12,7 +12,7 @@ abstract class RouteNames {
 
 abstract class RoutesBuilder {
   static final routes = <String, Widget Function(BuildContext)>{
-    RouteNames.mainList: (BuildContext) => const MainScreenWidget(),
-    RouteNames.changeTask: (BuildContext) => const ChangeTaskScreenWidget(),
+    RouteNames.mainList: (_) => const MainScreenWidget(),
+    RouteNames.changeTask: (_) => const ChangeTaskScreenWidget(),
   };
 }

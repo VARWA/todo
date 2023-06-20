@@ -200,4 +200,7 @@ class TasksListModel with ChangeNotifier {
     }
     notifyListeners();
   }
+  void checkVizibility(){
+    logger.d('КНОПКА НАЖАТА');
+  }
 }

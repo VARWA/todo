@@ -12,6 +12,8 @@ class ChangeDateWidget extends StatefulWidget {
 }
 
 class _ChangeDateWidgetState extends State<ChangeDateWidget> {
+  late String subtitle;
+
   @override
   Widget build(BuildContext context) {
     final model = context.read<NewTaskModel>();
@@ -30,7 +32,6 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
       }
     }
 
-    late String subtitle;
     if (model.haveDeadline == true && model.deadlineDate != null) {
       subtitle = DateFormat('d MMMM yyyy').format(model.deadlineDate!);
     } else {
@@ -41,13 +42,15 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
       subtitle: Text(subtitle),
       value: context.watch<NewTaskModel>().haveDeadline,
       onChanged: (bool value) {
-        setState(() {
-          if (value == false) {
-            model.setDeadlineStatus(false);
-          } else {
-            selectDate(context);
-          }
-        });
+        setState(
+          () {
+            if (value == false) {
+              model.setDeadlineStatus(false);
+            } else {
+              selectDate(context);
+            }
+          },
+        );
       },
     );
   }
