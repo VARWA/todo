@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/main_screen/widgets/task_in_list_widget.dart';
 
-import '../../models/task_list_model.dart';
-import '../../themes/src/light_theme.dart';
+import '../../../models/task_list_model.dart';
+import '../../../themes/src/light_theme.dart';
+
 import 'completed_count_widget.dart';
 import 'new_list_tile_widget.dart';
+import 'task_in_list_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
   const TasksListWidget({
@@ -27,7 +28,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     logger.d('Downloaded to main list $lenList tasks');
     final items = List<Widget>.generate(
       lenList + 1,
-          (index) {
+      (index) {
         if (index != lenList) {
           return Dismissible(
             key: UniqueKey(),
@@ -61,13 +62,13 @@ class _TasksListWidgetState extends State<TasksListWidget> {
             ),
             onDismissed: (DismissDirection direction) {
               if (direction == DismissDirection.startToEnd) {
-                model.makeCompleted(model.tasksListForMenu[index].id);
+                model.makeCompleted(model.tasksListForMenu[index].localId);
               } else {
                 model.removeTask(index);
               }
             },
             child: TaskInListWidget(
-              id: model.tasksListForMenu[index].id,
+              id: model.tasksListForMenu[index].localId,
             ),
           );
         } else {
@@ -99,4 +100,3 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     );
   }
 }
-

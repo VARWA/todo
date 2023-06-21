@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/new_task_model.dart';
+import '../../../models/new_task_model.dart';
 
 class ChangeDateWidget extends StatefulWidget {
   const ChangeDateWidget({Key? key}) : super(key: key);

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/task_list_model.dart';
-import '../../models/task_model.dart';
-import '../../navigation/routes.dart';
-import '../../themes/src/light_theme.dart';
+import '../../../models/task_list_model.dart';
+import '../../../models/task_model.dart';
+import '../../../navigation/routes.dart';
+import '../../../themes/src/light_theme.dart';
+import '../../../src/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {
   final int id;
@@ -18,23 +19,23 @@ class TaskInListWidget extends StatefulWidget {
 
 class _TaskInListWidgetState extends State<TaskInListWidget> {
   Text setTextStyle(Task task) {
-    if (task.completed == true) {
-      if (task.priorityLevel == 0) {
+    if (task.done == true) {
+      if (task.importance == ImportanceValues.basicGlobal) {
         return Text(
-          task.taskName,
+          task.text,
           style: const TextStyle(
               decoration: TextDecoration.lineThrough,
               color: OtherColors.comlitedTaskInList),
         );
       }
       return Text(
-        task.taskName,
+        task.text,
         style: const TextStyle(
             decoration: TextDecoration.lineThrough,
             color: OtherColors.comlitedTaskInList),
       );
     }
-    return Text(task.taskName);
+    return Text(task.text);
   }
 
   @override
@@ -43,25 +44,25 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     final id = widget.id;
     final Task task = model.tasksList[model.searchTaskIndexById(id)];
     final Text formattedText = setTextStyle(task);
-    final DateTime? deadline = task.dateDeadline;
+    final DateTime? deadline = task.deadline;
     if (deadline != null) {
       return ListTile(
         horizontalTitleGap: 0,
         leading: Checkbox(
-          value: task.completed,
+          value: task.done,
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor: MaterialStateProperty.resolveWith(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
-                return task.priorityLevel == 2
+                return task.importance == ImportanceValues.highGlobal
                     ? OtherColors.redCheckboxFillColor
                     : Theme.of(context).cardColor;
               }
               return null;
             },
           ),
-          side: task.priorityLevel == 2
+          side: task.importance == ImportanceValues.highGlobal
               ? const BorderSide(color: LightThemeColors.red)
               : BorderSide(color: Theme.of(context).unselectedWidgetColor),
           onChanged: (bool? value) {
@@ -81,27 +82,27 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
             onPressed: () {
               // Navigator.pushNamed(context, RouteNames.changeTask);
               Navigator.pushNamed(context, RouteNames.changeTask,
-                  arguments: task.id);
+                  arguments: task.localId);
             }),
       );
     } else {
       return ListTile(
         horizontalTitleGap: 0,
         leading: Checkbox(
-          value: task.completed,
+          value: task.done,
           activeColor: LightThemeColors.green,
           checkColor: LightThemeColors.white,
           fillColor: MaterialStateProperty.resolveWith(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (!states.contains(MaterialState.selected)) {
-                return task.priorityLevel == 2
+                return task.importance == ImportanceValues.highGlobal
                     ? OtherColors.redCheckboxFillColor
                     : Theme.of(context).cardColor;
               }
               return null;
             },
           ),
-          side: task.priorityLevel == 2
+          side: task.importance == ImportanceValues.highGlobal
               ? const BorderSide(color: LightThemeColors.red)
               : BorderSide(color: Theme.of(context).unselectedWidgetColor),
           onChanged: (bool? value) {
@@ -120,7 +121,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           onPressed: () {
             // Navigator.pushNamed(context, RouteNames.changeTask);
             Navigator.pushNamed(context, RouteNames.changeTask,
-                arguments: task.id);
+                arguments: task.localId);
           },
         ),
       );

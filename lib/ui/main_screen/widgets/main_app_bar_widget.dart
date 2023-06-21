@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../themes/src/light_theme.dart';
+import '../../../themes/src/light_theme.dart';
 
 class MainAppBarWidget extends StatelessWidget {
   const MainAppBarWidget({

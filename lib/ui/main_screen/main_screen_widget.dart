@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo/main_screen/widgets/main_app_bar_widget.dart';
-import 'package:todo/main_screen/widgets/tasks_list_widget.dart';
 import 'package:todo/navigation/routes.dart';
+import 'package:todo/ui/main_screen/widgets/main_app_bar_widget.dart';
+import 'package:todo/ui/main_screen/widgets/tasks_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);

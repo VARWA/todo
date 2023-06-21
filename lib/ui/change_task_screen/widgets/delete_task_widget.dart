@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/new_task_model.dart';
-import '../../models/task_list_model.dart';
-import '../../themes/src/light_theme.dart';
+import '../../../models/new_task_model.dart';
+import '../../../models/task_list_model.dart';
+import '../../../themes/src/light_theme.dart';
 
 class DeleteTaskWidget extends StatelessWidget {
   const DeleteTaskWidget({
@@ -17,8 +17,8 @@ class DeleteTaskWidget extends StatelessWidget {
         onTap: () {
           context
               .read<TasksListModel>()
-              .deleteTaskWithId(context.read<NewTaskModel>().newTask.id);
-          Navigator.of(context).pop(); // todo: complete this
+              .deleteTaskWithId(context.read<NewTaskModel>().newTask.localId);
+          Navigator.of(context).pop();
         },
         leading: const Icon(
           Icons.delete,

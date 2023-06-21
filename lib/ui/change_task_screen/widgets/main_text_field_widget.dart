@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/new_task_model.dart';
-import '../../themes/src/light_theme.dart';
+import '../../../models/new_task_model.dart';
+import '../../../themes/src/light_theme.dart';
 
 class MainTextField extends StatefulWidget {
   const MainTextField({

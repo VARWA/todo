@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../change_task_screen/change_task_screen_widget.dart';
-import '../main_screen/main_screen_widget.dart';
+import '../ui/change_task_screen/change_task_screen_widget.dart';
+import '../ui/main_screen/main_screen_widget.dart';
 
 abstract class RouteNames {
   static const initialRoute = mainList;

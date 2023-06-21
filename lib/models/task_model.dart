@@ -1,36 +1,44 @@
 class Task {
-  int id;
-  String taskName;
-  bool completed;
-  DateTime? dateDeadline;
-  int priorityLevel = 0;
+  int localId;
+  String text;
+  String importance;
+  DateTime? deadline;
+  bool done;
+  String? color;
+  DateTime createdAt;
+  DateTime changedAt;
+  String lastUpdatedBy = 'null';
 
   Task(
-      {required this.id,
-      required this.taskName,
-      this.completed = false,
-      this.dateDeadline,
-      required this.priorityLevel});
+      {required this.localId,
+      required this.text,
+      this.importance = 'basic',
+      this.deadline,
+      this.done = false,
+      this.color = "#FFFFFF",
+      required this.createdAt,
+      required this.changedAt,
+      this.lastUpdatedBy = 'null'});
 
-  Task.fromMap(Map<String, dynamic> res)
-      : id = res['id'],
-        taskName = res['task_name'],
-        completed = res['title'] == 1,
-        dateDeadline = DateTime.parse(res['date_deadline']),
-        priorityLevel = res['priority_level'];
-
-  Map<String, Object?> toMap() {
-    return {
-      "id": id,
-      "task_name": taskName,
-      "completed": completed ? 1 : 0,
-      "date_deadline": dateDeadline.toString(),
-      "priority_level": priorityLevel,
-    };
-  }
-
-  @override
-  String toString() {
-    return 'Task: ${toMap()}';
-  }
+// Task.fromMap(Map<String, dynamic> res)
+//     : id = res['id'],
+//       text = res['task_name'],
+//       completed = res['title'] == 1,
+//       dateDeadline = DateTime.parse(res['date_deadline']),
+//       priorityLevel = res['priority_level'];
+//
+// Map<String, Object?> toMap() {
+//   return {
+//     "id": id,
+//     "task_name": text,
+//     "completed": completed ? 1 : 0,
+//     "date_deadline": dateDeadline.toString(),
+//     "priority_level": priorityLevel,
+//   };
+// }
+//
+// @override
+// String toString() {
+//   return 'Task: ${toMap()}';
+// }
 }

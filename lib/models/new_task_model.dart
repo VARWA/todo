@@ -36,7 +36,7 @@ class NewTaskModel extends ChangeNotifier {
   }
 
   void setPriorityLevel(value) {
-    newTask.priorityLevel = value;
+    newTask.importance = value;
     notifyListeners();
   }
 }

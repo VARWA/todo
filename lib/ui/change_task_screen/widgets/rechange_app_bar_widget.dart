@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/new_task_model.dart';
-import '../../models/task_list_model.dart';
-import '../../models/task_model.dart';
-import '../../themes/src/light_theme.dart';
+import '../../../models/new_task_model.dart';
+import '../../../models/task_list_model.dart';
+import '../../../models/task_model.dart';
+import '../../../themes/src/light_theme.dart';
 
 class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RechangeAppBar({
@@ -21,10 +21,12 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
       }
 
       Task newTask = Task(
-          id: newModel.newTask.id,
-          taskName: newModel.newTask.taskName,
-          dateDeadline: deadlineLastValue,
-          priorityLevel: newModel.newTask.priorityLevel);
+          localId: newModel.newTask.localId,
+          text: newModel.newTask.text,
+          deadline: deadlineLastValue,
+          importance: newModel.newTask.importance,
+          createdAt: newModel.newTask.createdAt,
+          changedAt: newModel.newTask.changedAt);
       context.read<TasksListModel>().addTask(newTask, newModel.isNew);
     }
 

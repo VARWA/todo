@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/themes/src/light_theme.dart';
 
-import '../../models/task_list_model.dart';
+import '../../../models/task_list_model.dart';
 
 class CompletedCountWidget extends StatelessWidget {
   const CompletedCountWidget({Key? key}) : super(key: key);
