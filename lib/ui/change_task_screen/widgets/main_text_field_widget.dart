@@ -19,15 +19,16 @@ class _MainTextFieldState extends State<MainTextField> {
   @override
   void initState() {
     final model = Provider.of<NewTaskModel>(context, listen: false);
+    model.setInitText(model.newTask.text);
     super.initState();
     _nameController = TextEditingController(text: model.taskText);
   }
 
-  @override
-  void didChangeDependencies() {
-    _nameController.text = context.watch<NewTaskModel>().taskText;
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   _nameController.text = context.watch<NewTaskModel>().newTask.text;
+  //   super.didChangeDependencies();
+  // }
 
   @override
   void dispose() {

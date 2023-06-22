@@ -19,14 +19,14 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (newModel.haveDeadline && newModel.deadlineDate != null) {
         deadlineLastValue = newModel.deadlineDate;
       }
-
       Task newTask = Task(
-          localId: newModel.newTask.localId,
-          text: newModel.newTask.text,
-          deadline: deadlineLastValue,
-          importance: newModel.newTask.importance,
-          createdAt: newModel.newTask.createdAt,
-          changedAt: newModel.newTask.changedAt);
+        localId: newModel.newTask.localId,
+        text: newModel.taskText,
+        deadline: deadlineLastValue,
+        importance: newModel.newTask.importance,
+        createdAt: newModel.newTask.createdAt,
+        changedAt: DateTime.now(),
+      );
       context.read<TasksListModel>().addTask(newTask, newModel.isNew);
     }
 

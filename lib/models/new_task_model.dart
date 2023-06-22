@@ -4,15 +4,14 @@ import 'task_model.dart';
 class NewTaskModel extends ChangeNotifier {
   Task newTask;
   bool isNew;
-  String _taskText = '';
+  String taskText = '';
   bool _haveDeadline = true;
 
-  String get taskText => _taskText;
 
   bool get haveDeadline => _haveDeadline;
 
    setTaskText(String newText){
-      _taskText = newText;
+      taskText = newText;
       notifyListeners();
 
   }
@@ -23,7 +22,7 @@ class NewTaskModel extends ChangeNotifier {
   NewTaskModel({required this.newTask, required this.isNew});
 
   void setInitText(String text){
-    _taskText = text;
+    taskText = text;
   }
   void switchDeadline() {
     _haveDeadline = !_haveDeadline;

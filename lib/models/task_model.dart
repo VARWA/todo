@@ -9,16 +9,15 @@ class Task {
   DateTime changedAt;
   String lastUpdatedBy = 'null';
 
-  Task(
-      {required this.localId,
-      required this.text,
-      this.importance = 'basic',
-      this.deadline,
-      this.done = false,
-      this.color = "#FFFFFF",
-      required this.createdAt,
-      required this.changedAt,
-      this.lastUpdatedBy = 'null'});
+  Task({required this.localId,
+    required this.text,
+    this.importance = 'basic',
+    this.deadline,
+    this.done = false,
+    this.color = "#FFFFFF",
+    required this.createdAt,
+    required this.changedAt,
+    this.lastUpdatedBy = 'null'});
 
 // Task.fromMap(Map<String, dynamic> res)
 //     : id = res['id'],
@@ -37,8 +36,18 @@ class Task {
 //   };
 // }
 //
-// @override
-// String toString() {
-//   return 'Task: ${toMap()}';
-// }
+  @override
+  String toString() {
+    return 'Task: ${[
+      localId,
+      text,
+      importance,
+      deadline,
+      done,
+      color,
+      createdAt,
+      changedAt,
+      lastUpdatedBy
+    ]}';
+  }
 }
