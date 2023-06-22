@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:todo/device_info_model.dart';
 import 'package:todo/my_app.dart';
 
-void main() {
+
+Future<void> main() async {
+
   var deviceInfo = DeviceInfoModel();
   // deviceInfo.setDeviceId();
   runApp(
