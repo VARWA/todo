@@ -5,7 +5,7 @@ import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart';
-import 'package:todo/ui/change_task_screen/widgets/change_time_widget.dart';
+import 'package:todo/ui/change_task_screen/widgets/change_date_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
 import 'package:todo/src/importance_values.dart';

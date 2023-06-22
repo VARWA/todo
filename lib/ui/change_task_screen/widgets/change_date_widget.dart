@@ -40,7 +40,7 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
     return SwitchListTile(
       title: const Text('Сделать до'),
       subtitle: Text(subtitle),
-      value: context.watch<NewTaskModel>().haveDeadline,
+      value: context.watch<NewTaskModel>().haveDeadline && subtitle != 'Нет',
       onChanged: (bool value) {
         setState(
           () {
