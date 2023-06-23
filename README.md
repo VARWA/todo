@@ -24,6 +24,6 @@ ___
 	- easy_localization
 
 ____  
-![Scereenshot 1](https://github.com/VARWA/todo/issues/1#issue-1759535800)  
-![Scereenshot 2](https://github.com/VARWA/todo/issues/2#issue-1759535800)  
+![Screenshot 1](https://github.com/VARWA/todo/issues/1#issue-1759535800)  
+![Screenshot 2](https://github.com/VARWA/todo/issues/2#issue-1759535800)  
 ![Screenshot 3](https://github.com/VARWA/todo/issues/3#issue-1759535800)
