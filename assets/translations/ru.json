@@ -1,0 +1,14 @@
+{
+  "myTasks" : "Мои дела",
+  "completed": "Выполнено - {}",
+  "textForEmptyTaskField": "Что надо сделать...",
+  "importance": "Важность",
+  "delete": "Удалить",
+  "highImportance" : "!! Высокий",
+  "basicImportance": "Нет",
+  "lowImportance": "Низкий",
+  "withoutDeadlineText": "Нет",
+  "createNewTaskFromList": "Новое",
+  "deadline": "Сделать до",
+  "save": "Сохранить"
+}

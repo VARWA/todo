@@ -1,7 +1,7 @@
-// TODO Implement this library.import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../models/new_task_model.dart';
 
@@ -18,9 +18,11 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
   @override
   Widget build(BuildContext context) {
     final model = context.read<NewTaskModel>();
+    final localization = context.deviceLocale;
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? pickedDate = await showDatePicker(
+          locale: localization,
           context: context,
           initialDate: model.currentDate,
           firstDate: DateTime(2020),
@@ -34,14 +36,16 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
     }
 
     if (model.haveDeadline == true && model.deadlineDate != null) {
-      subtitle = DateFormat('d MMMM yyyy').format(model.deadlineDate!);
+      subtitle = DateFormat('d MMMM yyyy', localization.toString())
+          .format(model.deadlineDate!);
     } else {
-      subtitle = 'Нет';
+      subtitle = LocaleKeys.withoutDeadlineText.tr();
     }
     return SwitchListTile(
-      title: const Text('Сделать до'),
+      title: const Text(LocaleKeys.deadline).tr(),
       subtitle: Text(subtitle),
-      value: context.watch<NewTaskModel>().haveDeadline && subtitle != 'Нет',
+      value: context.watch<NewTaskModel>().haveDeadline &&
+          subtitle != LocaleKeys.withoutDeadlineText.tr(),
       onChanged: (bool value) {
         setState(
           () {

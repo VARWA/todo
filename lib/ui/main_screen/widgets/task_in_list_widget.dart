@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/task_list_model.dart';
@@ -74,7 +74,9 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           },
         ),
         title: formattedText,
-        subtitle: Text(DateFormat('d MMMM yyyy').format(deadline)),
+        subtitle: Text(
+            DateFormat('d MMMM yyyy', context.deviceLocale.toString())
+                .format(deadline)),
         trailing: IconButton(
             icon: const Icon(
               Icons.info_outline_rounded,

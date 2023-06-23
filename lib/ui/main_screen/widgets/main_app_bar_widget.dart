@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../themes/src/light_theme.dart';
 
@@ -9,7 +11,7 @@ class MainAppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SliverAppBar(
+    return SliverAppBar(
       backgroundColor: LightThemeColors.backPrimary,
       pinned: true,
       snap: false,
@@ -17,8 +19,8 @@ class MainAppBarWidget extends StatelessWidget {
       expandedHeight: 124,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
-          'Мои дела',
-          style: TextStyle(color: LightThemeColors.labelPrimary),
+          LocaleKeys.myTasks.tr(),
+          style: const TextStyle(color: LightThemeColors.labelPrimary),
           // style: largeTitleTextStyle,
         ),
       ),

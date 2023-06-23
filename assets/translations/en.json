@@ -1,0 +1,14 @@
+{
+  "myTasks" : "My tasks",
+  "completed": "Completed - {}",
+  "textForEmptyTaskField": "What need to do...",
+  "importance": "Importance",
+  "delete": "Delete",
+  "highImportance" : "!! High",
+  "basicImportance": "No",
+  "lowImportance": "Low",
+  "withoutDeadlineText": "No",
+  "createNewTaskFromList": "New",
+  "deadline": "Deadline",
+  "save": "Save"
+}

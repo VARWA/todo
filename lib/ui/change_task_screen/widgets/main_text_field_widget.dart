@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../models/new_task_model.dart';
 import '../../../themes/src/light_theme.dart';
@@ -24,12 +26,6 @@ class _MainTextFieldState extends State<MainTextField> {
     _nameController = TextEditingController(text: model.taskText);
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   _nameController.text = context.watch<NewTaskModel>().newTask.text;
-  //   super.didChangeDependencies();
-  // }
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -46,10 +42,10 @@ class _MainTextFieldState extends State<MainTextField> {
         onChanged: model.setTaskText,
         minLines: 4,
         maxLines: 50,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
             filled: true,
             fillColor: LightThemeColors.white,
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               borderSide: BorderSide(
                 color: Colors.grey,
@@ -57,10 +53,10 @@ class _MainTextFieldState extends State<MainTextField> {
                 style: BorderStyle.none,
               ),
             ),
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
-            hintText: 'Что надо сделать...'),
+            hintText: LocaleKeys.textForEmptyTaskField.tr()),
       ),
     );
   }

@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../models/new_task_model.dart';
 import '../../../models/task_list_model.dart';
@@ -49,7 +51,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
               addTask();
               Navigator.of(context).pop();
             },
-            child: const Text('Сохранить'),
+            child: const Text(LocaleKeys.save).tr(),
           ),
         ),
       ],

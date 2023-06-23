@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/themes/src/light_theme.dart';
@@ -17,8 +18,11 @@ class CompletedCountWidget extends StatelessWidget {
       child: SizedBox(
         height: 20,
         child: ListTile(
-          title: Text(
-              'Выполнено - ${context.watch<TasksListModel>().completedCount}'),
+          title: const Text('completed').tr(
+            args: [
+              context.watch<TasksListModel>().completedCount.toString(),
+            ],
+          ),
           trailing: InkWell(
             onTap: () => context.read<TasksListModel>().checkVizibility(),
             //todo: fix untapping
