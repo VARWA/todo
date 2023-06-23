@@ -8,7 +8,7 @@ import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart
 import 'package:todo/ui/change_task_screen/widgets/change_date_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
-import 'package:todo/src/importance_values.dart';
+import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {

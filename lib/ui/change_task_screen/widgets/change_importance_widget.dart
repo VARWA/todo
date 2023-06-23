@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/new_task_model.dart';
-import 'package:todo/src/importance_values.dart';
+import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 
 import '../../../themes/src/light_theme.dart';
 

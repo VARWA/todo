@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../navigation/routes.dart';
 import '../../../themes/src/light_theme.dart';
-import '../../../src/importance_values.dart';
+import '../../change_task_screen/elements/importance_values.dart';
+import '../../navigation/routes.dart';
 
 class TaskInListWidget extends StatefulWidget {
   final int id;
