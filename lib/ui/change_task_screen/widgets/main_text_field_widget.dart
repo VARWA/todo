@@ -35,8 +35,22 @@ class _MainTextFieldState extends State<MainTextField> {
   @override
   Widget build(BuildContext context) {
     final model = context.read<NewTaskModel>();
-    return Material(
-      elevation: 2,
+    return Container(
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shadows: const [
+          BoxShadow(
+            color: Color(0x1E000000),
+            blurRadius: 2,
+            offset: Offset(0, 2),
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: Color(0x0F000000),
+          ),
+        ],
+      ),
       child: TextField(
         controller: _nameController,
         onChanged: model.setTaskText,
@@ -45,16 +59,14 @@ class _MainTextFieldState extends State<MainTextField> {
         decoration: InputDecoration(
             filled: true,
             fillColor: LightThemeColors.white,
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
               borderSide: BorderSide(
-                color: Colors.grey,
-                width: 0.0,
+                width: 0,
                 style: BorderStyle.none,
               ),
-            ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
             hintText: LocaleKeys.textForEmptyTaskField.tr()),
       ),
