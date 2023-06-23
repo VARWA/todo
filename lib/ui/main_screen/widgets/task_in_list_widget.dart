@@ -1,12 +1,13 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/ui/main_screen/widgets/task_in_list_with_deadline_widget.dart';
+import 'package:todo/ui/main_screen/widgets/task_in_list_without_deadline_widget.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
 import '../../../themes/src/light_theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
-import '../../navigation/routes.dart';
 
 class TaskInListWidget extends StatefulWidget {
   final int id;
@@ -38,95 +39,54 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     return Text(task.text);
   }
 
+  Widget setTitle({required Task task, required Text text}) {
+    if (task.done || task.importance == ImportanceValues.basicGlobal) {
+      return text;
+    } else if (task.importance == ImportanceValues.highGlobal) {
+      final Widget highImportanceIcon = SvgPicture.asset(
+        'assets/priority_icons/high_importance_icon.svg',
+        width: 16,
+        height: 20,
+      );
+      return Row(
+        children: [highImportanceIcon, const SizedBox(width: 3), text],
+      );
+    } else {
+      final Widget lowImportanceIcon = SvgPicture.asset(
+        'assets/priority_icons/low_importance_icon.svg',
+        width: 16,
+        height: 20,
+      );
+      return Row(
+        children: [lowImportanceIcon, const SizedBox(width: 3), text],
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final model = context.watch<TasksListModel>();
     final id = widget.id;
     final Task task = model.tasksList[model.searchTaskIndexById(id)];
+
     final Text formattedText = setTextStyle(task);
+    final formattedTitle = setTitle(task: task, text: formattedText);
     final DateTime? deadline = task.deadline;
     if (deadline != null) {
-      return ListTile(
-        horizontalTitleGap: 0,
-        leading: Checkbox(
-          value: task.done,
-          activeColor: LightThemeColors.green,
-          checkColor: LightThemeColors.white,
-          fillColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return task.importance == ImportanceValues.highGlobal
-                    ? OtherColors.redCheckboxFillColor
-                    : Theme.of(context).cardColor;
-              }
-              return null;
-            },
-          ),
-          side: task.importance == ImportanceValues.highGlobal
-              ? const BorderSide(color: LightThemeColors.red)
-              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
-          onChanged: (bool? value) {
-            if (value!) {
-              model.makeCompleted(id);
-            } else {
-              model.makeUncompleted(id);
-            }
-          },
-        ),
-        title: formattedText,
-        subtitle: Text(
-            DateFormat('d MMMM yyyy', context.deviceLocale.toString())
-                .format(deadline)),
-        trailing: IconButton(
-            icon: const Icon(
-              Icons.info_outline_rounded,
-            ),
-            onPressed: () {
-              // Navigator.pushNamed(context, RouteNames.changeTask);
-              Navigator.pushNamed(context, RouteNames.changeTask,
-                  arguments: task.localId);
-            }),
-      );
+      return TaskInListWithDeadlineWidget(
+          task: task,
+          model: model,
+          id: id,
+          formattedTitle: formattedTitle,
+          deadline: deadline);
     } else {
-      return ListTile(
-        horizontalTitleGap: 0,
-        leading: Checkbox(
-          value: task.done,
-          activeColor: LightThemeColors.green,
-          checkColor: LightThemeColors.white,
-          fillColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (!states.contains(MaterialState.selected)) {
-                return task.importance == ImportanceValues.highGlobal
-                    ? OtherColors.redCheckboxFillColor
-                    : Theme.of(context).cardColor;
-              }
-              return null;
-            },
-          ),
-          side: task.importance == ImportanceValues.highGlobal
-              ? const BorderSide(color: LightThemeColors.red)
-              : BorderSide(color: Theme.of(context).unselectedWidgetColor),
-          onChanged: (bool? value) {
-            if (value!) {
-              model.makeCompleted(id);
-            } else {
-              model.makeUncompleted(id);
-            }
-          },
-        ),
-        title: formattedText,
-        trailing: IconButton(
-          icon: const Icon(
-            Icons.info_outline_rounded,
-          ),
-          onPressed: () {
-            // Navigator.pushNamed(context, RouteNames.changeTask);
-            Navigator.pushNamed(context, RouteNames.changeTask,
-                arguments: task.localId);
-          },
-        ),
-      );
+      return TaskInListWithoutDeadlineWidget(
+          task: task, model: model, id: id, formattedTitle: formattedTitle);
     }
   }
 }
