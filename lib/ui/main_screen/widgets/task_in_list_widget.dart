@@ -20,6 +20,8 @@ class TaskInListWidget extends StatefulWidget {
 
 class _TaskInListWidgetState extends State<TaskInListWidget> {
   Text setTextStyle(Task task) {
+    int maxLines = 3;
+    TextOverflow myOverflow = TextOverflow.ellipsis;
     if (task.done == true) {
       if (task.importance == ImportanceValues.basicGlobal) {
         return Text(
@@ -27,6 +29,8 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           style: const TextStyle(
               decoration: TextDecoration.lineThrough,
               color: OtherColors.comlitedTaskInList),
+          maxLines: maxLines,
+          overflow: myOverflow,
         );
       }
       return Text(
@@ -34,14 +38,24 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
         style: const TextStyle(
             decoration: TextDecoration.lineThrough,
             color: OtherColors.comlitedTaskInList),
+        maxLines: maxLines,
+        overflow: myOverflow,
       );
     }
-    return Text(task.text);
+    return Text(
+      task.text,
+      maxLines: maxLines,
+      overflow: myOverflow,
+    );
   }
 
   Widget setTitle({required Task task, required Text text}) {
     if (task.done || task.importance == ImportanceValues.basicGlobal) {
-      return text;
+      return Row(
+        children: [
+          Expanded(child: text),
+        ],
+      );
     } else if (task.importance == ImportanceValues.highGlobal) {
       final Widget highImportanceIcon = SvgPicture.asset(
         'assets/priority_icons/high_importance_icon.svg',
@@ -49,7 +63,11 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
         height: 20,
       );
       return Row(
-        children: [highImportanceIcon, const SizedBox(width: 3), text],
+        children: [
+          highImportanceIcon,
+          const SizedBox(width: 3),
+          Expanded(child: text),
+        ],
       );
     } else {
       final Widget lowImportanceIcon = SvgPicture.asset(
@@ -58,7 +76,11 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
         height: 20,
       );
       return Row(
-        children: [lowImportanceIcon, const SizedBox(width: 3), text],
+        children: [
+          lowImportanceIcon,
+          const SizedBox(width: 3),
+          Expanded(child: text),
+        ],
       );
     }
   }
