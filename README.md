@@ -28,6 +28,9 @@ ___
 
 ### Images
     - flutter_svg
+
+### HTTP packages
+    - dio
 ____  
 ![Screenshot 1](https://github.com/VARWA/todo/issues/1#issue-1759535800)  
 ![Screenshot 2](https://github.com/VARWA/todo/issues/2#issue-1759535800)  

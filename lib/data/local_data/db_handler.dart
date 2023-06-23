@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
 import 'package:path/path.dart';
 
-import '../models/task_model.dart';
+import '../../models/task_model.dart';
 
 class DBHelper {
   static Database? _db;
