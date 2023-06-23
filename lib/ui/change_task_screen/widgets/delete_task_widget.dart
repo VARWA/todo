@@ -17,7 +17,7 @@ class DeleteTaskWidget extends StatelessWidget {
         onTap: () {
           context
               .read<TasksListModel>()
-              .deleteTaskWithId(context.read<NewTaskModel>().newTask.localId);
+              .deleteTaskWithLocalId(context.read<NewTaskModel>().newTask.localId);
           Navigator.of(context).pop();
         },
         leading: const Icon(

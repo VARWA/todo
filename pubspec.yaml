@@ -37,6 +37,9 @@ dependencies:
   intl: ^0.18.1
   path_provider: ^2.0.15
   logger: ^1.4.0
+  sqflite: ^2.2.8+4
+  path: any
+
 
 dev_dependencies:
   flutter_test:

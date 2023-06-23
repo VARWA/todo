@@ -64,7 +64,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               if (direction == DismissDirection.startToEnd) {
                 model.makeCompleted(model.tasksListForMenu[index].localId);
               } else {
-                model.removeTask(index);
+                model.deleteTaskWithLocalId(model.tasksListForMenu[index].localId);
               }
             },
             child: TaskInListWidget(

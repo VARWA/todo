@@ -2,41 +2,28 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:todo/repository/data_client.dart';
 
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
-  final _tasksList = <Task>[
-    Task(
-      localId: 1,
-      text: 'Наконец-то сделать экран',
-      importance: 'high',
-      deadline: DateTime.now(),
-      done: true,
-      createdAt: DateTime.now(),
-      changedAt: DateTime.now(),
-    ),
-    Task(
-      localId: 2,
-      text: 'Нaконец-то добавить локализацию',
-      importance: 'low',
-      deadline: DateTime.now(),
-      done: false,
-      createdAt: DateTime.now(),
-      changedAt: DateTime.now(),
-    ),
-    Task(
-      localId: 3,
-      text: 'Наконец сделать домашку',
-      importance: 'basic',
-      deadline: DateTime.now(),
-      done: true,
-      createdAt: DateTime.now(),
-      changedAt: DateTime.now(),
-    ),
-  ];
-  bool _showCompleted = false;
   Logger logger = Logger(printer: PrettyPrinter());
+  DataClient dataClient = DataClient();
+
+  List<Task> _tasksList = [];
+
+  bool _showCompleted = false;
+
+  TasksListModel() {
+    loadTasks();
+  }
+
+  loadTasks() async {
+    var loadedList = await dataClient.loadTaskFromDB();
+    logger.d('Loaded tasks in model $loadedList');
+    _tasksList = loadedList;
+    notifyListeners();
+  }
 
   get showCompleted => _showCompleted;
 
@@ -72,12 +59,6 @@ class TasksListModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeTask(index) {
-    _tasksList.removeAt(index);
-    logger.i('Task with index $index removed');
-    notifyListeners();
-  }
-
   int searchTaskIndexById(id) {
     for (int i = 0; i < _tasksList.length; i++) {
       if (_tasksList[i].localId == id) {
@@ -87,35 +68,25 @@ class TasksListModel with ChangeNotifier {
     return -1;
   }
 
-  void deleteTaskWithId(id) {
-    for (int i = 0; i < _tasksList.length; i++) {
-      if (_tasksList[i].localId == id) {
-        removeTask(i);
-        logger.i('$Task with $id deleted');
-        notifyListeners();
-        return;
-      }
-    }
-
+  void deleteTaskWithLocalId(localId) {
+    dataClient.deleteTaskFromDB(localId);
+    loadTasks();
   }
 
-  void changeComplete(index) {
-    _tasksList[index].done = !_tasksList[index].done;
-    notifyListeners();
-  }
-
-  void makeCompleted(id) {
-    final index = searchTaskIndexById(id);
+  void makeCompleted(localId) {
+    final index = searchTaskIndexById(localId);
     _tasksList[index].done = true;
-    logger.i('Task with id $id comleted');
-    notifyListeners();
+    dataClient.updateTaskInDB(_tasksList[index]);
+    logger.i('Task with localId $localId completed');
+    loadTasks();
   }
 
-  void makeUncompleted(id) {
-    final index = searchTaskIndexById(id);
+  void makeUncompleted(localId) {
+    final index = searchTaskIndexById(localId);
     _tasksList[index].done = false;
-    logger.i('Task with id $id uncomleted');
-    notifyListeners();
+    dataClient.updateTaskInDB(_tasksList[index]);
+    logger.i('Task with id $localId uncompleted');
+    loadTasks();
   }
 
   int get maxId {
@@ -138,14 +109,17 @@ class TasksListModel with ChangeNotifier {
 
   void addTask(Task task, isNew) {
     if (isNew) {
-      _tasksList.insert(0, task);
+      dataClient.addNewTaskIntoDB(task);
+      loadTasks();
+      // _tasksList.insert(0, task);
       logger.i('Task saved, task: $task');
     } else {
-      int ind = searchIndex(task);
-      _tasksList[ind] = task;
+      dataClient.updateTaskInDB(task);
+      loadTasks();
+      // int ind = searchIndex(task);
+      // _tasksList[ind] = task;
       logger.i('Task remake, task: $task');
     }
-    notifyListeners();
   }
 
   void checkVizibility() {
