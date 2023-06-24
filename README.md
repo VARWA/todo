@@ -12,6 +12,7 @@ ___
     - Delete your tasks
     - Set Status of your tasks
     - Set Deadline of your tasks
+    - Change task status from the main menu
     - Store your tasks locally
     - Internationalization support
 
