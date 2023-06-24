@@ -4,7 +4,7 @@
 ___  
 [Link to apk](https://github.com/VARWA/todo/releases/tag/v2.0.0)
 ___
-The project is being actively developed. Backend URL and BEARER token will be needed shortly. Rename the file '.env.example' to '.env' and paste the values
+The project is being actively developed. Backend URL and BEARER token will be needed shortly. Rename the file '.env.example' to '.env' and paste the values.
 ___
 ### Features
     - Save your tasks
@@ -15,7 +15,7 @@ ___
     - Change task status from the main menu
     - Store your tasks locally
     - Internationalization support
-
+___
 ### State-Management
 	- Provider
 
@@ -27,13 +27,13 @@ ___
 	- easy_localization
 
 ### Linter
-    - flutter_lints
+	- flutter_lints
 
 ### Images
-    - flutter_svg
+	- flutter_svg
 
 ### HTTP packages
-    - dio
+	- dio
 ____  
 ### Screenshots
 <img alt="image" src="https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0" width="320"/>
