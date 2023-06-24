@@ -35,6 +35,7 @@ ___
 ### HTTP packages
     - dio
 ____  
-![image](https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0)
-![image](https://github.com/VARWA/todo/assets/60575285/974917f7-0f8b-4934-bbd6-e38e2f876c76)
-![image](https://github.com/VARWA/todo/assets/60575285/af4c0dd7-c54f-4fbe-8ee9-f531fdf414d4)
+### Screenshots
+<img alt="image" src="https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0" width="320"/>
+<img alt="image" src="https://github.com/VARWA/todo/assets/60575285/974917f7-0f8b-4934-bbd6-e38e2f876c76" width="320"/>
+<img alt="image" src="https://github.com/VARWA/todo/assets/60575285/af4c0dd7-c54f-4fbe-8ee9-f531fdf414d4" width="320"/>
