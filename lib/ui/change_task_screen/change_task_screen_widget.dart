@@ -53,7 +53,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
         localId: id + 1,
         text: '',
         importance: ImportanceValues.basicGlobal,
-        deadline: dateTimeNow,
+        deadline: null,
         createdAt: dateTimeNow,
         changedAt: dateTimeNow,
       );
@@ -76,6 +76,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       builder: (context, child) {
         if (createdPreTask.deadline != null) {
           context.read<NewTaskModel>().deadlineDate = createdPreTask.deadline!;
+          context.read<NewTaskModel>().setInitHaveDeadline(true);
         }
 
         return Scaffold(
