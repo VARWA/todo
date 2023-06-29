@@ -45,11 +45,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
             ? const BorderSide(color: LightThemeColors.red)
             : BorderSide(color: Theme.of(context).unselectedWidgetColor),
         onChanged: (bool? value) {
-          if (value!) {
-            model.makeCompleted(id);
-          } else {
-            model.makeUncompleted(id);
-          }
+          model.switchCompleted(id);
         },
       ),
       title: formattedTitle,

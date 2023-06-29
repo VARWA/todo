@@ -73,19 +73,11 @@ class TasksListModel with ChangeNotifier {
     loadTasks();
   }
 
-  void makeCompleted(localId) {
+  void switchCompleted(localId){
     final index = searchTaskIndexById(localId);
-    _tasksList[index].done = true;
+    _tasksList[index].done = !_tasksList[index].done;
     dataClient.updateTaskInDB(_tasksList[index]);
-    logger.i('Task with localId $localId completed');
-    loadTasks();
-  }
-
-  void makeUncompleted(localId) {
-    final index = searchTaskIndexById(localId);
-    _tasksList[index].done = false;
-    dataClient.updateTaskInDB(_tasksList[index]);
-    logger.i('Task with id $localId uncompleted');
+    logger.i('Task with localId $localId completed status updated');
     loadTasks();
   }
 
