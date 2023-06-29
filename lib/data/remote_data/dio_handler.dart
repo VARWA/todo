@@ -12,11 +12,11 @@ class DioHelper {
     _dio = Dio();
     _dio.options.baseUrl = _baseUrl;
     _dio.options.headers = {'Authorization': 'Bearer $_token'};
-
   }
 
   Future<AllTasksResponse> getTasksList() async {
-    final response = await _dio.get<Map<String, dynamic>>('$_baseUrl/list'); // todo: add token
+    final response = await _dio
+        .get<Map<String, dynamic>>('$_baseUrl/list'); // todo: add token
     if (response.statusCode == 200) {
       final data = response.data;
       return AllTasksResponse.fromJson(data!);
@@ -26,8 +26,7 @@ class DioHelper {
       throw ServerErrorType.authError;
     } else if (response.statusCode == 404) {
       throw ServerErrorType.taskNotExists;
-    }
-    else {
+    } else {
       throw ServerErrorType.otherError;
     }
   }

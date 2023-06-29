@@ -29,7 +29,7 @@ class TaskInListWithoutDeadlineWidget extends StatelessWidget {
         activeColor: LightThemeColors.green,
         checkColor: LightThemeColors.white,
         fillColor: MaterialStateProperty.resolveWith(
-              (Set<MaterialState> states) {
+          (Set<MaterialState> states) {
             if (!states.contains(MaterialState.selected)) {
               return task.importance == ImportanceValues.highGlobal
                   ? OtherColors.redCheckboxFillColor

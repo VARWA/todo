@@ -7,13 +7,11 @@ class NewTaskModel extends ChangeNotifier {
   String taskText = '';
   bool _haveDeadline = true;
 
-
   bool get haveDeadline => _haveDeadline;
 
-   setTaskText(String newText){
-      taskText = newText;
-      notifyListeners();
-
+  setTaskText(String newText) {
+    taskText = newText;
+    notifyListeners();
   }
 
   DateTime currentDate = DateTime.now();
@@ -21,9 +19,10 @@ class NewTaskModel extends ChangeNotifier {
 
   NewTaskModel({required this.newTask, required this.isNew});
 
-  void setInitText(String text){
+  void setInitText(String text) {
     taskText = text;
   }
+
   void switchDeadline() {
     _haveDeadline = !_haveDeadline;
     notifyListeners();

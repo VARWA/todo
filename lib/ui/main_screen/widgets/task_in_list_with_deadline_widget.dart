@@ -32,7 +32,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
         activeColor: LightThemeColors.green,
         checkColor: LightThemeColors.white,
         fillColor: MaterialStateProperty.resolveWith(
-              (Set<MaterialState> states) {
+          (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return task.importance == ImportanceValues.highGlobal
                   ? OtherColors.redCheckboxFillColor
@@ -54,9 +54,8 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
       ),
       title: formattedTitle,
       //formattedText,
-      subtitle: Text(
-          DateFormat('d MMMM yyyy', context.deviceLocale.toString())
-              .format(deadline!)),
+      subtitle: Text(DateFormat('d MMMM yyyy', context.deviceLocale.toString())
+          .format(deadline!)),
       trailing: IconButton(
         icon: const Icon(
           Icons.info_outline_rounded,

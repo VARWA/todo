@@ -29,8 +29,10 @@ class Task {
             : null,
         done = res['done'] == 1,
         color = res['color'],
-        createdAt = DateTime.fromMillisecondsSinceEpoch(res['createdAt'] * 1000),
-        changedAt = DateTime.fromMillisecondsSinceEpoch(res['changedAt'] * 1000),
+        createdAt =
+            DateTime.fromMillisecondsSinceEpoch(res['createdAt'] * 1000),
+        changedAt =
+            DateTime.fromMillisecondsSinceEpoch(res['changedAt'] * 1000),
         lastUpdatedBy = res['lastUpdatedBy'];
 
   Map<String, Object?> toMap() {

@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:todo/repository/entity/global_task.dart';
 
 part 'one_task_response.g.dart';
+
 @JsonSerializable()
 class OneTaskResponse {
   @JsonKey(includeToJson: false)
