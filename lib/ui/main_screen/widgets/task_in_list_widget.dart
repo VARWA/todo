@@ -10,7 +10,7 @@ import '../../../themes/src/light_theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {
-  final int id;
+  final String id;
 
   const TaskInListWidget({super.key, required this.id});
 

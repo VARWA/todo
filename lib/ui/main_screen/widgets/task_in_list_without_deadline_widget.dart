@@ -17,7 +17,7 @@ class TaskInListWithoutDeadlineWidget extends StatelessWidget {
 
   final Task task;
   final TasksListModel model;
-  final int id;
+  final String id;
   final Widget formattedTitle;
 
   @override
@@ -53,7 +53,7 @@ class TaskInListWithoutDeadlineWidget extends StatelessWidget {
         onPressed: () {
           // Navigator.pushNamed(context, RouteNames.changeTask);
           Navigator.pushNamed(context, RouteNames.changeTask,
-              arguments: task.localId);
+              arguments: task.id);
         },
       ),
     );

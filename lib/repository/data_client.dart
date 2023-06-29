@@ -14,8 +14,8 @@ class DataClient {
     await _dbHelper.insert(task);
   }
 
-  void deleteTaskFromDB(int localId) async {
-    await _dbHelper.delete(localId);
+  void deleteTaskFromDB(String id) async {
+    await _dbHelper.delete(id);
   }
 
   void updateTaskInDB(Task task) async {

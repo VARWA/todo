@@ -12,6 +12,7 @@ import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
 import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart';
+import 'package:uuid/uuid.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
   const ChangeTaskScreenWidget({Key? key}) : super(key: key);
@@ -27,14 +28,14 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
     final model = context.read<TasksListModel>();
-    int? maxId;
     Task? newTaskFromList;
     bool isNew = false;
 
     if (args != null) {
-      final oldTask = model.tasksList[model.searchTaskIndexById(args as int)];
+      final oldTask =
+          model.tasksList[model.searchTaskIndexById(args as String)];
       newTaskFromList = Task(
-        localId: oldTask.localId,
+        id: oldTask.id,
         text: oldTask.text,
         importance: oldTask.importance,
         deadline: oldTask.deadline,
@@ -43,14 +44,13 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
         changedAt: oldTask.changedAt,
       );
     } else {
-      maxId = context.read<TasksListModel>().maxId;
       isNew = true;
     }
-    logger.i('Args results: $newTaskFromList, $maxId');
-    Task createNewTask(id) {
+    logger.i('Args results: $newTaskFromList');
+    Task createNewTask() {
       DateTime dateTimeNow = DateTime.now();
       return Task(
-        localId: id + 1,
+        id: const Uuid().v4(),
         text: '',
         importance: ImportanceValues.basicGlobal,
         deadline: null,
@@ -59,17 +59,16 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
       );
     }
 
-    Task createPreTask(int? maxId, Task? newTaskFromList) {
-      logger.i('Data for create PreNewTask max_Id from task_list: $maxId,'
-          ' task for recreating : $newTaskFromList');
+    Task createPreTask(Task? newTaskFromList) {
+      logger.i(' task for recreating : $newTaskFromList');
       if (newTaskFromList != null) {
         return newTaskFromList;
       } else {
-        return createNewTask(maxId);
+        return createNewTask();
       }
     }
 
-    final createdPreTask = createPreTask(maxId, newTaskFromList);
+    final createdPreTask = createPreTask(newTaskFromList);
 
     return ListenableProvider(
       create: (_) => NewTaskModel(newTask: createdPreTask, isNew: isNew),

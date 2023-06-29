@@ -1,5 +1,5 @@
 class Task {
-  int localId;
+  String id;
   String text;
   String importance;
   DateTime? deadline;
@@ -10,7 +10,7 @@ class Task {
   String lastUpdatedBy = 'null';
 
   Task(
-      {required this.localId,
+      {required this.id,
       required this.text,
       this.importance = 'basic',
       this.deadline,
@@ -21,7 +21,7 @@ class Task {
       this.lastUpdatedBy = 'null'});
 
   Task.fromMap(Map<String, dynamic> res)
-      : localId = res['localId'],
+      : id = res['id'],
         text = res['text'],
         importance = res['importance'],
         deadline = res['deadline'] != null
@@ -37,7 +37,7 @@ class Task {
 
   Map<String, Object?> toMap() {
     return {
-      "localId": localId,
+      "id": id,
       "text": text,
       "importance": importance,
       "deadline":

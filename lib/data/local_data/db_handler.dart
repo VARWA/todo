@@ -30,7 +30,7 @@ class DBHelper {
   _createDatabase(Database db, int version) async {
     logger.i('CREATING DATABASE');
     await db.execute(
-        "CREATE TABLE mytask(id INTEGER PRIMARY KEY AUTOINCREMENT, localId INT NOT NULL, text TEXT NOT NULL, importance TEXT NOT NULL, deadline INTEGER, done INTEGER NOT NULL, color TEXT, createdAt INTEGER NOT NULL, changedAt INTEGER NOT NULL, lastUpdatedBy TEXT NOT NULL)");
+        "CREATE TABLE mytask(idp INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL, text TEXT NOT NULL, importance TEXT NOT NULL, deadline INTEGER, done INTEGER NOT NULL, color TEXT, createdAt INTEGER NOT NULL, changedAt INTEGER NOT NULL, lastUpdatedBy TEXT NOT NULL)");
   }
 
   Future<Task> insert(Task task) async {
@@ -50,18 +50,17 @@ class DBHelper {
     return queryResult.map((e) => Task.fromMap(e)).toList();
   }
 
-  Future<int> delete(int localId) async {
-    logger.i('DELETING TASK WITH $localId FROM DATABASE');
+  Future<int> delete(String id) async {
+    logger.i('DELETING TASK WITH id = $id FROM DATABASE');
 
     var dbClient = await db;
-    return await dbClient!
-        .delete('mytask', where: 'localId = ?', whereArgs: [localId]);
+    return await dbClient!.delete('mytask', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> update(Task task) async {
     logger.i('UPDATING DATABASE');
     var dbClient = await db;
-    return await dbClient!.update('mytask', task.toMap(),
-        where: 'localId = ?', whereArgs: [task.localId]);
+    return await dbClient!
+        .update('mytask', task.toMap(), where: 'id = ?', whereArgs: [task.id]);
   }
 }

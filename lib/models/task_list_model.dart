@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:todo/repository/data_client.dart';
@@ -59,21 +57,21 @@ class TasksListModel with ChangeNotifier {
     notifyListeners();
   }
 
-  int searchTaskIndexById(id) {
+  int searchTaskIndexById(String id) {
     for (int i = 0; i < _tasksList.length; i++) {
-      if (_tasksList[i].localId == id) {
+      if (_tasksList[i].id == id) {
         return i;
       }
     }
     return -1;
   }
 
-  void deleteTaskWithLocalId(localId) {
-    dataClient.deleteTaskFromDB(localId);
+  void deleteTaskWithId(id) {
+    dataClient.deleteTaskFromDB(id);
     loadTasks();
   }
 
-  void switchCompleted(localId){
+  void switchCompleted(localId) {
     final index = searchTaskIndexById(localId);
     _tasksList[index].done = !_tasksList[index].done;
     dataClient.updateTaskInDB(_tasksList[index]);
@@ -81,18 +79,9 @@ class TasksListModel with ChangeNotifier {
     loadTasks();
   }
 
-  int get maxId {
-    int maxId = -1;
-    for (int i = 0; i < _tasksList.length; i++) {
-      maxId = max(maxId, _tasksList[i].localId);
-    }
-    if (maxId == -1) return 0;
-    return maxId;
-  }
-
   int searchIndex(Task el) {
     for (int i = 0; i < _tasksList.length; i++) {
-      if (_tasksList[i].localId == el.localId) {
+      if (_tasksList[i].id == el.id) {
         return i;
       }
     }
