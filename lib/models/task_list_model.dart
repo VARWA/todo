@@ -102,8 +102,4 @@ class TasksListModel with ChangeNotifier {
       logger.i('Task remake, task: $task');
     }
   }
-
-  void checkVizibility() {
-    logger.d('КНОПКА НАЖАТА');
-  }
 }

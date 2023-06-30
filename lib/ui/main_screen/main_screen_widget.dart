@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/ui/main_screen/widgets/completed_count_widget.dart';
 import 'package:todo/ui/main_screen/widgets/main_app_bar_widget.dart';
 import 'package:todo/ui/main_screen/widgets/tasks_list_widget.dart';
 
@@ -18,6 +19,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: const CustomScrollView(
         slivers: [
           MainAppBarWidget(),
+          CompletedCountWidget(),
           TasksListWidget(),
         ],
       ),

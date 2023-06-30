@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../models/task_list_model.dart';
 import '../../../themes/src/light_theme.dart';
 
-import 'completed_count_widget.dart';
 import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
 
@@ -78,25 +77,19 @@ class _TasksListWidgetState extends State<TasksListWidget> {
       },
     );
     return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          const CompletedCountWidget(),
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              elevation: 4,
-              shadowColor: Colors.black,
-              color: Theme.of(context).cardColor,
-              child: Column(
-                children: items,
-              ),
-            ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ],
+          elevation: 4,
+          shadowColor: Colors.black,
+          color: Theme.of(context).cardColor,
+          child: Column(
+            children: items,
+          ),
+        ),
       ),
     );
   }
