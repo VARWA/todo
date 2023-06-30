@@ -26,43 +26,49 @@ class ChangeImportanceWidget extends StatelessWidget {
       };
     }
 
-    String convertLocaleToGlobal(String value) {
-      if (localeValues['high'] == value) return ImportanceValues.highGlobal;
-      if (localeValues['basic'] == value) return ImportanceValues.basicGlobal;
-      if (localeValues['low'] == value) return ImportanceValues.lowGlobal;
-      return ImportanceValues.basicGlobal;
+    Text setTextWithStyle(value) {
+      if (value == localeValues['high']) {
+        return Text(
+          value,
+          style: const TextStyle(color: LightThemeColors.red),
+        );
+      } else {
+        return Text(value);
+      }
     }
 
-    return DropdownButton<String>(
-      value: convertGlobalToLocale(
-          context.watch<NewTaskModel>().newTask.importance),
-      onChanged: (String? value) {
-        context
-            .read<NewTaskModel>()
-            .setPriorityLevel(convertLocaleToGlobal(value!));
+    return PopupMenuButton<String>(
+      initialValue: convertGlobalToLocale(
+          context.read<NewTaskModel>().newTask.importance),
+      itemBuilder: (_) => [
+        PopupMenuItem<String>(
+          value: ImportanceValues.basicGlobal,
+          child: Text(localeValues['basic']!),
+        ),
+        PopupMenuItem<String>(
+          value: ImportanceValues.lowGlobal,
+          child: Text(localeValues['low']!),
+        ),
+        PopupMenuItem<String>(
+          value: ImportanceValues.highGlobal,
+          child: Text(
+            localeValues['high']!,
+            style: const TextStyle(color: LightThemeColors.red),
+          ),
+        )
+      ],
+      onSelected: (value) {
+        context.read<NewTaskModel>().setPriorityLevel(value);
       },
-      items: [
-        localeValues['basic']!,
-        localeValues['low']!,
-        localeValues['high']!,
-      ].map<DropdownMenuItem<String>>(
-        (String value) {
-          if (value == localeValues['high']) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: const TextStyle(color: LightThemeColors.red),
-              ),
-            );
-          } else {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }
-        },
-      ).toList(),
+      child: ListTile(
+        title: Text(
+          LocaleKeys.importance.tr(),
+        ),
+        subtitle: setTextWithStyle(
+          convertGlobalToLocale(
+              context.watch<NewTaskModel>().newTask.importance),
+        ),
+      ),
     );
   }
 }

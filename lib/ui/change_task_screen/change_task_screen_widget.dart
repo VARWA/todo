@@ -1,8 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/generated/locale_keys.g.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
@@ -82,25 +80,27 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: const RechangeAppBar(),
           body: ListView(
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(top: 20, right: 16, left: 16),
+                padding: EdgeInsets.only(top: 20, right: 16, left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const MainTextField(),
-                    const SizedBox(height: 16),
-                    Text(LocaleKeys.importance.tr()),
-                    const ChangeImportanceWidget(),
+                    MainTextField(),
                   ],
                 ),
               ),
-              const Column(
+              Column(
                 children: [
-                  Divider(),
+                  SizedBox(height: 16),
+                  ChangeImportanceWidget(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Divider(thickness: 1),
+                  ),
                   ChangeDateWidget(),
-                  Divider(),
+                  Divider(thickness: 1),
                   DeleteTaskWidget(),
                 ],
               )

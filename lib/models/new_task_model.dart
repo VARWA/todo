@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
+  Logger logger = Logger(printer: PrettyPrinter());
   Task newTask;
   bool isNew;
   String taskText = '';
@@ -39,6 +41,7 @@ class NewTaskModel extends ChangeNotifier {
 
   void setPriorityLevel(value) {
     newTask.importance = value;
+    logger.i('Changed importance: $value');
     notifyListeners();
   }
 }

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/generated/locale_keys.g.dart';
+import 'package:todo/themes/src/light_theme.dart';
 
 import '../../../models/new_task_model.dart';
 
@@ -13,7 +14,7 @@ class ChangeDateWidget extends StatefulWidget {
 }
 
 class _ChangeDateWidgetState extends State<ChangeDateWidget> {
-  late String subtitle;
+  late Text subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +37,19 @@ class _ChangeDateWidgetState extends State<ChangeDateWidget> {
     }
 
     if (model.haveDeadline == true && model.deadlineDate != null) {
-      subtitle = DateFormat('d MMMM yyyy', localization.toString())
-          .format(model.deadlineDate!);
+      subtitle = Text(
+        DateFormat('d MMMM yyyy', localization.toString())
+            .format(model.deadlineDate!),
+        style: const TextStyle(color: LightThemeColors.blue),
+      );
     } else {
-      subtitle = LocaleKeys.withoutDeadlineText.tr();
+      subtitle = Text(LocaleKeys.withoutDeadlineText.tr());
     }
     return SwitchListTile(
       title: const Text(LocaleKeys.deadline).tr(),
-      subtitle: Text(subtitle),
+      subtitle: subtitle,
       value: context.watch<NewTaskModel>().haveDeadline &&
-          subtitle != LocaleKeys.withoutDeadlineText.tr(),
+          subtitle.data != LocaleKeys.withoutDeadlineText.tr(),
       onChanged: (bool value) {
         setState(
           () {
