@@ -8,13 +8,15 @@ import '../../change_task_screen/elements/importance_values.dart';
 import '../../navigation/routes.dart';
 
 class TaskInListWithDeadlineWidget extends StatelessWidget {
+  final void Function(String?) onChangeTaskTap;
+
   const TaskInListWithDeadlineWidget({
     super.key,
     required this.task,
     required this.model,
     required this.id,
     required this.formattedTitle,
-    required this.deadline,
+    required this.deadline, required this.onChangeTaskTap,
   });
 
   final Task task;
@@ -56,11 +58,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
         icon: const Icon(
           Icons.info_outline_rounded,
         ),
-        onPressed: () {
-          // Navigator.pushNamed(context, RouteNames.changeTask);
-          Navigator.pushNamed(context, RouteNames.changeTask,
-              arguments: task.id);
-        },
+        onPressed: () => onChangeTaskTap(task.id),
       ),
     );
   }

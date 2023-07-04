@@ -11,8 +11,10 @@ import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {
   final String id;
+  final void Function(String?) onChangeTaskTap;
 
-  const TaskInListWidget({super.key, required this.id});
+  const TaskInListWidget(
+      {super.key, required this.id, required this.onChangeTaskTap});
 
   @override
   State<TaskInListWidget> createState() => _TaskInListWidgetState();
@@ -101,14 +103,21 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     final DateTime? deadline = task.deadline;
     if (deadline != null) {
       return TaskInListWithDeadlineWidget(
-          task: task,
-          model: model,
-          id: id,
-          formattedTitle: formattedTitle,
-          deadline: deadline);
+        task: task,
+        model: model,
+        id: id,
+        formattedTitle: formattedTitle,
+        deadline: deadline,
+        onChangeTaskTap: widget.onChangeTaskTap,
+      );
     } else {
       return TaskInListWithoutDeadlineWidget(
-          task: task, model: model, id: id, formattedTitle: formattedTitle);
+        task: task,
+        model: model,
+        id: id,
+        formattedTitle: formattedTitle,
+        onChangeTaskTap: widget.onChangeTaskTap,
+      );
     }
   }
 }

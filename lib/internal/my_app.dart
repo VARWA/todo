@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
+import 'package:todo/ui/navigation/router_delegate.dart';
 
 import '../ui/navigation/routes.dart';
 
@@ -11,16 +12,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final routerDelegate = MyRouterDelegate();
+
     return ListenableProvider(
       create: (context) => TasksListModel(),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'To-do',
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        initialRoute: RouteNames.initialRoute,
-        routes: RoutesBuilder.routes,
+        routerDelegate: routerDelegate,
+        // initialRoute: RouteNames.initialRoute,
+        // routes: RoutesBuilder.routes,
         theme: lightThemeData(),
       ),
     );

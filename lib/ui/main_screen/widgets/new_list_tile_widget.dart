@@ -6,7 +6,9 @@ import '../../../themes/src/light_theme.dart';
 import '../../navigation/routes.dart';
 
 class NewListTileWidget extends StatelessWidget {
-  const NewListTileWidget({Key? key}) : super(key: key);
+  final void Function(String?) onChangeTaskTap;
+
+  const NewListTileWidget({Key? key, required this.onChangeTaskTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,7 @@ class NewListTileWidget extends StatelessWidget {
         LocaleKeys.createNewTaskFromList.tr(),
         style: const TextStyle(color: LightThemeColors.labelTertiary),
       ),
-      onTap: () {
-        Navigator.pushNamed(context, RouteNames.changeTask);
-      },
+      onTap: () => onChangeTaskTap(null),
     );
   }
 }

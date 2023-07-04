@@ -37,10 +37,19 @@ class DataClient {
     return newList;
   }
 
+  Future<bool> checkTaskById(String id) async {
+    List<Task> tasksList = await loadTasksFromDB();
+    for (int i = 0; i <= tasksList.length; i++) {
+      if (tasksList[i].id == id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future<List<Task>> loadTaskFromData() async {
     List<Task> tasksFromDB = await loadTasksFromDB();
     logger.i('Got list from database: $tasksFromDB');
-
 
     int localRevisionFromDB = await getLocalRevisionFromDatabase();
     int oldServerRevisionFromDB = await getServerRevisionFromDatabase();
@@ -49,7 +58,7 @@ class DataClient {
     logger.i('Got old server revision from database: $oldServerRevisionFromDB');
 
     bool hasInternet = await InternetConnectionChecker().hasConnection;
-    if (!hasInternet){
+    if (!hasInternet || true) {
       logger.i('NO CONNECT TO INTERNET -> load data only from database');
       return tasksFromDB;
     }
@@ -133,7 +142,7 @@ class DataClient {
     } on ServerError {
       logger.e('Server error, load tasks from Database');
       return tasksFromDB;
-    } catch (e){
+    } catch (e) {
       logger.e('Connection error, Check your network');
       logger.e(e);
       return tasksFromDB;

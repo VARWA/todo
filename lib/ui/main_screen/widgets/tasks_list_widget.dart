@@ -9,8 +9,10 @@ import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
+  final void Function(String?) onChangeTaskTap;
+
   const TasksListWidget({
-    super.key,
+    super.key, required this.onChangeTaskTap,
   });
 
   @override
@@ -68,11 +70,11 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               return;
             },
             child: TaskInListWidget(
-              id: model.tasksListForMenu[index].id,
+              id: model.tasksListForMenu[index].id, onChangeTaskTap: widget.onChangeTaskTap,
             ),
           );
         } else {
-          return const NewListTileWidget();
+          return  NewListTileWidget(onChangeTaskTap: widget.onChangeTaskTap,);
         }
       },
     );

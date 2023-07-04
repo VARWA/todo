@@ -13,7 +13,8 @@ import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart'
 import 'package:uuid/uuid.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
-  const ChangeTaskScreenWidget({Key? key}) : super(key: key);
+  final String? taskId;
+  const ChangeTaskScreenWidget({Key? key, this.taskId}) : super(key: key);
 
   @override
   State<ChangeTaskScreenWidget> createState() => _ChangeTaskScreenWidgetState();
@@ -24,14 +25,14 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments;
+
     final model = context.read<TasksListModel>();
     Task? newTaskFromList;
     bool isNew = false;
 
-    if (args != null) {
+    if (widget.taskId != null) {
       final oldTask =
-          model.tasksList[model.searchTaskIndexById(args as String)];
+          model.tasksList[model.searchTaskIndexById(widget.taskId as String)];
       newTaskFromList = Task(
         id: oldTask.id,
         text: oldTask.text,
