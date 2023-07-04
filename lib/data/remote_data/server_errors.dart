@@ -6,7 +6,7 @@ enum ServerErrorType {
 }
 
 class ServerError implements Exception {
-  final ServerError type;
+  final ServerErrorType type;
 
   ServerError(this.type);
 }

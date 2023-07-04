@@ -18,7 +18,6 @@ class TasksListModel with ChangeNotifier {
 
   loadTasks() async {
     var loadedList = await dataClient.loadTaskFromData();
-    logger.d('Loaded tasks in model $loadedList');
     _tasksList = loadedList;
     notifyListeners();
   }

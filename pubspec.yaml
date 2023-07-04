@@ -47,6 +47,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   json_annotation: ^4.8.1
   uuid: ^3.0.7
+  internet_connection_checker: ^1.0.0+1
 
 
 dev_dependencies:

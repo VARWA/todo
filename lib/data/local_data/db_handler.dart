@@ -11,7 +11,7 @@ class DBHelper {
   Logger logger = Logger(printer: PrettyPrinter());
 
   Future<Database?> get db async {
-    logger.i('GETTING DATABASE');
+    // logger.i('GETTING DATABASE');
     if (_db != null) {
       return _db;
     }
@@ -41,15 +41,21 @@ class DBHelper {
         lastUpdatedBy TEXT NOT NULL
         )''');
     await db.execute('''
-        CREATE TABLE revision(id INTEGER PRIMARY KEY AUTOINCREMENT,
-        rvalue INTEGER
+        CREATE TABLE last_server_revision(id INTEGER PRIMARY KEY AUTOINCREMENT,
+        svalue INTEGER
         )''');
-    db.insert('revision', {'rvalue': 0});
+    db.insert('last_server_revision', {'svalue': 0});
+    await db.execute('''
+        CREATE TABLE database_revision(id INTEGER PRIMARY KEY AUTOINCREMENT,
+        dvalue INTEGER
+        )''');
+    db.insert('database_revision', {'dvalue': 0});
   }
 
   Future<Task> insert(Task task) async {
     logger.i('INSERTING INTO DATABASE');
     var dbClient = await db;
+    incrementDatabaseRevision();
     await dbClient?.insert('mytask', task.toMap());
     return task;
   }
@@ -60,33 +66,77 @@ class DBHelper {
 
     final List<Map<String, Object?>> queryResult =
         await _db!.rawQuery('SELECT * FROM mytask');
-    logger.d(queryResult);
+    logger.d('Got result from database: $queryResult');
     return queryResult.map((e) => Task.fromMap(e)).toList();
   }
 
   Future<int> delete(String id) async {
     logger.i('DELETING TASK WITH id = $id FROM DATABASE');
-
+    incrementDatabaseRevision();
     var dbClient = await db;
     return await dbClient!.delete('mytask', where: 'id = ?', whereArgs: [id]);
   }
 
+  rewriteAllData(
+      {required List<Task> newTasks, required int newRevision}) async {
+    logger.i('REWRITING DATA IN DATABASE');
+    await deleteAllTasks();
+    setDatabaseRevision(newRevision);
+    _setLastServerRevision(newRevision);
+    for (int i = 0; i < newTasks.length; i++) {
+      Task task = newTasks[i];
+      await insertTaskForRewriting(task);
+    }
+  }
+
+  deleteAllTasks() async {
+    var dbClient = await db;
+    dbClient!.rawDelete("Delete from mytask");
+    logger.i('All tasks deleted');
+  }
+
+  Future insertTaskForRewriting(Task task) async {
+    logger.i('INSERTING INTO DATABASE WHILE REWRITE $task');
+    var dbClient = await db;
+    return await dbClient?.insert('mytask', task.toMap());
+  }
+
   Future<int> update(Task task) async {
     logger.i('UPDATING DATABASE');
+    incrementDatabaseRevision();
     var dbClient = await db;
     return await dbClient!
         .update('mytask', task.toMap(), where: 'id = ?', whereArgs: [task.id]);
   }
 
-  Future getRevision() async {
+  Future getDatabaseRevision() async {
     var dbClient = await db;
-    var queryResult =
-        await dbClient!.query('revision', orderBy: 'rvalue DESC', limit: 1);
-    return queryResult.map((e) => e['rvalue']).toList()[0];
+    var queryResult = await dbClient!
+        .query('database_revision', orderBy: 'dvalue DESC', limit: 1);
+    return queryResult.map((e) => e['dvalue']).toList()[0];
   }
 
-  Future setRevision(int newRevision) async {
+  Future setDatabaseRevision(int newRevision) async {
     var dbClient = await db;
-    return await dbClient!.insert('revision', {'rvalue': newRevision});
+    await dbClient!.insert('database_revision', {'dvalue': newRevision});
+  }
+
+  Future<void> incrementDatabaseRevision() async {
+    final int oldRevision = await getDatabaseRevision();
+    final int newRevision = oldRevision + 1;
+    logger.i('Local revision update: $oldRevision -> $newRevision');
+    await setDatabaseRevision(newRevision);
+  }
+
+  Future getLastServerRevision() async {
+    var dbClient = await db;
+    var queryResult = await dbClient!
+        .query('last_server_revision', orderBy: 'svalue DESC', limit: 1);
+    return queryResult.map((e) => e['svalue']).toList()[0];
+  }
+
+  Future _setLastServerRevision(int newRevision) async {
+    var dbClient = await db;
+    await dbClient!.insert('last_server_revision', {'svalue': newRevision});
   }
 }

@@ -23,38 +23,49 @@ class DioHelper {
         .get<Map<String, dynamic>>('$_baseUrl/list'); // todo: add token
     if (response.statusCode == 200) {
       final data = response.data;
+      logger.i('GOT DATA FROM SERVER:'
+          '${response.data}');
       return GetAllTasksResponse.fromJson(data!);
     } else if (response.statusCode == 400) {
-      throw ServerErrorType.wrongResponseError;
+      throw ServerError(ServerErrorType.wrongResponseError);
     } else if (response.statusCode == 401) {
-      throw ServerErrorType.authError;
+      throw ServerError(ServerErrorType.authError);
     } else if (response.statusCode == 404) {
-      throw ServerErrorType.taskNotExists;
+      throw ServerError(ServerErrorType.taskNotExists);
     } else {
-      throw ServerErrorType.otherError;
+      throw ServerError(ServerErrorType.otherError);
     }
   }
 
-  Future<GetAllTasksResponse> patchTasksList(
+  patchTasksList(
       {required int revision, required List<GlobalTask> list}) async {
-    final response = await _dio.post(
-      '$_baseUrl/list',
-      data: PatchAllTasksResponse(list),
-      options: Options(headers: {
-        'X-Last-Known-Revision': revision.toString(),
-      }),
-    ); // todo: add token
-    if (response.statusCode == 200) {
-      final data = response.data;
-      return GetAllTasksResponse.fromJson(data!);
-    } else if (response.statusCode == 400) {
-      throw ServerErrorType.wrongResponseError;
-    } else if (response.statusCode == 401) {
-      throw ServerErrorType.authError;
-    } else if (response.statusCode == 404) {
-      throw ServerErrorType.taskNotExists;
-    } else {
-      throw ServerErrorType.otherError;
+    try {
+      var listForSending = PatchAllTasksResponse(list).toJson();
+      final response = await _dio.patch(
+        '$_baseUrl/list',
+        data: listForSending,
+        options: Options(
+          headers: {
+            'X-Last-Known-Revision': revision.toString(),
+          },
+        ),
+      );
+      logger.i('RESPONSE AFTER PATCHING:'
+          '${response.data}');
+    } on DioException catch (e) {
+      logger.e(e);
+      // if (response.statusCode == 200) {
+      //   final data = response.data;
+      //   return GetAllTasksResponse.fromJson(data!);
+      // } else if (response.statusCode == 400) {
+      //   throw ServerError(ServerErrorType.wrongResponseError);
+      // } else if (response.statusCode == 401) {
+      //   throw ServerError(ServerErrorType.authError);
+      // } else if (response.statusCode == 404) {
+      //   throw ServerError(ServerErrorType.taskNotExists);
+      // } else {
+      //   throw ServerError(ServerErrorType.otherError);
+      // }
     }
   }
 }

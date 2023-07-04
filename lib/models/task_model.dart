@@ -52,6 +52,16 @@ class Task {
 
   @override
   String toString() {
-    return 'Task: ${toMap()}';
+    return '''Task: {
+    "id": $id,
+    "text": $text,
+    "importance": $importance,
+    "deadline": $deadline,
+    "done": $done,
+    "color": $color,
+    "createdAt": $createdAt,
+    "changedAt": $changedAt,
+    "lastUpdatedBy": $lastUpdatedBy
+  }''';
   }
 }
