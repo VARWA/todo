@@ -5,7 +5,7 @@ import 'package:todo/models/task_list_model.dart';
 import 'package:todo/themes/src/light_theme.dart';
 import 'package:todo/ui/navigation/router_delegate.dart';
 
-import '../ui/navigation/routes.dart';
+import '../ui/navigation/route_information_parser.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final routerDelegate = MyRouterDelegate();
+    final routeInformationParser = MyRouteInformationParser();
 
     return ListenableProvider(
       create: (context) => TasksListModel(),
@@ -23,8 +24,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         routerDelegate: routerDelegate,
-        // initialRoute: RouteNames.initialRoute,
-        // routes: RoutesBuilder.routes,
+        routeInformationParser: routeInformationParser,
         theme: lightThemeData(),
       ),
     );

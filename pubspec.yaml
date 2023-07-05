@@ -48,6 +48,9 @@ dependencies:
   json_annotation: ^4.8.1
   uuid: ^3.0.7
   internet_connection_checker: ^1.0.0+1
+  sqflite_common_ffi: ^2.2.5
+  sqflite_common_ffi_web: ^0.3.6
+  get_it: ^7.6.0
 
 
 dev_dependencies:

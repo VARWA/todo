@@ -50,8 +50,10 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
 
 
     if (configuration.isTaskDetailsScreen) {
+      final taskId = configuration.selectedTaskId ?? 'new';
+
       return RouteInformation(
-          location: '/${Routes.changeTask}/${configuration.selectedTaskId}');
+          location: '/${Routes.changeTask}/$taskId');
     }
 
     if (configuration.isUnknown) {

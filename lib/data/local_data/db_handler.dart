@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:io' as io;
 import 'package:path/path.dart';
-
+import 'package:sqflite/sqflite.dart';
 import '../../models/task_model.dart';
 
 class DBHelper {
@@ -21,7 +21,7 @@ class DBHelper {
 
   initDatabase() async {
     logger.i('INITIAL DATABASE');
-    io.Directory documentDirectory = await getApplicationDocumentsDirectory();
+    final Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'Task.db');
     var db = await openDatabase(path, version: 1, onCreate: _createDatabase);
     return db;

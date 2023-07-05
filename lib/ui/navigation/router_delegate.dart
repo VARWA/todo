@@ -28,7 +28,7 @@ class MyRouterDelegate extends RouterDelegate<NavigationState>
 
   @override
   Widget build(BuildContext context) {
-    logger.i('''state?.isTaskDetailsScreen = ${state?.isTaskDetailsScreen}
+    logger.d('''state?.isTaskDetailsScreen = ${state?.isTaskDetailsScreen}
     state?.isUnknown = ${state?.isUnknown}
     ''');
     return Navigator(
