@@ -4,4 +4,8 @@ abstract class ImportanceValues {
   static const String basicGlobal = 'basic';
 }
 
-enum Importance { basic, low, important }
+enum Importance {
+  basic,
+  low,
+  important,
+}

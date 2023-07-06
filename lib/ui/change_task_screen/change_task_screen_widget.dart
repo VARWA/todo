@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/new_task_model.dart';
-import 'package:todo/models/task_model.dart';
 import 'package:todo/models/task_list_model.dart';
-import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart';
+import 'package:todo/models/task_model.dart';
+import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_date_widget.dart';
+import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
-import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart';
 import 'package:uuid/uuid.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
   final String? taskId;
+
   const ChangeTaskScreenWidget({Key? key, this.taskId}) : super(key: key);
 
   @override
