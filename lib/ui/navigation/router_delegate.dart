@@ -1,14 +1,9 @@
-// import 'package:deeplinks_app/ui/cart_screen.dart';
-// import 'package:deeplinks_app/ui/item_details_screen.dart';
-// import 'package:deeplinks_app/ui/item_list_screen.dart';
-// import 'package:deeplinks_app/ui/unknown_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:todo/ui/change_task_screen/change_task_screen_widget.dart';
 import 'package:todo/ui/main_screen/main_screen_widget.dart';
 
-import '../../models/task_model.dart';
-import '../unknown_screen/unknown_screen_widget.dart';
+import '../main_screen/unknown_screen/unknown_screen_widget.dart';
 import 'navigation_state.dart';
 
 class MyRouterDelegate extends RouterDelegate<NavigationState>
@@ -42,7 +37,7 @@ class MyRouterDelegate extends RouterDelegate<NavigationState>
         if (state?.isTaskDetailsScreen == true)
           MaterialPage(
             child: ChangeTaskScreenWidget(
-               taskId: state?.selectedTaskId,
+              taskId: state?.selectedTaskId,
             ),
           ),
         if (state?.isUnknown == true)
@@ -69,9 +64,8 @@ class MyRouterDelegate extends RouterDelegate<NavigationState>
 
   void _showTaskDetails(String? taskId) {
     logger.i('Request to _showTaskDetails with taskId = $taskId');
-    state = NavigationState.taskDetailsScreen(taskId, createNewTask: taskId==null);
+    state = NavigationState.taskDetailsScreen(taskId,
+        createNewTask: taskId == null);
     notifyListeners();
   }
-
-
 }

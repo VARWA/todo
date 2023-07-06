@@ -48,13 +48,16 @@ dependencies:
   json_annotation: ^4.8.1
   uuid: ^3.0.7
   internet_connection_checker: ^1.0.0+1
-  sqflite_common_ffi: ^2.2.5
-  sqflite_common_ffi_web: ^0.3.6
   get_it: ^7.6.0
+  mockito: ^5.4.2
+  golden_toolkit: ^0.15.0
+  url_strategy: ^0.2.0
 
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

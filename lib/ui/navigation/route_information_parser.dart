@@ -21,14 +21,13 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
     final uri = Uri.parse(location);
     logger.i('Got uri: $uri');
 
-
     if (uri.pathSegments.isEmpty) {
       return NavigationState.tasksListScreen();
     }
 
     if (uri.pathSegments.length == 2) {
       final taskId = uri.pathSegments[1];
-       final dataRepository = DataClient();
+      final dataRepository = DataClient();
       if (uri.pathSegments[0] == Routes.changeTask &&
           await dataRepository.checkTaskById(taskId)) {
         return NavigationState.taskDetailsScreen(taskId);
@@ -47,13 +46,10 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
 
   @override
   RouteInformation? restoreRouteInformation(NavigationState configuration) {
-
-
     if (configuration.isTaskDetailsScreen) {
       final taskId = configuration.selectedTaskId ?? 'new';
 
-      return RouteInformation(
-          location: '/${Routes.changeTask}/$taskId');
+      return RouteInformation(location: '/${Routes.changeTask}/$taskId');
     }
 
     if (configuration.isUnknown) {

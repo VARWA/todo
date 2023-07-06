@@ -15,7 +15,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    void addTask() {
+    Future<void> addTask() async {
       final newModel = context.read<NewTaskModel>();
       DateTime? deadlineLastValue;
       if (newModel.haveDeadline && newModel.deadlineDate != null) {
@@ -30,7 +30,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
         createdAt: newModel.isNew ? DateTime.now() : newModel.newTask.createdAt,
         changedAt: DateTime.now(),
       );
-      context.read<TasksListModel>().addTask(newTask, newModel.isNew);
+      await context.read<TasksListModel>().addTask(newTask, newModel.isNew);
     }
 
     return AppBar(

@@ -10,5 +10,6 @@
   "withoutDeadlineText": "Нет",
   "createNewTaskFromList": "Новое",
   "deadline": "Сделать до",
-  "save": "Сохранить"
+  "save": "Сохранить",
+  "unknownPage": "Страница не найдена"
 }

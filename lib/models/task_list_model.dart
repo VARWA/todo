@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:todo/repository/data_client.dart';
 
+import '../di/service_locator.dart';
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
   Logger logger = Logger(printer: PrettyPrinter());
-  DataClient dataClient = DataClient();
+  DataClient dataClient = locator<DataClient>();
 
   List<Task> _tasksList = [];
 
@@ -65,14 +66,15 @@ class TasksListModel with ChangeNotifier {
     return -1;
   }
 
-  void deleteTaskWithId(id) {
-    dataClient.deleteTaskFromDB(id);
+  Future<void> deleteTaskWithId(id) async {
+    await dataClient.deleteTaskFromDB(id);
     loadTasks();
   }
 
   void switchCompleted(localId) {
     final index = searchTaskIndexById(localId);
     _tasksList[index].done = !_tasksList[index].done;
+    _tasksList[index].changedAt = DateTime.now();
     dataClient.updateTaskInDB(_tasksList[index]);
     logger.i('Task with localId $localId completed status updated');
     loadTasks();
@@ -86,19 +88,17 @@ class TasksListModel with ChangeNotifier {
     }
     return -1;
   }
-
-  void addTask(Task task, isNew) {
+  Future addTask(Task task, isNew) async {
     if (isNew) {
-      dataClient.addNewTaskIntoDB(task);
-      loadTasks();
+      await dataClient.addNewTaskIntoDB(task);
       // _tasksList.insert(0, task);
       logger.i('Task saved, task: $task');
     } else {
-      dataClient.updateTaskInDB(task);
-      loadTasks();
+      await dataClient.updateTaskInDB(task);
       // int ind = searchIndex(task);
       // _tasksList[ind] = task;
       logger.i('Task remake, task: $task');
     }
   }
+
 }

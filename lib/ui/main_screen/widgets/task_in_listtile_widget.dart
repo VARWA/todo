@@ -5,7 +5,6 @@ import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
 import '../../../themes/src/light_theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
-import '../../navigation/routes.dart';
 
 class TaskInListWithDeadlineWidget extends StatelessWidget {
   final void Function(String?) onChangeTaskTap;
@@ -16,7 +15,8 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
     required this.model,
     required this.id,
     required this.formattedTitle,
-    required this.deadline, required this.onChangeTaskTap,
+    required this.deadline,
+    required this.onChangeTaskTap,
   });
 
   final Task task;
@@ -36,14 +36,14 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
         fillColor: MaterialStateProperty.resolveWith(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
-              return task.importance == ImportanceValues.highGlobal
+              return task.importance == ImportanceValues.importantGlobal
                   ? OtherColors.redCheckboxFillColor
                   : Theme.of(context).cardColor;
             }
             return null;
           },
         ),
-        side: task.importance == ImportanceValues.highGlobal
+        side: task.importance == ImportanceValues.importantGlobal
             ? const BorderSide(color: LightThemeColors.red)
             : BorderSide(color: Theme.of(context).unselectedWidgetColor),
         onChanged: (bool? value) {
@@ -51,9 +51,12 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
         },
       ),
       title: formattedTitle,
-      //formattedText,
-      subtitle: Text(DateFormat('d MMMM yyyy', context.deviceLocale.toString())
-          .format(deadline!)),
+      subtitle: (deadline != null)
+          ? Text(
+              DateFormat('d MMMM yyyy', context.deviceLocale.toString())
+                  .format(deadline!),
+            )
+          : null,
       trailing: IconButton(
         icon: const Icon(
           Icons.info_outline_rounded,

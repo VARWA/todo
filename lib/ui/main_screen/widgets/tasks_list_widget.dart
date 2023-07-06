@@ -12,7 +12,8 @@ class TasksListWidget extends StatefulWidget {
   final void Function(String?) onChangeTaskTap;
 
   const TasksListWidget({
-    super.key, required this.onChangeTaskTap,
+    super.key,
+    required this.onChangeTaskTap,
   });
 
   @override
@@ -70,11 +71,14 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               return;
             },
             child: TaskInListWidget(
-              id: model.tasksListForMenu[index].id, onChangeTaskTap: widget.onChangeTaskTap,
+              id: model.tasksListForMenu[index].id,
+              onChangeTaskTap: widget.onChangeTaskTap,
             ),
           );
         } else {
-          return  NewListTileWidget(onChangeTaskTap: widget.onChangeTaskTap,);
+          return NewListTileWidget(
+            onChangeTaskTap: widget.onChangeTaskTap,
+          );
         }
       },
     );

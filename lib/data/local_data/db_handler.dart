@@ -10,8 +10,13 @@ class DBHelper {
   static Database? _db;
   Logger logger = Logger(printer: PrettyPrinter());
 
+  DBHelper._();
+
+  static final DBHelper _instance = DBHelper._();
+
+  factory DBHelper() => _instance;
+
   Future<Database?> get db async {
-    // logger.i('GETTING DATABASE');
     if (_db != null) {
       return _db;
     }
@@ -21,7 +26,8 @@ class DBHelper {
 
   initDatabase() async {
     logger.i('INITIAL DATABASE');
-    final Directory documentDirectory = await getApplicationDocumentsDirectory();
+    final Directory documentDirectory =
+        await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'Task.db');
     var db = await openDatabase(path, version: 1, onCreate: _createDatabase);
     return db;
@@ -66,6 +72,7 @@ class DBHelper {
 
     final List<Map<String, Object?>> queryResult =
         await _db!.rawQuery('SELECT * FROM mytask');
+
     logger.d('Got result from database: $queryResult');
     return queryResult.map((e) => Task.fromMap(e)).toList();
   }
@@ -74,11 +81,17 @@ class DBHelper {
     logger.i('DELETING TASK WITH id = $id FROM DATABASE');
     incrementDatabaseRevision();
     var dbClient = await db;
-    return await dbClient!.delete('mytask', where: 'id = ?', whereArgs: [id]);
+    return await dbClient!.delete(
+      'mytask',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
-  rewriteAllData(
-      {required List<Task> newTasks, required int newRevision}) async {
+  rewriteAllData({
+    required List<Task> newTasks,
+    required int newRevision,
+  }) async {
     logger.i('REWRITING DATA IN DATABASE');
     await deleteAllTasks();
     setDatabaseRevision(newRevision);
@@ -98,27 +111,40 @@ class DBHelper {
   Future insertTaskForRewriting(Task task) async {
     logger.i('INSERTING INTO DATABASE WHILE REWRITE $task');
     var dbClient = await db;
-    return await dbClient?.insert('mytask', task.toMap());
+    return await dbClient?.insert(
+      'mytask',
+      task.toMap(),
+    );
   }
 
   Future<int> update(Task task) async {
     logger.i('UPDATING DATABASE');
     incrementDatabaseRevision();
     var dbClient = await db;
-    return await dbClient!
-        .update('mytask', task.toMap(), where: 'id = ?', whereArgs: [task.id]);
+    return await dbClient!.update(
+      'mytask',
+      task.toMap(),
+      where: 'id = ?',
+      whereArgs: [task.id],
+    );
   }
 
   Future getDatabaseRevision() async {
     var dbClient = await db;
-    var queryResult = await dbClient!
-        .query('database_revision', orderBy: 'dvalue DESC', limit: 1);
+    var queryResult = await dbClient!.query(
+      'database_revision',
+      orderBy: 'dvalue DESC',
+      limit: 1,
+    );
     return queryResult.map((e) => e['dvalue']).toList()[0];
   }
 
   Future setDatabaseRevision(int newRevision) async {
     var dbClient = await db;
-    await dbClient!.insert('database_revision', {'dvalue': newRevision});
+    await dbClient!.insert(
+      'database_revision',
+      {'dvalue': newRevision},
+    );
   }
 
   Future<void> incrementDatabaseRevision() async {
@@ -130,13 +156,19 @@ class DBHelper {
 
   Future getLastServerRevision() async {
     var dbClient = await db;
-    var queryResult = await dbClient!
-        .query('last_server_revision', orderBy: 'svalue DESC', limit: 1);
+    var queryResult = await dbClient!.query(
+      'last_server_revision',
+      orderBy: 'svalue DESC',
+      limit: 1,
+    );
     return queryResult.map((e) => e['svalue']).toList()[0];
   }
 
   Future _setLastServerRevision(int newRevision) async {
     var dbClient = await db;
-    await dbClient!.insert('last_server_revision', {'svalue': newRevision});
+    await dbClient!.insert(
+      'last_server_revision',
+      {'svalue': newRevision},
+    );
   }
 }

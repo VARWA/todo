@@ -25,7 +25,6 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     final model = context.read<TasksListModel>();
     Task? newTaskFromList;
     bool isNew = false;

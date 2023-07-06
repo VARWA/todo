@@ -15,9 +15,10 @@ ___
     - Change task status from the main menu
     - Store your tasks locally
     - Internationalization support
+    - 
 ___
 ### State-Management
-	- Provider
+	- provider
 
 ### Local database
 	- sqflite
@@ -34,6 +35,10 @@ ___
 
 ### HTTP packages
 	- dio
+
+### DI
+	- provider
+    - get_it
 ____  
 ### Screenshots
 <img alt="image" src="https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0" width="320"/>

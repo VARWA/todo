@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const myTasks = 'myTasks';
   static const completed = 'completed';
   static const textForEmptyTaskField = 'textForEmptyTaskField';
@@ -13,4 +13,6 @@ abstract class LocaleKeys {
   static const createNewTaskFromList = 'createNewTaskFromList';
   static const deadline = 'deadline';
   static const save = 'save';
+  static const unknownPage = 'unknownPage';
+
 }

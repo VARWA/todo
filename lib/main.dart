@@ -1,25 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:logger/logger.dart';
 import 'package:todo/internal/my_app.dart';
+import 'package:url_strategy/url_strategy.dart';
 
+import 'di/service_locator.dart';
 import 'generated/codegen_loader.g.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  //
-  // if (kIsWeb) {
-  //   // Change default factory on the web
-  //   databaseFactory = databaseFactoryFfiWeb;
-  // } else {
-  //   sqfliteFfiInit();
-  //   databaseFactory = databaseFactoryFfi;
-  // }
-
+  setPathUrlStrategy();
+  setUpGetIt();
   await dotenv.load(fileName: ".env");
 
   runApp(

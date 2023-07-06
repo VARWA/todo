@@ -43,4 +43,9 @@ class GlobalTask {
       _$GlobalTaskFromJson(json);
 
   Map<String, dynamic> toJson() => _$GlobalTaskToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

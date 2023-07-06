@@ -12,13 +12,13 @@ class NavigationState {
   NavigationState.tasksListScreen()
       : _unknown = false,
         selectedTaskId = null,
-  createNewTask = false;
-  NavigationState.taskDetailsScreen(this.selectedTaskId, {this.createNewTask=false})
+        createNewTask = false;
+  NavigationState.taskDetailsScreen(this.selectedTaskId,
+      {this.createNewTask = false})
       : _unknown = false;
-  // selectedTaskId = null;
 
   NavigationState.unknownScreen()
       : _unknown = true,
         selectedTaskId = null,
-  createNewTask = false;
+        createNewTask = false;
 }

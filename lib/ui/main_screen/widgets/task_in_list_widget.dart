@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/ui/main_screen/widgets/task_in_list_with_deadline_widget.dart';
-import 'package:todo/ui/main_screen/widgets/task_in_list_without_deadline_widget.dart';
+import 'package:todo/ui/main_screen/widgets/task_in_listtile_widget.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
@@ -58,7 +57,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
           Expanded(child: text),
         ],
       );
-    } else if (task.importance == ImportanceValues.highGlobal) {
+    } else if (task.importance == ImportanceValues.importantGlobal) {
       final Widget highImportanceIcon = SvgPicture.asset(
         'assets/priority_icons/high_importance_icon.svg',
         width: 16,
@@ -101,23 +100,13 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     final Text formattedText = setTextStyle(task);
     final formattedTitle = setTitle(task: task, text: formattedText);
     final DateTime? deadline = task.deadline;
-    if (deadline != null) {
-      return TaskInListWithDeadlineWidget(
-        task: task,
-        model: model,
-        id: id,
-        formattedTitle: formattedTitle,
-        deadline: deadline,
-        onChangeTaskTap: widget.onChangeTaskTap,
-      );
-    } else {
-      return TaskInListWithoutDeadlineWidget(
-        task: task,
-        model: model,
-        id: id,
-        formattedTitle: formattedTitle,
-        onChangeTaskTap: widget.onChangeTaskTap,
-      );
-    }
+    return TaskInListWithDeadlineWidget(
+      task: task,
+      model: model,
+      id: id,
+      formattedTitle: formattedTitle,
+      deadline: deadline,
+      onChangeTaskTap: widget.onChangeTaskTap,
+    );
   }
 }

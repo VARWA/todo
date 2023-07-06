@@ -2,7 +2,7 @@ enum ServerErrorType {
   wrongResponseError,
   authError,
   taskNotExists,
-  otherError
+  otherError,
 }
 
 class ServerError implements Exception {

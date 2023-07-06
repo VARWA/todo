@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../themes/src/light_theme.dart';
-import '../../navigation/routes.dart';
 
 class NewListTileWidget extends StatelessWidget {
   final void Function(String?) onChangeTaskTap;
 
-  const NewListTileWidget({Key? key, required this.onChangeTaskTap}) : super(key: key);
+  const NewListTileWidget({Key? key, required this.onChangeTaskTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

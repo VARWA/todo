@@ -8,19 +8,26 @@ import 'package:todo/repository/entity/global_task.dart';
 import 'package:todo/repository/entity/parsers/tasks_parser.dart';
 
 import '../data/remote_data/dio_handler.dart';
+import '../di/service_locator.dart';
 
 class DataClient {
   Logger logger = Logger(printer: PrettyPrinter());
-  final DBHelper _dbHelper = DBHelper();
+  final DBHelper _dbHelper = locator<DBHelper>();
+  final DioHelper _dioHelper = locator<DioHelper>();
 
-  final DioHelper _dioHelper = DioHelper();
+  DataClient._();
+
+  static final DataClient _instance = DataClient._();
+
+  factory DataClient() => _instance;
+
 
   Future getLocalRevisionFromDatabase() async {
     return _dbHelper.getDatabaseRevision();
   }
 
   Future getServerRevisionFromDatabase() async {
-    return _dbHelper.getDatabaseRevision();
+    return _dbHelper.getLastServerRevision();
   }
 
   Future<List<Task>> loadTasksFromDB() async {
@@ -51,17 +58,17 @@ class DataClient {
     List<Task> tasksFromDB = await loadTasksFromDB();
     logger.i('Got list from database: $tasksFromDB');
 
+    bool hasInternet = await InternetConnectionChecker().hasConnection;
+    if (!hasInternet) {
+      logger.i('NO CONNECT TO INTERNET -> load data only from database');
+      return tasksFromDB;
+    }
+
     int localRevisionFromDB = await getLocalRevisionFromDatabase();
     int oldServerRevisionFromDB = await getServerRevisionFromDatabase();
 
     logger.i('Got local revision from database: $localRevisionFromDB');
     logger.i('Got old server revision from database: $oldServerRevisionFromDB');
-
-    bool hasInternet = await InternetConnectionChecker().hasConnection;
-    if (!hasInternet || true) {
-      logger.i('NO CONNECT TO INTERNET -> load data only from database');
-      return tasksFromDB;
-    }
 
     try {
       GetAllTasksResponse dioAnswer = await loadTasksFromServer();
@@ -86,8 +93,6 @@ class DataClient {
             '&& localRevisionFromDB < revisionFromDio.\n'
             ' Tasks from server: $tasksFromServer');
 
-        int revisionFromDio = dioAnswer.revision;
-
         var formattedTasks =
             getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
         logger.d('formatted tasks $formattedTasks');
@@ -99,12 +104,13 @@ class DataClient {
 
         return newTasksFromDB;
       } else if (localRevisionFromDB != oldServerRevisionFromDB &&
-          localRevisionFromDB < revisionFromDio) {
+          localRevisionFromDB > revisionFromDio) {
         logger.i('localRevisionFromDB != oldServerRevisionFromDB '
-            '&& localRevisionFromDB < revisionFromDio.'
+            '&& localRevisionFromDB > revisionFromDio.'
             ' Tasks from database: $tasksFromDB');
 
         await patchTasksToServer(tasksFromDB);
+        dioAnswer = await loadTasksFromServer();
 
         int revisionFromDio = dioAnswer.revision;
 
@@ -113,13 +119,15 @@ class DataClient {
         logger.d('formatted tasks $formattedTasks');
 
         await _dbHelper.rewriteAllData(
-            newTasks: formattedTasks, newRevision: revisionFromDio);
+          newTasks: formattedTasks,
+          newRevision: revisionFromDio,
+        );
 
         List<Task> newTasksFromDB = await loadTasksFromDB();
 
         return newTasksFromDB;
       } else {
-        logger.i('''Another situation
+        logger.i('''Another situation:
         localRevisionFromDB: $localRevisionFromDB,
         oldServerRevisionFromDB: $oldServerRevisionFromDB,
         revisionFromDio: ${revisionFromDio.toString()},
@@ -127,14 +135,19 @@ class DataClient {
 
         await patchTasksToServer(tasksFromDB);
 
+        GetAllTasksResponse dioAnswer = await loadTasksFromServer();
+
         revisionFromDio = dioAnswer.revision;
+        logger.i('Got revision from server $revisionFromDio');
 
         var formattedTasks =
             getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
         logger.d('formatted tasks $formattedTasks');
 
         await _dbHelper.rewriteAllData(
-            newTasks: formattedTasks, newRevision: revisionFromDio);
+          newTasks: formattedTasks,
+          newRevision: revisionFromDio,
+        );
         List<Task> newTasksFromDB = await loadTasksFromDB();
 
         return newTasksFromDB;
@@ -162,15 +175,16 @@ class DataClient {
     _dioHelper.patchTasksList(revision: revision, list: tasksWithGlobalFormat);
   }
 
-  void addNewTaskIntoDB(Task task) async {
+  Future addNewTaskIntoDB(Task task) async {
     await _dbHelper.insert(task);
   }
 
-  void deleteTaskFromDB(String id) async {
+  Future deleteTaskFromDB(String id) async {
     await _dbHelper.delete(id);
   }
 
-  void updateTaskInDB(Task task) async {
+  Future updateTaskInDB(Task task) async {
     await _dbHelper.update(task);
   }
+
 }

@@ -23,7 +23,10 @@ class NewTaskModel extends ChangeNotifier {
   DateTime currentDate = DateTime.now();
   DateTime? deadlineDate;
 
-  NewTaskModel({required this.newTask, required this.isNew});
+  NewTaskModel({
+    required this.newTask,
+    required this.isNew,
+  });
 
   void setInitText(String text) {
     taskText = text;

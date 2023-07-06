@@ -13,13 +13,13 @@ class ChangeImportanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, String> localeValues = {
-      'high': LocaleKeys.highImportance.tr(),
+      'important': LocaleKeys.highImportance.tr(),
       'basic': LocaleKeys.basicImportance.tr(),
       'low': LocaleKeys.lowImportance.tr(),
     };
     String convertGlobalToLocale(String value) {
       return switch (value) {
-        ImportanceValues.highGlobal => localeValues['high']!,
+        ImportanceValues.importantGlobal => localeValues['important']!,
         ImportanceValues.basicGlobal => localeValues['basic']!,
         ImportanceValues.lowGlobal => localeValues['low']!,
         _ => localeValues['basic']!
@@ -27,7 +27,7 @@ class ChangeImportanceWidget extends StatelessWidget {
     }
 
     Text setTextWithStyle(value) {
-      if (value == localeValues['high']) {
+      if (value == localeValues['important']) {
         return Text(
           value,
           style: const TextStyle(color: LightThemeColors.red),
@@ -50,9 +50,9 @@ class ChangeImportanceWidget extends StatelessWidget {
           child: Text(localeValues['low']!),
         ),
         PopupMenuItem<String>(
-          value: ImportanceValues.highGlobal,
+          value: ImportanceValues.importantGlobal,
           child: Text(
-            localeValues['high']!,
+            localeValues['important']!,
             style: const TextStyle(color: LightThemeColors.red),
           ),
         )

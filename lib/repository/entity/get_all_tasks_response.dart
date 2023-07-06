@@ -18,5 +18,5 @@ class GetAllTasksResponse {
   factory GetAllTasksResponse.fromJson(Map<String, dynamic> json) =>
       _$GetAllTasksResponseFromJson(json);
 
-  // Map<String, dynamic> toJson() => _$GetAllTasksResponseToJson(this);
+  //Map<String, dynamic> toJson() => _$GetAllTasksResponseToJson(this);
 }

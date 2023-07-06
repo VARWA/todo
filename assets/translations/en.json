@@ -4,11 +4,12 @@
   "textForEmptyTaskField": "What need to do...",
   "importance": "Importance",
   "delete": "Delete",
-  "highImportance" : "!! High",
+  "highImportance" : "!! Important",
   "basicImportance": "No",
   "lowImportance": "Low",
   "withoutDeadlineText": "No",
   "createNewTaskFromList": "New",
   "deadline": "Deadline",
-  "save": "Save"
+  "save": "Save",
+  "unknownPage": "Page not found"
 }

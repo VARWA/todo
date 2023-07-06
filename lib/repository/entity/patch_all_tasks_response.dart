@@ -12,4 +12,10 @@ class PatchAllTasksResponse {
   PatchAllTasksResponse(this.list);
 
   Map<String, dynamic> toJson() => _$PatchAllTasksResponseToJson(this);
+  @override
+  String toString() {
+    return '''status: $status
+    list: $list
+    ''';
+  }
 }
