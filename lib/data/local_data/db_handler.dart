@@ -28,8 +28,8 @@ class DBHelper {
     logger.i('INITIAL DATABASE');
     final Directory documentDirectory =
         await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'Task.db');
-    var db = await openDatabase(path, version: 1, onCreate: _createDatabase);
+    String path = join(documentDirectory.path, 'Task2.db');
+    var db = await openDatabase(path, version: 2, onCreate: _createDatabase);
     return db;
   }
 
