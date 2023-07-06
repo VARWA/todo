@@ -3,7 +3,7 @@
 ### *Project for Yandex School*
 
 ___  
-[Link to apk](https://github.com/VARWA/todo/releases/tag/v2.0.0)
+[Link to apk](https://github.com/VARWA/todo/releases/tag/v3.0.0)
 ___
 The project is being actively developed. Backend URL and BEARER token will be needed shortly. Rename
 the file '.env.example' to '.env' and paste the values.
@@ -19,7 +19,7 @@ ___
     - Change task status from the main menu
     - Store your tasks locally
     - Internationalization support
-    - 
+    - Navigator 2.0
 
 ___
 
