@@ -23,12 +23,12 @@ void main() async {
       find.byType(TextField),
       randomText,
     );
-    await tester.pump(const Duration(seconds:   5));
+    await tester.pump(const Duration(seconds: 5));
 
     await tester.tap(find.byType(TextButton).first);
     await tester.pumpAndSettle();
 
-    await tester.pump(const Duration(seconds: 105));
+    await tester.pump(const Duration(seconds: 15));
 
     expect(find.text(randomText), findsWidgets);
   });

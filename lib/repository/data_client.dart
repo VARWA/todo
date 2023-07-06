@@ -21,7 +21,6 @@ class DataClient {
 
   factory DataClient() => _instance;
 
-
   Future getLocalRevisionFromDatabase() async {
     return _dbHelper.getDatabaseRevision();
   }
@@ -186,5 +185,4 @@ class DataClient {
   Future updateTaskInDB(Task task) async {
     await _dbHelper.update(task);
   }
-
 }

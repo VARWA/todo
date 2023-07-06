@@ -16,15 +16,15 @@ class DioHelper {
     _baseUrl = dotenv.get('URL');
     _token = dotenv.get('TOKEN');
   }
+
   DioHelper() {
     _dio = Dio();
-     loadEnv();
+    loadEnv();
     _dio.options.baseUrl = _baseUrl;
     _dio.options.headers = {
       'Authorization': 'Bearer $_token',
     };
   }
-
 
   Future<GetAllTasksResponse> getTasksList() async {
     try {

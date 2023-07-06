@@ -88,6 +88,7 @@ class TasksListModel with ChangeNotifier {
     }
     return -1;
   }
+
   Future addTask(Task task, isNew) async {
     if (isNew) {
       await dataClient.addNewTaskIntoDB(task);
@@ -99,6 +100,6 @@ class TasksListModel with ChangeNotifier {
       // _tasksList[ind] = task;
       logger.i('Task remake, task: $task');
     }
+    loadTasks();
   }
-
 }
