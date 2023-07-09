@@ -6,7 +6,7 @@ import 'package:todo/generated/locale_keys.g.dart';
 import '../../../models/new_task_model.dart';
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 
 class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RechangeAppBar({
@@ -30,7 +30,10 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
         createdAt: newModel.isNew ? DateTime.now() : newModel.newTask.createdAt,
         changedAt: DateTime.now(),
       );
-      await context.read<TasksListModel>().addTask(newTask, newModel.isNew);
+      await context.read<TasksListModel>().addTask(
+            task: newTask,
+            isNew: newModel.isNew,
+          );
     }
 
     return AppBar(

@@ -1,5 +1,4 @@
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:logger/logger.dart';
 import 'package:todo/data/local_data/db_handler.dart';
 import 'package:todo/data/remote_data/server_errors.dart';
 import 'package:todo/models/task_model.dart';
@@ -9,9 +8,10 @@ import 'package:todo/repository/entity/parsers/tasks_parser.dart';
 
 import '../data/remote_data/dio_handler.dart';
 import '../di/service_locator.dart';
+import '../src/logger.dart';
 
 class DataClient {
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
   final DBHelper _dbHelper = locator<DBHelper>();
   final DioHelper _dioHelper = locator<DioHelper>();
 
@@ -30,22 +30,19 @@ class DataClient {
   }
 
   Future<List<Task>> loadTasksFromDB() async {
-    return _dbHelper.getDataList();
+    return _dbHelper.getTaskList();
   }
 
-  List<Task> getFormattedTasksFromDioAnswer({required dioAnswer}) {
+  List<Task> getFormattedTasksFromDioAnswer({required GetAllTasksResponse dioAnswer}) {
     final List<GlobalTask> gotList = dioAnswer.list;
-    List<Task> newList = [];
-
-    for (int i = 0; i < gotList.length; i++) {
-      newList.add(TasksParser.globalToLocalTaskParser(gotList[i]));
-    }
+    List<Task> newList =
+        gotList.map(TasksParser.globalToLocalTaskParser).toList();
     return newList;
   }
 
   Future<bool> checkTaskById(String id) async {
     List<Task> tasksList = await loadTasksFromDB();
-    for (int i = 0; i <= tasksList.length; i++) {
+    for (int i = 0; i < tasksList.length; i++) {
       if (tasksList[i].id == id) {
         return true;
       }
@@ -53,7 +50,7 @@ class DataClient {
     return false;
   }
 
-  Future<List<Task>> loadTaskFromData() async {
+  Future<List<Task>> loadTasksFromData() async {
     List<Task> tasksFromDB = await loadTasksFromDB();
     logger.i('Got list from database: $tasksFromDB');
 
@@ -167,7 +164,7 @@ class DataClient {
     return _dioHelper.getTasksList();
   }
 
-  patchTasksToServer(List<Task> list) async {
+  Future<void> patchTasksToServer(List<Task> list) async {
     List<GlobalTask> tasksWithGlobalFormat =
         list.map((e) => TasksParser.localToGlobalTaskParser(e)).toList();
     int revision = await getLocalRevisionFromDatabase();
@@ -175,7 +172,7 @@ class DataClient {
   }
 
   Future addNewTaskIntoDB(Task task) async {
-    await _dbHelper.insert(task);
+    await _dbHelper.insertTask(task);
   }
 
   Future deleteTaskFromDB(String id) async {
@@ -183,6 +180,6 @@ class DataClient {
   }
 
   Future updateTaskInDB(Task task) async {
-    await _dbHelper.update(task);
+    await _dbHelper.updateTask(task);
   }
 }

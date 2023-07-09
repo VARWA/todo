@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/generated/locale_keys.g.dart';
-import 'package:todo/themes/src/light_theme.dart';
 
 import '../../../models/new_task_model.dart';
+import '../../../src/themes/src/light_theme.dart';
 
 class ChangeDateWidget extends StatefulWidget {
   const ChangeDateWidget({Key? key}) : super(key: key);

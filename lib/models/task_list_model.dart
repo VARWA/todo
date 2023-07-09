@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:todo/repository/data_client.dart';
 
 import '../di/service_locator.dart';
+import '../src/logger.dart';
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
   DataClient dataClient = locator<DataClient>();
 
   List<Task> _tasksList = [];
@@ -18,37 +18,28 @@ class TasksListModel with ChangeNotifier {
   }
 
   loadTasks() async {
-    var loadedList = await dataClient.loadTaskFromData();
+    var loadedList = await dataClient.loadTasksFromData();
     _tasksList = loadedList;
     notifyListeners();
   }
 
-  get showCompleted => _showCompleted;
+  bool get showCompleted => _showCompleted;
 
   List<Task> get tasksList => _tasksList;
 
   List<Task> get tasksListForMenu {
-    if (_showCompleted == false) {
+    if (!_showCompleted) {
       return _tasksList;
     } else {
-      List<Task> uncompletedTasks = [];
-      for (int i = 0; i < _tasksList.length; i++) {
-        if (_tasksList[i].done == false) {
-          uncompletedTasks.add(_tasksList[i]);
-        }
-      }
+      List<Task> uncompletedTasks =
+          _tasksList.where((element) => !element.done).toList();
+
       return uncompletedTasks;
     }
   }
 
   int get completedCount {
-    int counter = 0;
-    for (int i = 0; i < _tasksList.length; i++) {
-      if (_tasksList[i].done) {
-        counter++;
-      }
-    }
-    return counter;
+    return _tasksList.where((element) => element.done).length;
   }
 
   void rechangeShowCompleted() {
@@ -89,15 +80,12 @@ class TasksListModel with ChangeNotifier {
     return -1;
   }
 
-  Future addTask(Task task, isNew) async {
+  Future addTask({required Task task, required bool isNew}) async {
     if (isNew) {
       await dataClient.addNewTaskIntoDB(task);
-      // _tasksList.insert(0, task);
       logger.i('Task saved, task: $task');
     } else {
       await dataClient.updateTaskInDB(task);
-      // int ind = searchIndex(task);
-      // _tasksList[ind] = task;
       logger.i('Task remake, task: $task');
     }
     loadTasks();

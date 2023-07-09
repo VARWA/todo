@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo/themes/src/light_theme.dart';
+
+import 'light_theme.dart';
 
 const largeTitleTextStyle = TextStyle(
     fontWeight: FontWeight.w500,

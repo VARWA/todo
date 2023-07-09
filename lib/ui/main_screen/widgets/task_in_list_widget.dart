@@ -5,7 +5,7 @@ import 'package:todo/ui/main_screen/widgets/task_in_listtile_widget.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {

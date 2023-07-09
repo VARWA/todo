@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+
+import '../di/service_locator.dart';
+import '../src/logger.dart';
 import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
   Task newTask;
   bool isNew;
   String taskText = '';
   bool _haveDeadline = false;
+  DateTime currentDate = DateTime.now();
+  DateTime? deadlineDate;
 
   bool get haveDeadline => _haveDeadline;
+
+  NewTaskModel({
+    required this.newTask,
+    required this.isNew,
+  });
 
   void setTaskText(String newText) {
     taskText = newText;
@@ -19,14 +28,6 @@ class NewTaskModel extends ChangeNotifier {
   void setInitHaveDeadline(bool value) {
     _haveDeadline = value;
   }
-
-  DateTime currentDate = DateTime.now();
-  DateTime? deadlineDate;
-
-  NewTaskModel({
-    required this.newTask,
-    required this.isNew,
-  });
 
   void setInitText(String text) {
     taskText = text;

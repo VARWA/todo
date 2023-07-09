@@ -1,5 +1,3 @@
-// import 'package:deeplinks_app/domain/items_repository.dart';
-// import 'package:deeplinks_app/domain/models/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:todo/repository/data_client.dart';
@@ -7,7 +5,6 @@ import 'package:todo/ui/navigation/routes.dart';
 
 import 'navigation_state.dart';
 
-/// URI <> NavigationState
 class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
   Logger logger = Logger();
   @override

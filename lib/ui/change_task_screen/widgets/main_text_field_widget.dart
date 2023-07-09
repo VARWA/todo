@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../models/new_task_model.dart';
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 
 class MainTextField extends StatefulWidget {
   const MainTextField({

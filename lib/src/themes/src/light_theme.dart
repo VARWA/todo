@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo/themes/src/text_theme.dart';
+import 'package:todo/src/themes/src/text_theme.dart';
 
 ThemeData lightThemeData() {
   return ThemeData(

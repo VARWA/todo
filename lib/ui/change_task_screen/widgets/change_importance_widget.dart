@@ -5,7 +5,7 @@ import 'package:todo/generated/locale_keys.g.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 
 class ChangeImportanceWidget extends StatelessWidget {
   const ChangeImportanceWidget({Key? key}) : super(key: key);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo/themes/src/constants.dart';
+
+import 'constants.dart';
 
 TextTheme createTextTheme() {
   return const TextTheme(

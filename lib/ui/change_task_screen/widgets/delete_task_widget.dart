@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../../models/new_task_model.dart';
 import '../../../models/task_list_model.dart';
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 
 class DeleteTaskWidget extends StatelessWidget {
   const DeleteTaskWidget({

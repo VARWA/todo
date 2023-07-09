@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../themes/src/light_theme.dart';
+import '../../../src/themes/src/light_theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWithDeadlineWidget extends StatelessWidget {

@@ -1,16 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
 import 'package:todo/data/remote_data/server_errors.dart';
 import 'package:todo/repository/entity/get_all_tasks_response.dart';
 import 'package:todo/repository/entity/global_task.dart';
 import 'package:todo/repository/entity/patch_all_tasks_response.dart';
 
+import '../../di/service_locator.dart';
+import '../../src/logger.dart';
+
 class DioHelper {
   late final Dio _dio;
   late final String _baseUrl;
   late final String _token;
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
 
   void loadEnv() {
     _baseUrl = dotenv.get('URL');

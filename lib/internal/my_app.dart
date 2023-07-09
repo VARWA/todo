@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/task_list_model.dart';
-import 'package:todo/themes/src/light_theme.dart';
 import 'package:todo/ui/navigation/router_delegate.dart';
 
+import '../src/themes/src/light_theme.dart';
 import '../ui/navigation/route_information_parser.dart';
 
 class MyApp extends StatelessWidget {

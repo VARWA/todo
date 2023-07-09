@@ -1,14 +1,16 @@
 import 'dart:io';
 
-import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../di/service_locator.dart';
+import '../../src/logger.dart';
 import '../../models/task_model.dart';
 
 class DBHelper {
   static Database? _db;
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
 
   DBHelper._();
 
@@ -58,7 +60,7 @@ class DBHelper {
     db.insert('database_revision', {'dvalue': 0});
   }
 
-  Future<Task> insert(Task task) async {
+  Future<Task> insertTask(Task task) async {
     logger.i('INSERTING INTO DATABASE');
     var dbClient = await db;
     incrementDatabaseRevision();
@@ -66,7 +68,7 @@ class DBHelper {
     return task;
   }
 
-  Future<List<Task>> getDataList() async {
+  Future<List<Task>> getTaskList() async {
     await db;
     logger.i('GETTING DATALIST');
 
@@ -117,7 +119,7 @@ class DBHelper {
     );
   }
 
-  Future<int> update(Task task) async {
+  Future<int> updateTask(Task task) async {
     logger.i('UPDATING DATABASE');
     incrementDatabaseRevision();
     var dbClient = await db;

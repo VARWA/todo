@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
+import '../../../di/service_locator.dart';
+import '../../../src/logger.dart';
 import '../../../models/task_list_model.dart';
-import '../../../themes/src/light_theme.dart';
 
+import '../../../src/themes/src/light_theme.dart';
 import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
 
@@ -21,7 +22,7 @@ class TasksListWidget extends StatefulWidget {
 }
 
 class _TasksListWidgetState extends State<TasksListWidget> {
-  Logger logger = Logger(printer: PrettyPrinter());
+  MyLogger logger = locator<MyLogger>();
 
   @override
   Widget build(BuildContext context) {
