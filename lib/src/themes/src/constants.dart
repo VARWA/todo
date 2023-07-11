@@ -1,5 +1,6 @@
 part of '../theme.dart';
 
+const fontFamily = 'Roboto';
 const largeTitleTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   fontSize: 32,

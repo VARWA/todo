@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
 import '../../../src/themes/src/custom_extension.dart';
-import '../../../src/themes/theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWithDeadlineWidget extends StatelessWidget {
@@ -46,8 +45,8 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
           },
         ),
         side: task.importance == ImportanceValues.importantGlobal
-            ? const BorderSide(
-                color: LightThemeColors.red,
+            ? BorderSide(
+                color: customColors.red!,
               )
             : BorderSide(
                 color: customColors.supportSeparator!,
