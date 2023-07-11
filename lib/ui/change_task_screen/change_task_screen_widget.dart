@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/models/task_model.dart';
+import 'package:todo/src/logger.dart';
 import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_date_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart';
@@ -11,6 +11,9 @@ import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../di/service_locator.dart';
+import '../../src/themes/src/custom_extension.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
   final String? taskId;
@@ -22,11 +25,13 @@ class ChangeTaskScreenWidget extends StatefulWidget {
 }
 
 class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
-  Logger logger = Logger(printer: PrettyPrinter());
-
   @override
   Widget build(BuildContext context) {
+    MyLogger logger = locator<MyLogger>();
+
     final model = context.read<TasksListModel>();
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+    final dividerColor = customColors.supportSeparator;
     Task? newTaskFromList;
     bool isNew = false;
 
@@ -59,7 +64,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     }
 
     Task createPreTask(Task? newTaskFromList) {
-      logger.i(' task for recreating : $newTaskFromList');
+      logger.i('Task for recreating : $newTaskFromList');
       if (newTaskFromList != null) {
         return newTaskFromList;
       } else {
@@ -70,7 +75,10 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     final createdPreTask = createPreTask(newTaskFromList);
 
     return ListenableProvider(
-      create: (_) => NewTaskModel(newTask: createdPreTask, isNew: isNew),
+      create: (_) => NewTaskModel(
+        newTask: createdPreTask,
+        isNew: isNew,
+      ),
       builder: (context, child) {
         if (createdPreTask.deadline != null) {
           context.read<NewTaskModel>().deadlineDate = createdPreTask.deadline!;
@@ -78,12 +86,16 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
         }
 
         return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: customColors.backPrimary,
           appBar: const RechangeAppBar(),
           body: ListView(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(top: 20, right: 16, left: 16),
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: 20,
+                  right: 16,
+                  left: 16,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -94,15 +106,23 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
               ),
               Column(
                 children: [
-                  SizedBox(height: 16),
-                  ChangeImportanceWidget(),
+                  const SizedBox(height: 16),
+                  const ChangeImportanceWidget(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Divider(thickness: 1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    child: Divider(
+                      thickness: 1,
+                      color: dividerColor,
+                    ),
                   ),
-                  ChangeDateWidget(),
-                  Divider(thickness: 1),
-                  DeleteTaskWidget(),
+                  const ChangeDateWidget(),
+                  Divider(
+                    thickness: 1,
+                    color: dividerColor,
+                  ),
+                  const DeleteTaskWidget(),
                 ],
               )
             ],

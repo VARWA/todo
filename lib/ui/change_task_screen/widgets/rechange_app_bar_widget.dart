@@ -6,7 +6,7 @@ import 'package:todo/generated/locale_keys.g.dart';
 import '../../../models/new_task_model.dart';
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
 
 class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RechangeAppBar({
@@ -15,6 +15,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     Future<void> addTask() async {
       final newModel = context.read<NewTaskModel>();
       DateTime? deadlineLastValue;
@@ -36,12 +37,12 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
     }
 
-    return AppBar(
+    return AppBar(backgroundColor: customColors.backPrimary,
       leading: IconButton(
         icon: const Icon(
           Icons.close,
         ),
-        color: LightThemeColors.labelPrimary,
+        color: customColors.labelPrimary,
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -54,7 +55,12 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
               addTask();
               Navigator.of(context).pop();
             },
-            child: const Text(LocaleKeys.save).tr(),
+            child: Text(
+              LocaleKeys.save,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: customColors.blue,
+                  ),
+            ).tr(),
           ),
         ),
       ],

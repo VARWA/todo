@@ -3,6 +3,8 @@ import 'package:todo/ui/main_screen/widgets/completed_count_widget.dart';
 import 'package:todo/ui/main_screen/widgets/main_app_bar_widget.dart';
 import 'package:todo/ui/main_screen/widgets/tasks_list_widget.dart';
 
+import '../../src/themes/src/custom_extension.dart';
+
 class MainScreenWidget extends StatefulWidget {
   final void Function(String?) onChangeTaskTap;
 
@@ -16,7 +18,10 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+
     return Scaffold(
+      backgroundColor: customColors.backPrimary,
       body: CustomScrollView(
         slivers: [
           const MainAppBarWidget(),
@@ -26,10 +31,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => widget.onChangeTaskTap(null),
-        child: const Icon(
+        child: Icon(
           Icons.add,
           weight: 56,
-          color: Colors.white,
+          color: customColors.white,
         ),
       ),
     );

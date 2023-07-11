@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+part of '../theme.dart';
 
-import 'constants.dart';
-
-TextTheme createTextTheme() {
+TextTheme createTextTheme({required ThemeStyles themeStyle}) {
   return const TextTheme(
-      titleLarge: largeTitleTextStyle,
-      bodyMedium: bodyTextStyle,
-      titleSmall: subheadTextStyle,
-      labelLarge: buttonTextStyle,
-      labelMedium: buttonTextStyle);
+    titleLarge: largeTitleTextStyle,
+    bodyMedium: bodyTextStyle,
+    titleMedium: titleTextStyle,
+    titleSmall: subheadTextStyle,
+    labelLarge: buttonTextStyle,
+    labelMedium: buttonTextStyle,
+  );
 }

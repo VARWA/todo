@@ -5,7 +5,7 @@ import 'package:todo/ui/main_screen/widgets/task_in_listtile_widget.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {
@@ -20,31 +20,19 @@ class TaskInListWidget extends StatefulWidget {
 }
 
 class _TaskInListWidgetState extends State<TaskInListWidget> {
-  Text setTextStyle(Task task) {
+  Text setTextStyle({required Task task, required CustomColors customColors}) {
     int maxLines = 3;
     TextOverflow myOverflow = TextOverflow.ellipsis;
-    if (task.done == true) {
-      if (task.importance == ImportanceValues.basicGlobal) {
-        return Text(
-          task.text,
-          style: const TextStyle(
-              decoration: TextDecoration.lineThrough,
-              color: OtherColors.comlitedTaskInList),
-          maxLines: maxLines,
-          overflow: myOverflow,
-        );
-      }
-      return Text(
-        task.text,
-        style: const TextStyle(
-            decoration: TextDecoration.lineThrough,
-            color: OtherColors.comlitedTaskInList),
-        maxLines: maxLines,
-        overflow: myOverflow,
-      );
-    }
+    final themeBodyMedium = Theme.of(context).textTheme.bodyMedium;
     return Text(
       task.text,
+      style: task.done
+          ? themeBodyMedium?.copyWith(
+              decoration: TextDecoration.lineThrough,
+              color: customColors.labelTertiary)
+          : themeBodyMedium?.copyWith(
+              color: customColors.labelPrimary,
+            ),
       maxLines: maxLines,
       overflow: myOverflow,
     );
@@ -54,7 +42,9 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
     if (task.done || task.importance == ImportanceValues.basicGlobal) {
       return Row(
         children: [
-          Expanded(child: text),
+          Expanded(
+            child: text,
+          ),
         ],
       );
     } else if (task.importance == ImportanceValues.importantGlobal) {
@@ -66,8 +56,12 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
       return Row(
         children: [
           highImportanceIcon,
-          const SizedBox(width: 3),
-          Expanded(child: text),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            child: text,
+          ),
         ],
       );
     } else {
@@ -79,8 +73,12 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
       return Row(
         children: [
           lowImportanceIcon,
-          const SizedBox(width: 3),
-          Expanded(child: text),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            child: text,
+          ),
         ],
       );
     }
@@ -94,11 +92,18 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<TasksListModel>();
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     final id = widget.id;
     final Task task = model.tasksList[model.searchTaskIndexById(id)];
 
-    final Text formattedText = setTextStyle(task);
-    final formattedTitle = setTitle(task: task, text: formattedText);
+    final Text formattedText = setTextStyle(
+      task: task,
+      customColors: customColors,
+    );
+    final formattedTitle = setTitle(
+      task: task,
+      text: formattedText,
+    );
     final DateTime? deadline = task.deadline;
     return TaskInListWithDeadlineWidget(
       task: task,

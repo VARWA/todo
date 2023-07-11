@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/task_list_model.dart';
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
 
 class CompletedCountWidget extends StatelessWidget {
   const CompletedCountWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -25,7 +26,12 @@ class CompletedCountWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 14.0),
-                child: const Text('completed').tr(
+                child: Text(
+                  'completed',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: customColors.labelTertiary,
+                  ),
+                ).tr(
                   args: [
                     context.watch<TasksListModel>().completedCount.toString(),
                   ],
@@ -33,8 +39,8 @@ class CompletedCountWidget extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: IconButton(
-                  color: LightThemeColors.blue,
+                child: IconButton(splashRadius: 15,
+                  color: customColors.blue,
                   onPressed: () =>
                       context.read<TasksListModel>().rechangeShowCompleted(),
                   icon: context.read<TasksListModel>().showCompleted

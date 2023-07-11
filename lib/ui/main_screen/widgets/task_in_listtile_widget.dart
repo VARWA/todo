@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
+import '../../../src/themes/theme.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWithDeadlineWidget extends StatelessWidget {
@@ -27,25 +28,30 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     return ListTile(
       horizontalTitleGap: 0,
       leading: Checkbox(
         value: task.done,
-        activeColor: LightThemeColors.green,
-        checkColor: LightThemeColors.white,
+        activeColor: customColors.green,
+        checkColor: customColors.white,
         fillColor: MaterialStateProperty.resolveWith(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return task.importance == ImportanceValues.importantGlobal
-                  ? OtherColors.redCheckboxFillColor
-                  : Theme.of(context).cardColor;
+                  ? customColors.red
+                  : customColors.backSecondary;
             }
             return null;
           },
         ),
         side: task.importance == ImportanceValues.importantGlobal
-            ? const BorderSide(color: LightThemeColors.red)
-            : BorderSide(color: Theme.of(context).unselectedWidgetColor),
+            ? const BorderSide(
+                color: LightThemeColors.red,
+              )
+            : BorderSide(
+                color: customColors.supportSeparator!,
+              ),
         onChanged: (bool? value) {
           model.switchCompleted(id);
         },
@@ -53,15 +59,23 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
       title: formattedTitle,
       subtitle: (deadline != null)
           ? Text(
-              DateFormat('d MMMM yyyy', context.deviceLocale.toString())
-                  .format(deadline!),
+              DateFormat(
+                'd MMMM yyyy',
+                context.deviceLocale.toString(),
+              ).format(deadline!),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: customColors.labelTertiary,
+                  ),
             )
           : null,
       trailing: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.info_outline_rounded,
+          color: customColors.labelTertiary,
         ),
-        onPressed: () => onChangeTaskTap(task.id),
+        onPressed: () => onChangeTaskTap(
+          task.id,
+        ),
       ),
     );
   }

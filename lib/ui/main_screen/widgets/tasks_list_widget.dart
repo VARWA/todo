@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../di/service_locator.dart';
-import '../../../src/logger.dart';
 import '../../../models/task_list_model.dart';
-
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/logger.dart';
+import '../../../src/themes/src/custom_extension.dart';
 import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
 
@@ -28,6 +27,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
   Widget build(BuildContext context) {
     final model = context.watch<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     logger.d('Downloaded to main list $lenList tasks');
     final items = List<Widget>.generate(
       lenList + 1,
@@ -36,28 +36,28 @@ class _TasksListWidgetState extends State<TasksListWidget> {
           return Dismissible(
             key: UniqueKey(),
             background: Container(
-              color: LightThemeColors.green,
-              child: const Align(
+              color: customColors.green,
+              child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 28),
+                  padding: const EdgeInsets.only(left: 28),
                   child: Icon(
                     Icons.done,
-                    color: LightThemeColors.white,
+                    color: customColors.white,
                     size: 18,
                   ),
                 ),
               ),
             ),
             secondaryBackground: Container(
-              color: LightThemeColors.red,
-              child: const Align(
+              color: customColors.red,
+              child: Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding: EdgeInsets.only(right: 28),
+                  padding: const EdgeInsets.only(right: 28),
                   child: Icon(
                     Icons.delete,
-                    color: LightThemeColors.white,
+                    color: customColors.white,
                     size: 18,
                   ),
                 ),
@@ -65,9 +65,13 @@ class _TasksListWidgetState extends State<TasksListWidget> {
             ),
             confirmDismiss: (DismissDirection direction) async {
               if (direction == DismissDirection.startToEnd) {
-                model.switchCompleted(model.tasksListForMenu[index].id);
+                model.switchCompleted(
+                  model.tasksListForMenu[index].id,
+                );
               } else {
-                model.deleteTaskWithId(model.tasksListForMenu[index].id);
+                model.deleteTaskWithId(
+                  model.tasksListForMenu[index].id,
+                );
               }
               return;
             },
@@ -92,9 +96,12 @@ class _TasksListWidgetState extends State<TasksListWidget> {
           ),
           elevation: 4,
           shadowColor: Colors.black,
-          color: Theme.of(context).cardColor,
-          child: Column(
-            children: items,
+          color: customColors.backSecondary,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Column(
+              children: items,
+            ),
           ),
         ),
       ),

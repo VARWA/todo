@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/generated/locale_keys.g.dart';
 
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
 
 class NewListTileWidget extends StatelessWidget {
   final void Function(String?) onChangeTaskTap;
@@ -12,11 +12,17 @@ class NewListTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     return ListTile(
-      leading: const Icon(Icons.add, color: Colors.transparent),
+      leading: const Icon(
+        Icons.add,
+        color: Colors.transparent,
+      ),
       title: Text(
         LocaleKeys.createNewTaskFromList.tr(),
-        style: const TextStyle(color: LightThemeColors.labelTertiary),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: customColors.labelTertiary,
+            ),
       ),
       onTap: () => onChangeTaskTap(null),
     );

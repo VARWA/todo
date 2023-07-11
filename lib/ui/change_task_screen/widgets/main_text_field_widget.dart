@@ -4,12 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../models/new_task_model.dart';
-import '../../../src/themes/src/light_theme.dart';
+import '../../../src/themes/src/custom_extension.dart';
 
 class MainTextField extends StatefulWidget {
-  const MainTextField({
-    super.key,
-  });
+  const MainTextField({super.key});
 
   @override
   State<MainTextField> createState() => _MainTextFieldState();
@@ -35,10 +33,13 @@ class _MainTextFieldState extends State<MainTextField> {
   @override
   Widget build(BuildContext context) {
     final model = context.read<NewTaskModel>();
+    final customColors = Theme.of(context).extension<CustomColors>()!;
     return Container(
       decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        color: customColors.backSecondary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         shadows: const [
           BoxShadow(
             color: Color(0x1E000000),
@@ -52,13 +53,16 @@ class _MainTextFieldState extends State<MainTextField> {
         ],
       ),
       child: TextField(
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: customColors.labelPrimary,
+            ),
         controller: _nameController,
         onChanged: model.setTaskText,
         minLines: 4,
         maxLines: 50,
         decoration: InputDecoration(
             filled: true,
-            fillColor: LightThemeColors.white,
+            fillColor: customColors.backSecondary,
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
@@ -68,7 +72,10 @@ class _MainTextFieldState extends State<MainTextField> {
                 style: BorderStyle.none,
               ),
             ),
-            hintText: LocaleKeys.textForEmptyTaskField.tr()),
+            hintText: LocaleKeys.textForEmptyTaskField.tr(),
+            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: customColors.labelTertiary,
+                )),
       ),
     );
   }
