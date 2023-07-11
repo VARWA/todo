@@ -4,7 +4,6 @@ import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../src/themes/src/light_theme.dart';
 
-
 class NewListTileWidget extends StatelessWidget {
   final void Function(String?) onChangeTaskTap;
 

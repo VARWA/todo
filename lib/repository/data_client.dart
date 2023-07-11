@@ -33,7 +33,8 @@ class DataClient {
     return _dbHelper.getTaskList();
   }
 
-  List<Task> getFormattedTasksFromDioAnswer({required GetAllTasksResponse dioAnswer}) {
+  List<Task> getFormattedTasksFromDioAnswer(
+      {required GetAllTasksResponse dioAnswer}) {
     final List<GlobalTask> gotList = dioAnswer.list;
     List<Task> newList =
         gotList.map(TasksParser.globalToLocalTaskParser).toList();
