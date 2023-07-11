@@ -37,7 +37,8 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
     }
 
-    return AppBar(backgroundColor: customColors.backPrimary,
+    return AppBar(
+      backgroundColor: customColors.backPrimary,
       leading: IconButton(
         icon: const Icon(
           Icons.close,

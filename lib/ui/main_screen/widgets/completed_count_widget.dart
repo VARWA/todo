@@ -29,8 +29,8 @@ class CompletedCountWidget extends StatelessWidget {
                 child: Text(
                   'completed',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: customColors.labelTertiary,
-                  ),
+                        color: customColors.labelTertiary,
+                      ),
                 ).tr(
                   args: [
                     context.watch<TasksListModel>().completedCount.toString(),
@@ -39,7 +39,8 @@ class CompletedCountWidget extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: IconButton(splashRadius: 15,
+                child: IconButton(
+                  splashRadius: 15,
                   color: customColors.blue,
                   onPressed: () =>
                       context.read<TasksListModel>().rechangeShowCompleted(),

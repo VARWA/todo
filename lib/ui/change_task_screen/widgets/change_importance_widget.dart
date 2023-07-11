@@ -38,7 +38,8 @@ class ChangeImportanceWidget extends StatelessWidget {
       );
     }
 
-    return PopupMenuButton<String>(color: customColors.backSecondary,
+    return PopupMenuButton<String>(
+      color: customColors.backSecondary,
       initialValue: convertGlobalToLocale(
           context.read<NewTaskModel>().newTask.importance),
       itemBuilder: (_) => [

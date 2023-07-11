@@ -4,7 +4,6 @@ import 'package:todo/generated/locale_keys.g.dart';
 
 import '../../../src/themes/src/custom_extension.dart';
 
-
 class MainAppBarWidget extends StatelessWidget {
   const MainAppBarWidget({
     super.key,
@@ -23,8 +22,8 @@ class MainAppBarWidget extends StatelessWidget {
         title: Text(
           LocaleKeys.myTasks.tr(),
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: customColors.labelPrimary,
-          ),
+                color: customColors.labelPrimary,
+              ),
           // style: largeTitleTextStyle,
         ),
       ),
