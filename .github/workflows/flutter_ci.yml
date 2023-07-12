@@ -51,7 +51,7 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
       - run: flutter build apk
   ios:
-  - name: Integration test (IOS)
+    name: Integration test (IOS)
     strategy:
       matrix:
         device:
@@ -80,7 +80,7 @@ jobs:
       - name: Run integration tests
         run: flutter test integration_test --verbose
   android:
-  - name: Integration test (Andriod)
+    name: Integration test (Andriod)
     runs-on: macos-11
     strategy:
       matrix:
