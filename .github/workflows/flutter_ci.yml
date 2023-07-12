@@ -11,12 +11,11 @@ jobs:
   analyze:
     name: Run analyzer and formatter
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.5'
+          flutter-version: '3.10.5'
           cache: true
       - run: flutter pub get
       - run: flutter analyze
