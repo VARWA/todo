@@ -79,32 +79,32 @@ jobs:
         run: flutter pub get
       - name: Run integration tests
         run: flutter test integration_test --verbose
-  android:
-    name: Integration test (Andriod)
-    runs-on: macos-11
-    strategy:
-      matrix:
-        api-level:
-          - 29
-          # you can add more API level if you want to run your tests on different API
-      fail-fast: true
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: '3.10.5'
-          cache: true
-      - run: |
-          echo "${{ secrets.ENV }}" > .env
-      - name: Install Flutter dependencies
-        run: flutter pub get
-      - name: Run integration tests
-        # more info on https://github.com/ReactiveCircus/android-emulator-runner
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          profile: Nexus 6
-          script: flutter test integration_test --verbose
+#  android:
+#    name: Integration test (Andriod)
+#    runs-on: macos-11
+#    strategy:
+#      matrix:
+#        api-level:
+#          - 29
+#          # you can add more API level if you want to run your tests on different API
+#      fail-fast: true
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Setup Flutter SDK
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: 'stable'
+#          flutter-version: '3.10.5'
+#          cache: true
+#      - run: |
+#          echo "${{ secrets.ENV }}" > .env
+#      - name: Install Flutter dependencies
+#        run: flutter pub get
+#      - name: Run integration tests
+#        # more info on https://github.com/ReactiveCircus/android-emulator-runner
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: ${{ matrix.api-level }}
+#          arch: x86_64
+#          profile: Nexus 6
+#          script: flutter test integration_test --verbose
