@@ -8,7 +8,3 @@ part 'src/light_theme.dart';
 
 part 'src/text_theme.dart';
 
-// enum ThemeStyles {
-//   dark,
-//   light,
-// }
