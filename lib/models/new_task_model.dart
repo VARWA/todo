@@ -43,8 +43,8 @@ class NewTaskModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setPriorityLevel(value) {
-    newTask.importance = value;
+  void setPriorityLevel(String value) {
+    newTask = newTask.copyWith(importance: value);
     logger.i('Changed importance: $value');
     notifyListeners();
   }

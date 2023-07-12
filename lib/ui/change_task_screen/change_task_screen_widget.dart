@@ -38,15 +38,7 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     if (widget.taskId != null) {
       final oldTask =
           model.tasksList[model.searchTaskIndexById(widget.taskId as String)];
-      newTaskFromList = Task(
-        id: oldTask.id,
-        text: oldTask.text,
-        importance: oldTask.importance,
-        deadline: oldTask.deadline,
-        done: oldTask.done,
-        createdAt: oldTask.createdAt,
-        changedAt: oldTask.changedAt,
-      );
+      newTaskFromList = oldTask.copyWith();
     } else {
       isNew = true;
     }

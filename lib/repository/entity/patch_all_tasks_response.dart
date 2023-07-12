@@ -10,6 +10,8 @@ class PatchAllTasksResponse {
   final List<GlobalTask> list;
 
   PatchAllTasksResponse(this.list);
+  factory PatchAllTasksResponse.fromJson(Map<String, dynamic> json) =>
+      _$PatchAllTasksResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$PatchAllTasksResponseToJson(this);
   @override

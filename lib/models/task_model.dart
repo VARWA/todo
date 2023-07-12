@@ -1,41 +1,37 @@
-class Task {
-  String id;
-  String text;
-  String importance;
-  DateTime? deadline;
-  bool done;
-  String? color;
-  DateTime createdAt;
-  DateTime changedAt;
-  String lastUpdatedBy = 'null';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Task(
-      {required this.id,
-      required this.text,
-      this.importance = 'basic',
-      this.deadline,
-      this.done = false,
-      this.color = "#FFFFFF",
-      required this.createdAt,
-      required this.changedAt,
-      this.lastUpdatedBy = 'null'});
+part 'task_model.freezed.dart';
 
-  Task.fromMap(Map<String, dynamic> res)
-      : id = res['id'],
-        text = res['text'],
-        importance = res['importance'],
-        deadline = res['deadline'] != null
+@freezed
+class Task with _$Task {
+  const Task._();
+
+  const factory Task(
+      {required String id,
+      required String text,
+      @Default('basic') String importance,
+      DateTime? deadline,
+      @Default(false) bool done,
+      @Default('#FFFFFF') String? color,
+      required DateTime createdAt,
+      required DateTime changedAt,
+      @Default('null') String lastUpdatedBy}) = _Task;
+
+  factory Task.fromMap(Map<String, dynamic> res) => Task(
+        id: res['id'],
+        text: res['text'],
+        importance: res['importance'],
+        deadline: res['deadline'] != null
             ? DateTime.fromMillisecondsSinceEpoch(res['deadline'] * 1000)
             : null,
-        done = res['done'] == 1,
-        color = res['color'],
-        createdAt =
-            DateTime.fromMillisecondsSinceEpoch(res['createdAt'] * 1000),
-        changedAt =
-            DateTime.fromMillisecondsSinceEpoch(res['changedAt'] * 1000),
-        lastUpdatedBy = res['lastUpdatedBy'];
+        done: res['done'] == 1,
+        color: res['color'],
+        createdAt: DateTime.fromMillisecondsSinceEpoch(res['createdAt'] * 1000),
+        changedAt: DateTime.fromMillisecondsSinceEpoch(res['changedAt'] * 1000),
+        lastUpdatedBy: res['lastUpdatedBy'],
+      );
 
-  Map<String, Object?> toMap() {
+  Map<String, Object?> toMapCustom() {
     return {
       "id": id,
       "text": text,
@@ -46,22 +42,7 @@ class Task {
       "color": color,
       "createdAt": createdAt.millisecondsSinceEpoch ~/ 1000,
       "changedAt": changedAt.millisecondsSinceEpoch ~/ 1000,
-      "lastUpdatedBy": lastUpdatedBy
+      "lastUpdatedBy": lastUpdatedBy,
     };
-  }
-
-  @override
-  String toString() {
-    return '''Task: {
-    "id": $id,
-    "text": $text,
-    "importance": $importance,
-    "deadline": $deadline,
-    "done": $done,
-    "color": $color,
-    "createdAt": $createdAt,
-    "changedAt": $changedAt,
-    "lastUpdatedBy": $lastUpdatedBy
-  }''';
   }
 }

@@ -64,8 +64,11 @@ class TasksListModel with ChangeNotifier {
 
   void switchCompleted(localId) {
     final index = searchTaskIndexById(localId);
-    _tasksList[index].done = !_tasksList[index].done;
-    _tasksList[index].changedAt = DateTime.now();
+    Task oldTask = _tasksList[index];
+    _tasksList[index] = _tasksList[index].copyWith(
+      done: !oldTask.done,
+      changedAt: DateTime.now(),
+    );
     dataClient.updateTaskInDB(_tasksList[index]);
     logger.i('Task with localId $localId completed status updated');
     loadTasks();

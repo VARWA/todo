@@ -61,10 +61,10 @@ class DBHelper {
   }
 
   Future<Task> insertTask(Task task) async {
-    logger.i('INSERTING INTO DATABASE');
+    logger.i('INSERTING INTO DATABASE TASK: $task');
     var dbClient = await db;
     incrementDatabaseRevision();
-    await dbClient?.insert('mytask', task.toMap());
+    await dbClient?.insert('mytask', task.toMapCustom());
     return task;
   }
 
@@ -115,7 +115,7 @@ class DBHelper {
     var dbClient = await db;
     return await dbClient?.insert(
       'mytask',
-      task.toMap(),
+      task.toMapCustom(),
     );
   }
 
@@ -125,7 +125,7 @@ class DBHelper {
     var dbClient = await db;
     return await dbClient!.update(
       'mytask',
-      task.toMap(),
+      task.toMapCustom(),
       where: 'id = ?',
       whereArgs: [task.id],
     );
