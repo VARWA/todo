@@ -54,6 +54,7 @@ jobs:
     strategy:
       matrix:
         device:
+          - "iPhone 11 Simulator (15.2)"
       fail-fast: true
     runs-on: macos-11 # or macos-latest if you prefer, but be aware that the available simulators could be different if you run a different version
     steps:
