@@ -21,7 +21,7 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
       - run: flutter pub get
       - run: flutter analyze
-      - run: flutter format --set-exit-if-changed .
+      - run: dart format --set-exit-if-changed .
 #jobs:
 #  build:
 #    runs-on: ubuntu-latest
