@@ -3,7 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:todo/ui/change_task_screen/change_task_screen_widget.dart';
 import 'package:todo/ui/main_screen/main_screen_widget.dart';
 
-import '../main_screen/unknown_screen/unknown_screen_widget.dart';
+import '../unknown_screen/unknown_screen_widget.dart';
 import 'navigation_state.dart';
 
 class MyRouterDelegate extends RouterDelegate<NavigationState>

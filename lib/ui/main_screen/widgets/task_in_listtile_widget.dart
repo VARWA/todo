@@ -52,7 +52,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
                 color: customColors.supportSeparator!,
               ),
         onChanged: (bool? value) {
-          model.switchCompleted(id);
+          model.switchCompleted(localId: id);
         },
       ),
       title: formattedTitle,

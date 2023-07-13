@@ -10,7 +10,7 @@ import '../../models/task_model.dart';
 
 class DBHelper {
   static Database? _db;
-  MyLogger logger = locator<MyLogger>();
+  final MyLogger _logger = locator<MyLogger>();
 
   DBHelper._();
 
@@ -27,7 +27,7 @@ class DBHelper {
   }
 
   initDatabase() async {
-    logger.i('INITIAL DATABASE');
+    _logger.i('INITIAL DATABASE');
     final Directory documentDirectory =
         await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'Task2.db');
@@ -36,7 +36,7 @@ class DBHelper {
   }
 
   void _createDatabase(Database db, int version) async {
-    logger.i('CREATING DATABASE');
+    _logger.i('CREATING DATABASE');
     await db.execute('''
         CREATE TABLE mytask(idp INTEGER PRIMARY KEY AUTOINCREMENT,
         id TEXT NOT NULL, text TEXT NOT NULL,
@@ -61,7 +61,7 @@ class DBHelper {
   }
 
   Future<Task> insertTask(Task task) async {
-    logger.i('INSERTING INTO DATABASE TASK: $task');
+    _logger.i('INSERTING INTO DATABASE TASK: $task');
     var dbClient = await db;
     incrementDatabaseRevision();
     await dbClient?.insert('mytask', task.toMapCustom());
@@ -70,17 +70,17 @@ class DBHelper {
 
   Future<List<Task>> getTaskList() async {
     await db;
-    logger.i('GETTING DATALIST');
+    _logger.i('GETTING DATALIST');
 
     final List<Map<String, Object?>> queryResult =
         await _db!.rawQuery('SELECT * FROM mytask');
 
-    logger.d('Got result from database: $queryResult');
+    _logger.d('Got result from database: $queryResult');
     return queryResult.map((e) => Task.fromMap(e)).toList();
   }
 
   Future<int> delete(String id) async {
-    logger.i('DELETING TASK WITH id = $id FROM DATABASE');
+    _logger.i('DELETING TASK WITH id = $id FROM DATABASE');
     incrementDatabaseRevision();
     var dbClient = await db;
     return await dbClient!.delete(
@@ -94,7 +94,7 @@ class DBHelper {
     required List<Task> newTasks,
     required int newRevision,
   }) async {
-    logger.i('REWRITING DATA IN DATABASE');
+    _logger.i('REWRITING DATA IN DATABASE');
     await deleteAllTasks();
     setDatabaseRevision(newRevision);
     _setLastServerRevision(newRevision);
@@ -107,11 +107,11 @@ class DBHelper {
   deleteAllTasks() async {
     var dbClient = await db;
     dbClient!.rawDelete("Delete from mytask");
-    logger.i('All tasks deleted');
+    _logger.i('All tasks deleted');
   }
 
   Future insertTaskForRewriting(Task task) async {
-    logger.i('INSERTING INTO DATABASE WHILE REWRITE $task');
+    _logger.i('INSERTING INTO DATABASE WHILE REWRITE $task');
     var dbClient = await db;
     return await dbClient?.insert(
       'mytask',
@@ -120,7 +120,7 @@ class DBHelper {
   }
 
   Future<int> updateTask(Task task) async {
-    logger.i('UPDATING DATABASE');
+    _logger.i('UPDATING DATABASE');
     incrementDatabaseRevision();
     var dbClient = await db;
     return await dbClient!.update(
@@ -152,7 +152,7 @@ class DBHelper {
   Future<void> incrementDatabaseRevision() async {
     final int oldRevision = await getDatabaseRevision();
     final int newRevision = oldRevision + 1;
-    logger.i('Local revision update: $oldRevision -> $newRevision');
+    _logger.i('Local revision update: $oldRevision -> $newRevision');
     await setDatabaseRevision(newRevision);
   }
 

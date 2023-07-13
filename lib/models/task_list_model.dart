@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:todo/repository/data_client.dart';
 
 import '../di/service_locator.dart';
+import '../firebase/firebase_worker.dart';
 import '../src/logger.dart';
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
-  MyLogger logger = locator<MyLogger>();
-  DataClient dataClient = locator<DataClient>();
+  final FirebaseWorker _firebaseWorker = locator<FirebaseWorker>();
+  final MyLogger _logger = locator<MyLogger>();
+  final DataClient _dataClient = locator<DataClient>();
 
   List<Task> _tasksList = [];
 
@@ -18,7 +20,7 @@ class TasksListModel with ChangeNotifier {
   }
 
   loadTasks() async {
-    var loadedList = await dataClient.loadTasksFromData();
+    var loadedList = await _dataClient.loadTasksFromData();
     _tasksList = loadedList;
     notifyListeners();
   }
@@ -44,7 +46,7 @@ class TasksListModel with ChangeNotifier {
 
   void rechangeShowCompleted() {
     _showCompleted = !_showCompleted;
-    logger.i('Completed tasks are showed in list: $_showCompleted');
+    _logger.i('Completed tasks are showed in list: $_showCompleted');
     notifyListeners();
   }
 
@@ -57,20 +59,25 @@ class TasksListModel with ChangeNotifier {
     return -1;
   }
 
+  Task searchTaskById({required String id}) =>
+      _tasksList.firstWhere((task) => task.id == id);
+
   Future<void> deleteTaskWithId(id) async {
-    await dataClient.deleteTaskFromDB(id);
+    await _dataClient.deleteTaskFromDB(id);
+    _firebaseWorker.analytics.deleteTask(task: searchTaskById(id: id));
     loadTasks();
   }
 
-  void switchCompleted(localId) {
+  void switchCompleted({required String localId}) {
     final index = searchTaskIndexById(localId);
     Task oldTask = _tasksList[index];
     _tasksList[index] = _tasksList[index].copyWith(
       done: !oldTask.done,
       changedAt: DateTime.now(),
     );
-    dataClient.updateTaskInDB(_tasksList[index]);
-    logger.i('Task with localId $localId completed status updated');
+    _dataClient.updateTaskInDB(_tasksList[index]);
+    _logger.i('Task with localId $localId completed status updated');
+    _firebaseWorker.analytics.completedStatusUpdate(task: _tasksList[index]);
     loadTasks();
   }
 
@@ -85,11 +92,13 @@ class TasksListModel with ChangeNotifier {
 
   Future addTask({required Task task, required bool isNew}) async {
     if (isNew) {
-      await dataClient.addNewTaskIntoDB(task);
-      logger.i('Task saved, task: $task');
+      await _dataClient.addNewTaskIntoDB(task);
+      _logger.i('Task saved, task: $task');
+      _firebaseWorker.analytics.addTask(task: task);
     } else {
-      await dataClient.updateTaskInDB(task);
-      logger.i('Task remake, task: $task');
+      await _dataClient.updateTaskInDB(task);
+      _logger.i('Task remake, task: $task');
+      _firebaseWorker.analytics.updateTask(task: task);
     }
     loadTasks();
   }

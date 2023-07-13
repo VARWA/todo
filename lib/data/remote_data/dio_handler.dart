@@ -12,16 +12,16 @@ class DioHelper {
   late final Dio _dio;
   late final String _baseUrl;
   late final String _token;
-  MyLogger logger = locator<MyLogger>();
+  final MyLogger _logger = locator<MyLogger>();
 
-  void loadEnv() {
+  void _loadEnv() {
     _baseUrl = dotenv.get('URL');
     _token = dotenv.get('TOKEN');
   }
 
   DioHelper() {
     _dio = Dio();
-    loadEnv();
+    _loadEnv();
     _dio.options.baseUrl = _baseUrl;
     _dio.options.headers = {
       'Authorization': 'Bearer $_token',
@@ -32,7 +32,7 @@ class DioHelper {
     try {
       final response = await _dio.get<Map<String, dynamic>>('$_baseUrl/list');
       final data = response.data;
-      logger.i('GOT DATA FROM SERVER:'
+      _logger.i('GOT DATA FROM SERVER:'
           '${response.data}');
       return GetAllTasksResponse.fromJson(data!);
     } on DioException catch (e) {
@@ -54,7 +54,7 @@ class DioHelper {
   }) async {
     try {
       var listForSending = PatchAllTasksResponse(list).toJson();
-      logger.i('Data for patching:'
+      _logger.i('Data for patching:'
           '$listForSending, \n revision: ${revision - 1}');
       final response = await _dio.patch(
         '$_baseUrl/list',
@@ -65,7 +65,7 @@ class DioHelper {
           },
         ),
       );
-      logger.i('RESPONSE AFTER PATCHING:'
+      _logger.i('RESPONSE AFTER PATCHING:'
           '${response.data}');
       final data = response.data;
       return GetAllTasksResponse.fromJson(data!);

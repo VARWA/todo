@@ -4,6 +4,7 @@
 
 ___  
 [Link to apk](https://github.com/VARWA/todo/releases/tag/v3.0.0)
+[Link to Firebase Distribution](https://appdistribution.firebase.dev/i/3573bc7c078a9f34)
 ___
 The project is being actively developed. Backend URL and BEARER token will be needed shortly. Rename
 the file '.env.example' to '.env' and paste the values.

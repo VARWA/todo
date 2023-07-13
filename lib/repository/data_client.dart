@@ -11,7 +11,7 @@ import '../di/service_locator.dart';
 import '../src/logger.dart';
 
 class DataClient {
-  MyLogger logger = locator<MyLogger>();
+  final MyLogger _logger = locator<MyLogger>();
   final DBHelper _dbHelper = locator<DBHelper>();
   final DioHelper _dioHelper = locator<DioHelper>();
 
@@ -53,46 +53,47 @@ class DataClient {
 
   Future<List<Task>> loadTasksFromData() async {
     List<Task> tasksFromDB = await loadTasksFromDB();
-    logger.i('Got list from database: $tasksFromDB');
+    _logger.i('Got list from database: $tasksFromDB');
 
     bool hasInternet = await InternetConnectionChecker().hasConnection;
     if (!hasInternet) {
-      logger.i('NO CONNECT TO INTERNET -> load data only from database');
+      _logger.i('NO CONNECT TO INTERNET -> load data only from database');
       return tasksFromDB;
     }
 
     int localRevisionFromDB = await getLocalRevisionFromDatabase();
     int oldServerRevisionFromDB = await getServerRevisionFromDatabase();
 
-    logger.i('Got local revision from database: $localRevisionFromDB');
-    logger.i('Got old server revision from database: $oldServerRevisionFromDB');
+    _logger.i('Got local revision from database: $localRevisionFromDB');
+    _logger
+        .i('Got old server revision from database: $oldServerRevisionFromDB');
 
     try {
       GetAllTasksResponse dioAnswer = await loadTasksFromServer();
 
       int revisionFromDio = dioAnswer.revision;
-      logger.i('Got revision from server $revisionFromDio');
+      _logger.i('Got revision from server $revisionFromDio');
 
       List<Task> tasksFromServer = getFormattedTasksFromDioAnswer(
         dioAnswer: dioAnswer,
       );
-      logger.i('Got list from server after parsing: $tasksFromServer');
+      _logger.i('Got list from server after parsing: $tasksFromServer');
 
       if (revisionFromDio == oldServerRevisionFromDB &&
           localRevisionFromDB == revisionFromDio) {
-        logger.i(
+        _logger.i(
             'revisionFromDio = oldServerRevisionFromDB = revisionFromDio = $localRevisionFromDB');
 
         return tasksFromDB;
       } else if (localRevisionFromDB == oldServerRevisionFromDB &&
           localRevisionFromDB < revisionFromDio) {
-        logger.i('localRevisionFromDB == oldServerRevisionFromDB '
+        _logger.i('localRevisionFromDB == oldServerRevisionFromDB '
             '&& localRevisionFromDB < revisionFromDio.\n'
             ' Tasks from server: $tasksFromServer');
 
         var formattedTasks =
             getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        logger.d('formatted tasks $formattedTasks');
+        _logger.d('formatted tasks $formattedTasks');
 
         await _dbHelper.rewriteAllData(
             newTasks: formattedTasks, newRevision: revisionFromDio);
@@ -102,7 +103,7 @@ class DataClient {
         return newTasksFromDB;
       } else if (localRevisionFromDB != oldServerRevisionFromDB &&
           localRevisionFromDB > revisionFromDio) {
-        logger.i('localRevisionFromDB != oldServerRevisionFromDB '
+        _logger.i('localRevisionFromDB != oldServerRevisionFromDB '
             '&& localRevisionFromDB > revisionFromDio.'
             ' Tasks from database: $tasksFromDB');
 
@@ -113,7 +114,7 @@ class DataClient {
 
         var formattedTasks =
             getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        logger.d('formatted tasks $formattedTasks');
+        _logger.d('formatted tasks $formattedTasks');
 
         await _dbHelper.rewriteAllData(
           newTasks: formattedTasks,
@@ -124,7 +125,7 @@ class DataClient {
 
         return newTasksFromDB;
       } else {
-        logger.i('''Another situation:
+        _logger.i('''Another situation:
         localRevisionFromDB: $localRevisionFromDB,
         oldServerRevisionFromDB: $oldServerRevisionFromDB,
         revisionFromDio: ${revisionFromDio.toString()},
@@ -135,11 +136,11 @@ class DataClient {
         GetAllTasksResponse dioAnswer = await loadTasksFromServer();
 
         revisionFromDio = dioAnswer.revision;
-        logger.i('Got revision from server $revisionFromDio');
+        _logger.i('Got revision from server $revisionFromDio');
 
         var formattedTasks =
             getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        logger.d('formatted tasks $formattedTasks');
+        _logger.d('formatted tasks $formattedTasks');
 
         await _dbHelper.rewriteAllData(
           newTasks: formattedTasks,
@@ -150,11 +151,11 @@ class DataClient {
         return newTasksFromDB;
       }
     } on ServerError {
-      logger.e('Server error, load tasks from Database');
+      _logger.e('Server error, load tasks from Database');
       return tasksFromDB;
     } catch (e) {
-      logger.e('Connection error, Check your network');
-      logger.e(e);
+      _logger.e('Connection error, Check your network');
+      _logger.e(e);
       return tasksFromDB;
     }
   }

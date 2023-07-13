@@ -5,7 +5,7 @@ import '../src/logger.dart';
 import 'task_model.dart';
 
 class NewTaskModel extends ChangeNotifier {
-  MyLogger logger = locator<MyLogger>();
+  final MyLogger _logger = locator<MyLogger>();
   Task newTask;
   bool isNew;
   String taskText = '';
@@ -45,7 +45,7 @@ class NewTaskModel extends ChangeNotifier {
 
   void setPriorityLevel(String value) {
     newTask = newTask.copyWith(importance: value);
-    logger.i('Changed importance: $value');
+    _logger.i('Changed importance: $value');
     notifyListeners();
   }
 }

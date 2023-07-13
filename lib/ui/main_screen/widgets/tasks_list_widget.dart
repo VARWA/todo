@@ -21,14 +21,14 @@ class TasksListWidget extends StatefulWidget {
 }
 
 class _TasksListWidgetState extends State<TasksListWidget> {
-  MyLogger logger = locator<MyLogger>();
+  final MyLogger _logger = locator<MyLogger>();
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
     final customColors = Theme.of(context).extension<CustomColors>()!;
-    logger.d('Downloaded to main list $lenList tasks');
+    _logger.d('Downloaded to main list $lenList tasks');
     final items = List<Widget>.generate(
       lenList + 1,
       (index) {
@@ -66,7 +66,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
             confirmDismiss: (DismissDirection direction) async {
               if (direction == DismissDirection.startToEnd) {
                 model.switchCompleted(
-                  model.tasksListForMenu[index].id,
+                  localId: model.tasksListForMenu[index].id,
                 );
               } else {
                 model.deleteTaskWithId(
