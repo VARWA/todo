@@ -1,14 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:todo/repository/entity/global_task.dart';
 
-part 'get_all_tasks_response.g.dart';
 part 'get_all_tasks_response.freezed.dart';
+
+part 'get_all_tasks_response.g.dart';
 
 @freezed
 class GetAllTasksResponse with _$GetAllTasksResponse {
   @JsonSerializable(explicitToJson: true)
-
   const factory GetAllTasksResponse({
     required String status,
     required List<GlobalTask> list,
@@ -17,6 +16,4 @@ class GetAllTasksResponse with _$GetAllTasksResponse {
 
   factory GetAllTasksResponse.fromJson(Map<String, dynamic> json) =>
       _$GetAllTasksResponseFromJson(json);
-
-  //Map<String, dynamic> toJson() => _$GetAllTasksResponseToJson(this);
 }

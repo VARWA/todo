@@ -58,16 +58,23 @@ abstract class $GlobalTaskCopyWith<$Res> {
       {String id,
       String text,
       String importance,
-      @JsonKey(fromJson: DateTimeParser.fromUnixToDatetimeWithNull, toJson: DateTimeParser.fromDatetimeToUnixWithNull)
-          DateTime? deadline,
+      @JsonKey(
+          fromJson: DateTimeParser.fromUnixToDatetimeWithNull,
+          toJson: DateTimeParser.fromDatetimeToUnixWithNull)
+      DateTime? deadline,
       bool done,
       String? color,
-      @JsonKey(name: 'created_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          DateTime createdAt,
-      @JsonKey(name: 'changed_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          DateTime changedAt,
-      @JsonKey(name: 'last_updated_by')
-          String lastUpdatedBy});
+      @JsonKey(
+          name: 'created_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      DateTime createdAt,
+      @JsonKey(
+          name: 'changed_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      DateTime changedAt,
+      @JsonKey(name: 'last_updated_by') String lastUpdatedBy});
 }
 
 /// @nodoc
@@ -146,16 +153,23 @@ abstract class _$$_GlobalTaskCopyWith<$Res>
       {String id,
       String text,
       String importance,
-      @JsonKey(fromJson: DateTimeParser.fromUnixToDatetimeWithNull, toJson: DateTimeParser.fromDatetimeToUnixWithNull)
-          DateTime? deadline,
+      @JsonKey(
+          fromJson: DateTimeParser.fromUnixToDatetimeWithNull,
+          toJson: DateTimeParser.fromDatetimeToUnixWithNull)
+      DateTime? deadline,
       bool done,
       String? color,
-      @JsonKey(name: 'created_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          DateTime createdAt,
-      @JsonKey(name: 'changed_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          DateTime changedAt,
-      @JsonKey(name: 'last_updated_by')
-          String lastUpdatedBy});
+      @JsonKey(
+          name: 'created_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      DateTime createdAt,
+      @JsonKey(
+          name: 'changed_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      DateTime changedAt,
+      @JsonKey(name: 'last_updated_by') String lastUpdatedBy});
 }
 
 /// @nodoc
@@ -228,16 +242,23 @@ class _$_GlobalTask implements _GlobalTask {
       {required this.id,
       required this.text,
       required this.importance,
-      @JsonKey(fromJson: DateTimeParser.fromUnixToDatetimeWithNull, toJson: DateTimeParser.fromDatetimeToUnixWithNull)
-          required this.deadline,
+      @JsonKey(
+          fromJson: DateTimeParser.fromUnixToDatetimeWithNull,
+          toJson: DateTimeParser.fromDatetimeToUnixWithNull)
+      required this.deadline,
       required this.done,
       required this.color,
-      @JsonKey(name: 'created_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          required this.createdAt,
-      @JsonKey(name: 'changed_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          required this.changedAt,
-      @JsonKey(name: 'last_updated_by')
-          required this.lastUpdatedBy});
+      @JsonKey(
+          name: 'created_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      required this.createdAt,
+      @JsonKey(
+          name: 'changed_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      required this.changedAt,
+      @JsonKey(name: 'last_updated_by') required this.lastUpdatedBy});
 
   factory _$_GlobalTask.fromJson(Map<String, dynamic> json) =>
       _$$_GlobalTaskFromJson(json);
@@ -323,16 +344,24 @@ abstract class _GlobalTask implements GlobalTask {
       {required final String id,
       required final String text,
       required final String importance,
-      @JsonKey(fromJson: DateTimeParser.fromUnixToDatetimeWithNull, toJson: DateTimeParser.fromDatetimeToUnixWithNull)
-          required final DateTime? deadline,
+      @JsonKey(
+          fromJson: DateTimeParser.fromUnixToDatetimeWithNull,
+          toJson: DateTimeParser.fromDatetimeToUnixWithNull)
+      required final DateTime? deadline,
       required final bool done,
       required final String? color,
-      @JsonKey(name: 'created_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          required final DateTime createdAt,
-      @JsonKey(name: 'changed_at', fromJson: DateTimeParser.fromUnixToDatetime, toJson: DateTimeParser.fromDatetimeToUnix)
-          required final DateTime changedAt,
+      @JsonKey(
+          name: 'created_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      required final DateTime createdAt,
+      @JsonKey(
+          name: 'changed_at',
+          fromJson: DateTimeParser.fromUnixToDatetime,
+          toJson: DateTimeParser.fromDatetimeToUnix)
+      required final DateTime changedAt,
       @JsonKey(name: 'last_updated_by')
-          required final String lastUpdatedBy}) = _$_GlobalTask;
+      required final String lastUpdatedBy}) = _$_GlobalTask;
 
   factory _GlobalTask.fromJson(Map<String, dynamic> json) =
       _$_GlobalTask.fromJson;

@@ -5,7 +5,7 @@ part 'global_task.freezed.dart';
 
 part 'global_task.g.dart';
 
-@Freezed()
+@freezed
 class GlobalTask with _$GlobalTask {
   @JsonSerializable()
   const factory GlobalTask({
@@ -28,61 +28,9 @@ class GlobalTask with _$GlobalTask {
         fromJson: DateTimeParser.fromUnixToDatetime,
         toJson: DateTimeParser.fromDatetimeToUnix)
     required DateTime changedAt,
-    @JsonKey(name: 'last_updated_by')
-    required String lastUpdatedBy,
+    @JsonKey(name: 'last_updated_by') required String lastUpdatedBy,
   }) = _GlobalTask;
 
   factory GlobalTask.fromJson(Map<String, dynamic> json) =>
       _$GlobalTaskFromJson(json);
-
-  // Map<String, dynamic> toJson( data) => data.toJson();
-
-  // Map<String, dynamic> toJson() => _$$_GlobalTaskToJson(this);
 }
-
-//@JsonSerializable()
-// class GlobalTask {
-//   final String id;
-//   final String text;
-//   final String importance;
-//   @JsonKey(
-//       fromJson: DateTimeParser.fromUnixToDatetimeWithNull,
-//       toJson: DateTimeParser.fromDatetimeToUnixWithNull)
-//   final DateTime? deadline;
-//   final bool done;
-//   final String? color;
-//   @JsonKey(
-//       name: 'created_at',
-//       fromJson: DateTimeParser.fromUnixToDatetime,
-//       toJson: DateTimeParser.fromDatetimeToUnix)
-//   final DateTime createdAt;
-//   @JsonKey(
-//       name: 'changed_at',
-//       fromJson: DateTimeParser.fromUnixToDatetime,
-//       toJson: DateTimeParser.fromDatetimeToUnix)
-//   final DateTime changedAt;
-//   @JsonKey(name: 'last_updated_by')
-//   final String lastUpdatedBy;
-//
-//   GlobalTask({
-//     required this.id,
-//     required this.text,
-//     required this.importance,
-//     required this.deadline,
-//     required this.done,
-//     required this.color,
-//     required this.createdAt,
-//     required this.changedAt,
-//     required this.lastUpdatedBy,
-//   });
-//
-//   factory GlobalTask.fromJson(Map<String, dynamic> json) =>
-//       _$GlobalTaskFromJson(json);
-//
-//   Map<String, dynamic> toJson() => _$GlobalTaskToJson(this);
-//
-//   @override
-//   String toString() {
-//     return toJson().toString();
-//   }
-// }
