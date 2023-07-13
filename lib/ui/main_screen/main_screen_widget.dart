@@ -31,6 +31,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => widget.onChangeTaskTap(null),
+        backgroundColor: customColors.blue,
         child: Icon(
           Icons.add,
           weight: 56,

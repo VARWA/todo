@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/firebase/firebase_remote_values.dart';
+import 'package:todo/firebase/firebase_worker.dart';
 
+import '../../../di/service_locator.dart';
 import '../../../models/task_list_model.dart';
 import '../../../models/task_model.dart';
 import '../../../src/themes/src/custom_extension.dart';
@@ -28,6 +31,12 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
+    final remoteConfig = locator<FirebaseWorker>().remoteConfig;
+    final bool useNewImportantColor = remoteConfig.useNewImportantTaskColor;
+    final Color importantColor = useNewImportantColor
+        ? RemoteValues.newImportantTaskColor
+        : customColors.red!;
+
     return ListTile(
       horizontalTitleGap: 0,
       leading: Checkbox(
@@ -38,7 +47,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return task.importance == ImportanceValues.importantGlobal
-                  ? customColors.red
+                  ? importantColor
                   : customColors.backSecondary;
             }
             return null;
@@ -46,7 +55,7 @@ class TaskInListWithDeadlineWidget extends StatelessWidget {
         ),
         side: task.importance == ImportanceValues.importantGlobal
             ? BorderSide(
-                color: customColors.red!,
+                color: importantColor,
               )
             : BorderSide(
                 color: customColors.supportSeparator!,

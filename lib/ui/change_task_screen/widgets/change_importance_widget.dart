@@ -5,6 +5,9 @@ import 'package:todo/generated/locale_keys.g.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 
+import '../../../di/service_locator.dart';
+import '../../../firebase/firebase_remote_values.dart';
+import '../../../firebase/firebase_worker.dart';
 import '../../../src/themes/src/custom_extension.dart';
 
 class ChangeImportanceWidget extends StatelessWidget {
@@ -13,6 +16,11 @@ class ChangeImportanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
+    final remoteConfig = locator<FirebaseWorker>().remoteConfig;
+    final bool useNewImportantColor = remoteConfig.useNewImportantTaskColor;
+    final Color importantColor = useNewImportantColor
+        ? RemoteValues.newImportantTaskColor
+        : customColors.red!;
     Map<String, String> localeValues = {
       'important': LocaleKeys.highImportance.tr(),
       'basic': LocaleKeys.basicImportance.tr(),
@@ -32,7 +40,7 @@ class ChangeImportanceWidget extends StatelessWidget {
         value,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: value == localeValues['important']
-                  ? customColors.red
+                  ? importantColor
                   : customColors.labelTertiary,
             ),
       );
@@ -66,7 +74,7 @@ class ChangeImportanceWidget extends StatelessWidget {
           child: Text(
             localeValues['important']!,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: customColors.red,
+                  color: importantColor,
                 ),
           ),
         )
