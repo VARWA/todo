@@ -15,7 +15,7 @@ class Task with _$Task {
       @Default('#FFFFFF') String? color,
       required DateTime createdAt,
       required DateTime changedAt,
-      @Default('null') String lastUpdatedBy}) = _Task;
+      @Default('none') String lastUpdatedBy}) = _Task;
 
   factory Task.fromMap(Map<String, dynamic> res) => Task(
         id: res['id'],

@@ -6,7 +6,8 @@ part of 'global_task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GlobalTask _$GlobalTaskFromJson(Map<String, dynamic> json) => GlobalTask(
+_$_GlobalTask _$$_GlobalTaskFromJson(Map<String, dynamic> json) =>
+    _$_GlobalTask(
       id: json['id'] as String,
       text: json['text'] as String,
       importance: json['importance'] as String,
@@ -19,7 +20,7 @@ GlobalTask _$GlobalTaskFromJson(Map<String, dynamic> json) => GlobalTask(
       lastUpdatedBy: json['last_updated_by'] as String,
     );
 
-Map<String, dynamic> _$GlobalTaskToJson(GlobalTask instance) =>
+Map<String, dynamic> _$$_GlobalTaskToJson(_$_GlobalTask instance) =>
     <String, dynamic>{
       'id': instance.id,
       'text': instance.text,

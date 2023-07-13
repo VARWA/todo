@@ -6,16 +6,16 @@ part of 'patch_all_tasks_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PatchAllTasksResponse _$PatchAllTasksResponseFromJson(
+_$_PatchAllTasksResponse _$$_PatchAllTasksResponseFromJson(
         Map<String, dynamic> json) =>
-    PatchAllTasksResponse(
+    _$_PatchAllTasksResponse(
       (json['list'] as List<dynamic>)
           .map((e) => GlobalTask.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$PatchAllTasksResponseToJson(
-        PatchAllTasksResponse instance) =>
+Map<String, dynamic> _$$_PatchAllTasksResponseToJson(
+        _$_PatchAllTasksResponse instance) =>
     <String, dynamic>{
       'list': instance.list,
     };

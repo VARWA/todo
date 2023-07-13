@@ -1,23 +1,16 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'global_task.dart';
 
+part 'patch_all_tasks_response.freezed.dart';
+
 part 'patch_all_tasks_response.g.dart';
 
-@JsonSerializable()
-class PatchAllTasksResponse {
-  final String status = 'ok';
-  final List<GlobalTask> list;
+@freezed
+class PatchAllTasksResponse with _$PatchAllTasksResponse {
+  @JsonSerializable()
+  factory PatchAllTasksResponse(List<GlobalTask> list) = _PatchAllTasksResponse;
 
-  PatchAllTasksResponse(this.list);
   factory PatchAllTasksResponse.fromJson(Map<String, dynamic> json) =>
       _$PatchAllTasksResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$PatchAllTasksResponseToJson(this);
-  @override
-  String toString() {
-    return '''status: $status
-    list: $list
-    ''';
-  }
 }
