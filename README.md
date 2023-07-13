@@ -20,6 +20,9 @@ ___
     - Store your tasks locally
     - Internationalization support
     - Navigator 2.0
+    - Added freezed
+    - Added Github actions
+    - Added Dark theme
 
 ___
 
