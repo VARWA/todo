@@ -23,7 +23,7 @@ class MainAppBarWidget extends StatelessWidget {
       centerTitle: false,
       flexibleSpace: Padding(
         padding: EdgeInsets.symmetric(
-        horizontal: globalPadding,
+          horizontal: globalPadding,
         ),
         child: FlexibleSpaceBar(
           title: Text(
