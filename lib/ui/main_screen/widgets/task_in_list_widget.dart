@@ -105,7 +105,7 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
       text: formattedText,
     );
     final DateTime? deadline = task.deadline;
-    return TaskInListWithDeadlineWidget(
+    return TaskInListtileWidget(
       task: task,
       model: model,
       id: id,

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:todo/data/local_data/db_handler.dart';
 import 'package:todo/data/remote_data/server_errors.dart';
@@ -6,14 +9,14 @@ import 'package:todo/repository/entity/get_all_tasks_response.dart';
 import 'package:todo/repository/entity/global_task.dart';
 import 'package:todo/repository/entity/parsers/tasks_parser.dart';
 
-import '../data/remote_data/dio_handler.dart';
+import '../data/remote_data/server_handler.dart';
 import '../di/service_locator.dart';
 import '../src/logger.dart';
 
 class DataClient {
   final MyLogger _logger = locator<MyLogger>();
-  final DBHelper _dbHelper = locator<DBHelper>();
-  final DioHelper _dioHelper = locator<DioHelper>();
+  final DBHandler _dbHelper = locator<DBHandler>();
+  final ServerHandler _serverHelper = locator<ServerHandler>();
 
   DataClient._();
 
@@ -33,9 +36,9 @@ class DataClient {
     return _dbHelper.getTaskList();
   }
 
-  List<Task> getFormattedTasksFromDioAnswer(
-      {required GetAllTasksResponse dioAnswer}) {
-    final List<GlobalTask> gotList = dioAnswer.list;
+  List<Task> getFormattedTasksFromServerAnswer(
+      {required GetAllTasksResponse serverAnswer}) {
+    final List<GlobalTask> gotList = serverAnswer.list;
     List<Task> newList =
         gotList.map(TasksParser.globalToLocalTaskParser).toList();
     return newList;
@@ -51,9 +54,9 @@ class DataClient {
     return false;
   }
 
-  Future<List<Task>> loadTasksFromData() async {
+  Future<List<Task>> loadTasksFromSomeData() async {
     List<Task> tasksFromDB = await loadTasksFromDB();
-    _logger.i('Got list from database: $tasksFromDB');
+    _logger.v('Got list from database: $tasksFromDB');
 
     bool hasInternet = await InternetConnectionChecker().hasConnection;
     if (!hasInternet) {
@@ -69,86 +72,42 @@ class DataClient {
         .i('Got old server revision from database: $oldServerRevisionFromDB');
 
     try {
-      GetAllTasksResponse dioAnswer = await loadTasksFromServer();
+      GetAllTasksResponse serverAnswer = await loadTasksFromServer();
 
-      int revisionFromDio = dioAnswer.revision;
-      _logger.i('Got revision from server $revisionFromDio');
+      int revisionFromServer = serverAnswer.revision;
+      _logger.i('Got revision from server $revisionFromServer');
 
-      List<Task> tasksFromServer = getFormattedTasksFromDioAnswer(
-        dioAnswer: dioAnswer,
-      );
-      _logger.i('Got list from server after parsing: $tasksFromServer');
-
-      if (revisionFromDio == oldServerRevisionFromDB &&
-          localRevisionFromDB == revisionFromDio) {
+      if (revisionFromServer == oldServerRevisionFromDB &&
+          localRevisionFromDB == revisionFromServer) {
         _logger.i(
-            'revisionFromDio = oldServerRevisionFromDB = revisionFromDio = $localRevisionFromDB');
+            'revisionFromServer = oldServerRevisionFromDB = revisionFromServer = $localRevisionFromDB');
 
         return tasksFromDB;
       } else if (localRevisionFromDB == oldServerRevisionFromDB &&
-          localRevisionFromDB < revisionFromDio) {
+          localRevisionFromDB < revisionFromServer) {
         _logger.i('localRevisionFromDB == oldServerRevisionFromDB '
-            '&& localRevisionFromDB < revisionFromDio.\n'
-            ' Tasks from server: $tasksFromServer');
+            '&& localRevisionFromDB < revisionFromServer.');
 
-        var formattedTasks =
-            getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        _logger.d('formatted tasks $formattedTasks');
-
-        await _dbHelper.rewriteAllData(
-            newTasks: formattedTasks, newRevision: revisionFromDio);
-
-        List<Task> newTasksFromDB = await loadTasksFromDB();
-
-        return newTasksFromDB;
+        return _loadTasksFromServerAndInsertIntoDB(serverAnswer: serverAnswer);
       } else if (localRevisionFromDB != oldServerRevisionFromDB &&
-          localRevisionFromDB > revisionFromDio) {
+          localRevisionFromDB > revisionFromServer) {
         _logger.i('localRevisionFromDB != oldServerRevisionFromDB '
-            '&& localRevisionFromDB > revisionFromDio.'
-            ' Tasks from database: $tasksFromDB');
-
-        await patchTasksToServer(tasksFromDB);
-        dioAnswer = await loadTasksFromServer();
-
-        int revisionFromDio = dioAnswer.revision;
-
-        var formattedTasks =
-            getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        _logger.d('formatted tasks $formattedTasks');
-
-        await _dbHelper.rewriteAllData(
-          newTasks: formattedTasks,
-          newRevision: revisionFromDio,
-        );
-
-        List<Task> newTasksFromDB = await loadTasksFromDB();
-
-        return newTasksFromDB;
+            '&& localRevisionFromDB > revisionFromServer.');
+        _logger.v(' Tasks from database: $tasksFromDB');
+        return await _patchTasksToServerAndUpdateDB(tasksFromDB: tasksFromDB);
+      } else if (localRevisionFromDB != oldServerRevisionFromDB &&
+          localRevisionFromDB < revisionFromServer) {
+        _logger.i(
+            'localRevisionFromDB != oldServerRevisionFromDB && localRevisionFromDB < revisionFromServer');
+        return await _patchTasksToServerAndUpdateDB(tasksFromDB: tasksFromDB);
       } else {
         _logger.i('''Another situation:
         localRevisionFromDB: $localRevisionFromDB,
         oldServerRevisionFromDB: $oldServerRevisionFromDB,
-        revisionFromDio: ${revisionFromDio.toString()},
+        revisionFromServer: ${revisionFromServer.toString()},
         ''');
 
-        await patchTasksToServer(tasksFromDB);
-
-        GetAllTasksResponse dioAnswer = await loadTasksFromServer();
-
-        revisionFromDio = dioAnswer.revision;
-        _logger.i('Got revision from server $revisionFromDio');
-
-        var formattedTasks =
-            getFormattedTasksFromDioAnswer(dioAnswer: dioAnswer);
-        _logger.d('formatted tasks $formattedTasks');
-
-        await _dbHelper.rewriteAllData(
-          newTasks: formattedTasks,
-          newRevision: revisionFromDio,
-        );
-        List<Task> newTasksFromDB = await loadTasksFromDB();
-
-        return newTasksFromDB;
+        return await _patchTasksToServerAndUpdateDB(tasksFromDB: tasksFromDB);
       }
     } on ServerError {
       _logger.e('Server error, load tasks from Database');
@@ -160,17 +119,46 @@ class DataClient {
     }
   }
 
-  void loadFromServerAndRewriteDatabase() {}
+  Future<List<Task>> _patchTasksToServerAndUpdateDB(
+      {required List<Task> tasksFromDB}) async {
+    final (formattedTasks, revisionFromServer) =
+        await _patchTasksToServer(tasksFromDB);
 
-  Future<GetAllTasksResponse> loadTasksFromServer() {
-    return _dioHelper.getTasksList();
+    await _dbHelper.rewriteAllData(
+      newTasks: formattedTasks,
+      newRevision: revisionFromServer,
+    );
+
+    List<Task> newTasksFromDB = await loadTasksFromDB();
+
+    return newTasksFromDB;
   }
 
-  Future<void> patchTasksToServer(List<Task> list) async {
+  List<Task> _loadTasksFromServerAndInsertIntoDB(
+      {required GetAllTasksResponse serverAnswer}) {
+    final formattedTasks =
+        getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+    _logger.v(' Tasks from server: $formattedTasks');
+
+    _dbHelper.rewriteAllData(
+        newTasks: formattedTasks, newRevision: serverAnswer.revision);
+
+    return formattedTasks;
+  }
+
+  Future<GetAllTasksResponse> loadTasksFromServer() {
+    return _serverHelper.getTasksList();
+  }
+
+  Future<(List<Task>, int)> _patchTasksToServer(List<Task> list) async {
     List<GlobalTask> tasksWithGlobalFormat =
         list.map((e) => TasksParser.localToGlobalTaskParser(e)).toList();
     int revision = await getLocalRevisionFromDatabase();
-    _dioHelper.patchTasksList(revision: revision, list: tasksWithGlobalFormat);
+    final serverAnswer = await _serverHelper.patchTasksList(
+        revision: revision, list: tasksWithGlobalFormat);
+    final formattedTasks =
+        getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+    return (formattedTasks, serverAnswer.revision);
   }
 
   Future addNewTaskIntoDB(Task task) async {
@@ -183,5 +171,35 @@ class DataClient {
 
   Future updateTaskInDB(Task task) async {
     await _dbHelper.updateTask(task);
+  }
+
+  Future<List<Task>> loadTasksFromData() async {
+    if (kIsWeb) {
+      _logger.i('Current platform is Web -> load data from server');
+      return await loadTasksOnlyFromServer();
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      _logger.i(
+          'Current platform is Andriod or IOS -> load data from server and db');
+      return await loadTasksFromSomeData();
+    } else {
+      _logger
+          .i('Current platform is not Andriod or IOS -> load data from server');
+      return await loadTasksOnlyFromServer();
+    }
+  }
+
+  Future<List<Task>> loadTasksOnlyFromServer() async {
+    try {
+      GetAllTasksResponse serverAnswer = await loadTasksFromServer();
+      _logger.i('Loaded tasks from server');
+      final formattedTasks =
+          getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+      return formattedTasks;
+    } on ServerError {
+      return [];
+    } catch (e) {
+      _logger.e(e);
+      return [];
+    }
   }
 }

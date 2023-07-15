@@ -53,6 +53,7 @@ class _MainTextFieldState extends State<MainTextField> {
         ],
       ),
       child: TextField(
+        autofocus: true,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: customColors.labelPrimary,
             ),
@@ -61,21 +62,22 @@ class _MainTextFieldState extends State<MainTextField> {
         minLines: 4,
         maxLines: 50,
         decoration: InputDecoration(
-            filled: true,
-            fillColor: customColors.backSecondary,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-              borderSide: BorderSide(
-                width: 0,
-                style: BorderStyle.none,
-              ),
+          filled: true,
+          fillColor: customColors.backSecondary,
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
-            hintText: LocaleKeys.textForEmptyTaskField.tr(),
-            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: customColors.labelTertiary,
-                )),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+          hintText: LocaleKeys.textForEmptyTaskField.tr(),
+          hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: customColors.labelTertiary,
+              ),
+        ),
       ),
     );
   }

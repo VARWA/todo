@@ -8,7 +8,7 @@ import 'navigation_state.dart';
 
 class MyRouterDelegate extends RouterDelegate<NavigationState>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<NavigationState> {
-  Logger logger = Logger(printer: PrettyPrinter());
+  final Logger _logger = Logger(printer: PrettyPrinter());
   @override
   final GlobalKey<NavigatorState> navigatorKey;
 
@@ -23,7 +23,7 @@ class MyRouterDelegate extends RouterDelegate<NavigationState>
 
   @override
   Widget build(BuildContext context) {
-    logger.d('''state?.isTaskDetailsScreen = ${state?.isTaskDetailsScreen}
+    _logger.d('''state?.isTaskDetailsScreen = ${state?.isTaskDetailsScreen}
     state?.isUnknown = ${state?.isUnknown}
     ''');
     return Navigator(
@@ -63,7 +63,7 @@ class MyRouterDelegate extends RouterDelegate<NavigationState>
   }
 
   void _showTaskDetails(String? taskId) {
-    logger.i('Request to _showTaskDetails with taskId = $taskId');
+    _logger.i('Request to _showTaskDetails with taskId = $taskId');
     state = NavigationState.taskDetailsScreen(taskId,
         createNewTask: taskId == null);
     notifyListeners();

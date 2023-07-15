@@ -3,16 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:todo/models/new_task_model.dart';
 import 'package:todo/models/task_list_model.dart';
 import 'package:todo/models/task_model.dart';
-import 'package:todo/src/logger.dart';
-import 'package:todo/ui/change_task_screen/elements/importance_values.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_date_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/change_importance_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/delete_task_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/main_text_field_widget.dart';
 import 'package:todo/ui/change_task_screen/widgets/rechange_app_bar_widget.dart';
-import 'package:uuid/uuid.dart';
+import 'package:todo/ui/src/form_factor.dart';
 
-import '../../di/service_locator.dart';
 import '../../src/themes/src/custom_extension.dart';
 
 class ChangeTaskScreenWidget extends StatefulWidget {
@@ -27,13 +24,12 @@ class ChangeTaskScreenWidget extends StatefulWidget {
 class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
   @override
   Widget build(BuildContext context) {
-    MyLogger logger = locator<MyLogger>();
-
     final model = context.read<TasksListModel>();
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final dividerColor = customColors.supportSeparator;
     Task? newTaskFromList;
     bool isNew = false;
+    final double globalPadding = establishGlobalPadding(context: context);
 
     if (widget.taskId != null) {
       final oldTask =
@@ -42,29 +38,8 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
     } else {
       isNew = true;
     }
-    logger.i('Args results: $newTaskFromList');
-    Task createNewTask() {
-      DateTime dateTimeNow = DateTime.now();
-      return Task(
-        id: const Uuid().v4(),
-        text: '',
-        importance: ImportanceValues.basicGlobal,
-        deadline: null,
-        createdAt: dateTimeNow,
-        changedAt: dateTimeNow,
-      );
-    }
 
-    Task createPreTask(Task? newTaskFromList) {
-      logger.i('Task for recreating : $newTaskFromList');
-      if (newTaskFromList != null) {
-        return newTaskFromList;
-      } else {
-        return createNewTask();
-      }
-    }
-
-    final createdPreTask = createPreTask(newTaskFromList);
+    final createdPreTask = model.createPreTask(newTaskFromList);
 
     return ListenableProvider(
       create: (_) => NewTaskModel(
@@ -76,48 +51,50 @@ class _ChangeTaskScreenWidgetState extends State<ChangeTaskScreenWidget> {
           context.read<NewTaskModel>().deadlineDate = createdPreTask.deadline!;
           context.read<NewTaskModel>().setInitHaveDeadline(true);
         }
-
         return Scaffold(
           backgroundColor: customColors.backPrimary,
           appBar: const RechangeAppBar(),
-          body: ListView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(
-                  top: 20,
-                  right: 16,
-                  left: 16,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: globalPadding),
+            child: ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 20,
+                    right: 16,
+                    left: 16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      MainTextField(),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                Column(
                   children: [
-                    MainTextField(),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const ChangeImportanceWidget(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                    const SizedBox(height: 16),
+                    const ChangeImportanceWidget(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      child: Divider(
+                        thickness: 1,
+                        color: dividerColor,
+                      ),
                     ),
-                    child: Divider(
+                    const ChangeDateWidget(),
+                    Divider(
                       thickness: 1,
                       color: dividerColor,
                     ),
-                  ),
-                  const ChangeDateWidget(),
-                  Divider(
-                    thickness: 1,
-                    color: dividerColor,
-                  ),
-                  const DeleteTaskWidget(),
-                ],
-              )
-            ],
+                    const DeleteTaskWidget(),
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },

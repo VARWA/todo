@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:todo/repository/data_client.dart';
+import 'package:todo/src/logger.dart';
 import 'package:todo/ui/navigation/routes.dart';
 
+import '../../di/service_locator.dart';
+import '../../firebase/firebase_worker.dart';
 import 'navigation_state.dart';
 
 class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
-  Logger logger = Logger();
+  final MyLogger _logger = locator<MyLogger>();
+  final _firebaseWorker = locator<FirebaseWorker>();
+
   @override
   Future<NavigationState> parseRouteInformation(
       RouteInformation routeInformation) async {
     final location = routeInformation.location;
+
     if (location == null) {
       return NavigationState.unknownScreen();
     }
 
     final uri = Uri.parse(location);
-    logger.i('Got uri: $uri');
+    _logger.i('Got uri: $uri');
 
     if (uri.pathSegments.isEmpty) {
       return NavigationState.tasksListScreen();
@@ -34,7 +39,6 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
     }
 
     if (uri.pathSegments.length == 1) {
-      // final path = uri.pathSegments[0];
       return NavigationState.tasksListScreen();
     }
 
@@ -45,14 +49,19 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
   RouteInformation? restoreRouteInformation(NavigationState configuration) {
     if (configuration.isTaskDetailsScreen) {
       final taskId = configuration.selectedTaskId ?? 'new';
-
-      return RouteInformation(location: '/${Routes.changeTask}/$taskId');
+      final location = '/${Routes.changeTask}/$taskId';
+      _firebaseWorker.analytics.screenRoutes(
+        route: location,
+      );
+      return RouteInformation(location: location);
     }
 
     if (configuration.isUnknown) {
       return null;
     }
-
+    _firebaseWorker.analytics.screenRoutes(
+      route: '/',
+    );
     return const RouteInformation(location: '/');
   }
 }

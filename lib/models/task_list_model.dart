@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo/repository/data_client.dart';
+import 'package:uuid/uuid.dart';
 
 import '../di/service_locator.dart';
 import '../firebase/firebase_worker.dart';
 import '../src/logger.dart';
+import '../ui/change_task_screen/elements/importance_values.dart';
 import 'task_model.dart';
 
 class TasksListModel with ChangeNotifier {
@@ -44,7 +46,7 @@ class TasksListModel with ChangeNotifier {
     return _tasksList.where((element) => element.done).length;
   }
 
-  void rechangeShowCompleted() {
+  void toggleShowCompleted() {
     _showCompleted = !_showCompleted;
     _logger.i('Completed tasks are showed in list: $_showCompleted');
     notifyListeners();
@@ -101,5 +103,26 @@ class TasksListModel with ChangeNotifier {
       _firebaseWorker.analytics.updateTask(task: task);
     }
     loadTasks();
+  }
+
+  Task createNewTask() {
+    DateTime dateTimeNow = DateTime.now();
+    return Task(
+      id: const Uuid().v4(),
+      text: '',
+      importance: ImportanceValues.basicGlobal,
+      deadline: null,
+      createdAt: dateTimeNow,
+      changedAt: dateTimeNow,
+    );
+  }
+
+  Task createPreTask(Task? newTaskFromList) {
+    _logger.i('Task for recreating : $newTaskFromList');
+    if (newTaskFromList != null) {
+      return newTaskFromList;
+    } else {
+      return createNewTask();
+    }
   }
 }

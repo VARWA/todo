@@ -9,10 +9,10 @@ import '../../../models/task_model.dart';
 import '../../../src/themes/src/custom_extension.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
-class TaskInListWithDeadlineWidget extends StatelessWidget {
+class TaskInListtileWidget extends StatelessWidget {
   final void Function(String?) onChangeTaskTap;
 
-  const TaskInListWithDeadlineWidget({
+  const TaskInListtileWidget({
     super.key,
     required this.task,
     required this.model,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/ui/src/form_factor.dart';
 
-import '../../../di/service_locator.dart';
 import '../../../models/task_list_model.dart';
-import '../../../src/logger.dart';
 import '../../../src/themes/src/custom_extension.dart';
 import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
@@ -21,14 +20,12 @@ class TasksListWidget extends StatefulWidget {
 }
 
 class _TasksListWidgetState extends State<TasksListWidget> {
-  final MyLogger _logger = locator<MyLogger>();
-
   @override
   Widget build(BuildContext context) {
     final model = context.watch<TasksListModel>();
     final lenList = model.tasksListForMenu.length;
     final customColors = Theme.of(context).extension<CustomColors>()!;
-    _logger.d('Downloaded to main list $lenList tasks');
+    final globalPadding = establishGlobalPadding(context: context);
     final items = List<Widget>.generate(
       lenList + 1,
       (index) {
@@ -88,8 +85,9 @@ class _TasksListWidgetState extends State<TasksListWidget> {
       },
     );
     return SliverToBoxAdapter(
+      // padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
       child: Padding(
-        padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
+        padding: EdgeInsets.symmetric(horizontal: globalPadding + 8),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

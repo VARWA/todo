@@ -1,12 +1,9 @@
-enum ServerErrorType {
-  wrongResponseError,
-  authError,
-  taskNotExists,
-  otherError,
-}
+class WrongResponseError extends ServerError {}
 
-class ServerError implements Exception {
-  final ServerErrorType type;
+class AuthError extends ServerError {}
 
-  ServerError(this.type);
-}
+class TaskNotExistsError extends ServerError {}
+
+class OtherError extends ServerError {}
+
+class ServerError implements Exception {}

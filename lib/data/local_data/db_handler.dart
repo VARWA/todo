@@ -5,18 +5,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../di/service_locator.dart';
-import '../../src/logger.dart';
 import '../../models/task_model.dart';
+import '../../src/logger.dart';
 
-class DBHelper {
+class DBHandler {
   static Database? _db;
   final MyLogger _logger = locator<MyLogger>();
-
-  DBHelper._();
-
-  static final DBHelper _instance = DBHelper._();
-
-  factory DBHelper() => _instance;
 
   Future<Database?> get db async {
     if (_db != null) {
@@ -39,7 +33,8 @@ class DBHelper {
     _logger.i('CREATING DATABASE');
     await db.execute('''
         CREATE TABLE mytask(idp INTEGER PRIMARY KEY AUTOINCREMENT,
-        id TEXT NOT NULL, text TEXT NOT NULL,
+        id TEXT NOT NULL,
+        text TEXT NOT NULL,
         importance TEXT NOT NULL,
         deadline INTEGER,
         done INTEGER NOT NULL,
@@ -75,7 +70,7 @@ class DBHelper {
     final List<Map<String, Object?>> queryResult =
         await _db!.rawQuery('SELECT * FROM mytask');
 
-    _logger.d('Got result from database: $queryResult');
+    _logger.v('Got result from database: $queryResult');
     return queryResult.map((e) => Task.fromMap(e)).toList();
   }
 
@@ -95,28 +90,24 @@ class DBHelper {
     required int newRevision,
   }) async {
     _logger.i('REWRITING DATA IN DATABASE');
+    final dbClient = await db;
     await deleteAllTasks();
     setDatabaseRevision(newRevision);
     _setLastServerRevision(newRevision);
-    for (int i = 0; i < newTasks.length; i++) {
-      Task task = newTasks[i];
-      await insertTaskForRewriting(task);
+    for (Task task in newTasks) {
+      _logger.v('INSERTING INTO DATABASE WHILE REWRITE $task');
+
+      dbClient?.insert(
+        'mytask',
+        task.toMapCustom(),
+      );
     }
   }
 
   deleteAllTasks() async {
     var dbClient = await db;
     dbClient!.rawDelete("Delete from mytask");
-    _logger.i('All tasks deleted');
-  }
-
-  Future insertTaskForRewriting(Task task) async {
-    _logger.i('INSERTING INTO DATABASE WHILE REWRITE $task');
-    var dbClient = await db;
-    return await dbClient?.insert(
-      'mytask',
-      task.toMapCustom(),
-    );
+    _logger.i('ALL TASKS DELETED');
   }
 
   Future<int> updateTask(Task task) async {
