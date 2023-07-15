@@ -65,6 +65,8 @@ class TasksListModel with ChangeNotifier {
       _tasksList.firstWhere((task) => task.id == id);
 
   Future<void> deleteTaskWithId(id) async {
+    _tasksList.removeAt(searchTaskIndexById(id));
+    notifyListeners();
     await _dataClient.deleteTaskFromDB(id);
     _firebaseWorker.analytics.deleteTask(task: searchTaskById(id: id));
     loadTasks();
@@ -77,6 +79,7 @@ class TasksListModel with ChangeNotifier {
       done: !oldTask.done,
       changedAt: DateTime.now(),
     );
+    notifyListeners();
     _dataClient.updateTaskInDB(_tasksList[index]);
     _logger.i('Task with localId $localId completed status updated');
     _firebaseWorker.analytics.completedStatusUpdate(task: _tasksList[index]);
