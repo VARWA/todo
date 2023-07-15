@@ -37,52 +37,54 @@ class TaskInListtileWidget extends StatelessWidget {
         ? RemoteValues.newImportantTaskColor
         : customColors.red!;
 
-    return ListTile(
-      horizontalTitleGap: 0,
-      leading: Checkbox(
-        value: task.done,
-        activeColor: customColors.green,
-        checkColor: customColors.white,
-        fillColor: MaterialStateProperty.resolveWith(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return task.importance == ImportanceValues.importantGlobal
-                  ? importantColor
-                  : customColors.backSecondary;
-            }
-            return null;
+    return ClipRRect(
+      child: ListTile(
+        horizontalTitleGap: 0,
+        leading: Checkbox(
+          value: task.done,
+          activeColor: customColors.green,
+          checkColor: customColors.white,
+          fillColor: MaterialStateProperty.resolveWith(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return task.importance == ImportanceValues.importantGlobal
+                    ? importantColor
+                    : customColors.backSecondary;
+              }
+              return null;
+            },
+          ),
+          side: task.importance == ImportanceValues.importantGlobal
+              ? BorderSide(
+                  color: importantColor,
+                )
+              : BorderSide(
+                  color: customColors.supportSeparator!,
+                ),
+          onChanged: (bool? value) {
+            model.switchCompleted(localId: id);
           },
         ),
-        side: task.importance == ImportanceValues.importantGlobal
-            ? BorderSide(
-                color: importantColor,
+        title: formattedTitle,
+        subtitle: (deadline != null)
+            ? Text(
+                DateFormat(
+                  'd MMMM yyyy',
+                  context.deviceLocale.toString(),
+                ).format(deadline!),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: customColors.labelTertiary,
+                    ),
               )
-            : BorderSide(
-                color: customColors.supportSeparator!,
-              ),
-        onChanged: (bool? value) {
-          model.switchCompleted(localId: id);
-        },
-      ),
-      title: formattedTitle,
-      subtitle: (deadline != null)
-          ? Text(
-              DateFormat(
-                'd MMMM yyyy',
-                context.deviceLocale.toString(),
-              ).format(deadline!),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: customColors.labelTertiary,
-                  ),
-            )
-          : null,
-      trailing: IconButton(
-        icon: Icon(
-          Icons.info_outline_rounded,
-          color: customColors.labelTertiary,
-        ),
-        onPressed: () => onChangeTaskTap(
-          task.id,
+            : null,
+        trailing: IconButton(
+          icon: Icon(
+            Icons.info_outline_rounded,
+            color: customColors.labelTertiary,
+          ),
+          onPressed: () => onChangeTaskTap(
+            task.id,
+          ),
         ),
       ),
     );

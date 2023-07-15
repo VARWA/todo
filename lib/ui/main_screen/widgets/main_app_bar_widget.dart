@@ -20,8 +20,11 @@ class MainAppBarWidget extends StatelessWidget {
       snap: false,
       floating: false,
       expandedHeight: 124,
+      centerTitle: false,
       flexibleSpace: Padding(
-        padding: EdgeInsets.symmetric(horizontal: globalPadding),
+        padding: EdgeInsets.symmetric(
+        horizontal: globalPadding,
+        ),
         child: FlexibleSpaceBar(
           title: Text(
             LocaleKeys.myTasks.tr(),
