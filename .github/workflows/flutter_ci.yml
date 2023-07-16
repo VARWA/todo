@@ -29,6 +29,7 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
       - run: flutter pub get
       - run: flutter analyze
+      - run: dart format lib/firebase_options.dart # unknown error for generated file
       - run: dart format --set-exit-if-changed .
   build_ios:
     name: Build app (IOS)
