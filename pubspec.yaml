@@ -49,8 +49,6 @@ dependencies:
   uuid: ^3.0.7
   internet_connection_checker: ^1.0.0+1
   get_it: ^7.6.0
-  mockito: ^5.4.2
-  golden_toolkit: ^0.15.0
   url_strategy: ^0.2.0
   freezed: ^2.4.1
   freezed_annotation: ^2.4.1
@@ -58,7 +56,6 @@ dependencies:
   firebase_crashlytics: ^3.3.3
   firebase_analytics: ^10.4.3
   firebase_remote_config: ^4.2.3
-  http: ^1.1.0
 
 
 dev_dependencies:
