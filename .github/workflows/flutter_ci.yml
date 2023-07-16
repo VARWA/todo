@@ -38,7 +38,7 @@ jobs:
       - name: Decode firebase_app_id_file.json
         env:
           FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
-        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/app/firebase_app_id_file.json
+        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/firebase_app_id_file.json
       - name: Decode GoogleService-Info.plist
         env:
           GOOGLESERVICE_INFO_PLIST: ${{ secrets.GOOGLESERVICE_INFO_PLIST }}
@@ -97,7 +97,7 @@ jobs:
       - name: Decode firebase_app_id_file.json
         env:
           FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
-        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/app/firebase_app_id_file.json
+        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/firebase_app_id_file.json
       - name: Decode GoogleService-Info.plist
         env:
           GOOGLESERVICE_INFO_PLIST: ${{ secrets.GOOGLESERVICE_INFO_PLIST }}
