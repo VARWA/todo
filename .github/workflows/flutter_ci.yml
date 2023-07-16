@@ -121,6 +121,7 @@ jobs:
       - name: Run integration tests
         run: flutter test integration_test --verbose
   build:
+    name: Deploy to Firebase
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -143,9 +144,6 @@ jobs:
           cache: true
       - run: |
           echo "${{ secrets.ENV }}" > .env
-
-      - name: Build
-        run: flutter build apk
       - run: flutter pub get
       - run: flutter build apk --flavor dev
       - uses: actions/upload-artifact@v1
