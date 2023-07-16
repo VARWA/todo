@@ -82,6 +82,18 @@ jobs:
           UDID=$(xcrun xctrace list devices | grep "^${{ matrix.device }}" | awk '{gsub(/[()]/,""); print $NF}')
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - name: Decode firebase_app_id_file.json
+        env:
+          FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
+        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/app/firebase_app_id_file.json
+      - name: Deode firebase_app_id_file.json
+        env:
+          GOOGLESERVICE_INFO_PLIST: ${{ secrets.GOOGLESERVICE_INFO_PLIST }}
+        run: echo "$GOOGLESERVICE_INFO_PLIST" > ios/Runner/GoogleService-Info.plist
+      - name: Decode firebase_option
+        env:
+          firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
+        run: echo "$firebase_options_dart" > lib/firebase_options.dart
       - uses: actions/checkout@v3
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
