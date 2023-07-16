@@ -65,8 +65,6 @@ class TasksListModel with ChangeNotifier {
       _tasksList.firstWhere((task) => task.id == id);
 
   Future<void> deleteTaskWithId(id) async {
-    _tasksList.removeAt(searchTaskIndexById(id));
-    notifyListeners();
     await _dataClient.deleteTaskFromDB(id);
     _firebaseWorker.analytics.deleteTask(task: searchTaskById(id: id));
     loadTasks();

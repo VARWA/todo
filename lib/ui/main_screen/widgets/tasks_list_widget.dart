@@ -85,18 +85,14 @@ class _TasksListWidgetState extends State<TasksListWidget> {
       },
     );
     return SliverToBoxAdapter(
-      // padding: const EdgeInsets.only(right: 8, left: 8, bottom: 20),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: globalPadding + 8),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 4,
-          shadowColor: Colors.black,
-          color: customColors.backSecondary,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Material(
+            elevation: 4,
+            shadowColor: Colors.black,
+            color: customColors.backSecondary,
             child: Column(
               children: items,
             ),
