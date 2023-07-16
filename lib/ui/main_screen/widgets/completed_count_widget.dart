@@ -41,17 +41,14 @@ class CompletedCountWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: IconButton(
-                    splashRadius: 15,
-                    color: customColors.blue,
-                    onPressed: () =>
-                        context.read<TasksListModel>().toggleShowCompleted(),
-                    icon: context.read<TasksListModel>().showCompleted
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
-                  ),
+                IconButton(
+                  splashRadius: 15,
+                  color: customColors.blue,
+                  onPressed: () =>
+                      context.read<TasksListModel>().toggleShowCompleted(),
+                  icon: context.read<TasksListModel>().showCompleted
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off),
                 ),
               ],
             ),

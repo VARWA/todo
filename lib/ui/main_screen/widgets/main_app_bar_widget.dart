@@ -20,6 +20,7 @@ class MainAppBarWidget extends StatelessWidget {
       snap: false,
       floating: false,
       expandedHeight: 124,
+      collapsedHeight: 60,
       centerTitle: false,
       flexibleSpace: Padding(
         padding: EdgeInsets.symmetric(

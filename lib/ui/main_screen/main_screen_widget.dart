@@ -20,22 +20,24 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
 
-    return Scaffold(
-      backgroundColor: customColors.backPrimary,
-      body: CustomScrollView(
-        slivers: [
-          const MainAppBarWidget(),
-          const CompletedCountWidget(),
-          TasksListWidget(onChangeTaskTap: widget.onChangeTaskTap),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => widget.onChangeTaskTap(null),
-        backgroundColor: customColors.blue,
-        child: Icon(
-          Icons.add,
-          weight: 56,
-          color: customColors.white,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: customColors.backPrimary,
+        body: CustomScrollView(
+          slivers: [
+            const MainAppBarWidget(),
+            const CompletedCountWidget(),
+            TasksListWidget(onChangeTaskTap: widget.onChangeTaskTap),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => widget.onChangeTaskTap(null),
+          backgroundColor: customColors.blue,
+          child: Icon(
+            Icons.add,
+            weight: 56,
+            color: customColors.white,
+          ),
         ),
       ),
     );

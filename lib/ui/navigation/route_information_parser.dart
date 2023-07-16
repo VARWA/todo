@@ -55,7 +55,6 @@ class MyRouteInformationParser extends RouteInformationParser<NavigationState> {
       );
       return RouteInformation(location: location);
     }
-
     if (configuration.isUnknown) {
       return null;
     }
