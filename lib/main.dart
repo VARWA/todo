@@ -11,6 +11,7 @@ import 'generated/codegen_loader.g.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
