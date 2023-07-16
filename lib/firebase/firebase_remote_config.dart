@@ -6,10 +6,18 @@ class MyFirebaseRemoteConfig {
   MyFirebaseRemoteConfig() {
     setConfig();
   }
+
   Future<void> setConfig() async {
     _remoteConfig.setDefaults({
       _ConfigFields.useNewImportantTaskColor: false,
     });
+    _remoteConfig.setConfigSettings(
+      RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 1),
+        minimumFetchInterval: const Duration(minutes: 1),
+      ),
+    );
+
     await _remoteConfig.fetchAndActivate();
   }
 

@@ -1,8 +1,12 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/ui/src/form_factor.dart';
 
+import '../../../di/service_locator.dart';
+import '../../../firebase/firebase_worker.dart';
 import '../../../models/task_list_model.dart';
+import '../../../src/logger.dart';
 import '../../../src/themes/src/custom_extension.dart';
 import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
@@ -26,6 +30,18 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     final lenList = model.tasksListForMenu.length;
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final globalPadding = establishGlobalPadding(context: context);
+    final MyLogger logger = locator<MyLogger>();
+    final remoteConfig = locator<FirebaseWorker>().remoteConfig;
+
+    remoteConfig.remoteConfig.onConfigUpdated
+        .listen((RemoteConfigUpdate event) async {
+      logger
+          .i('RemoteConfigUpdate.updatedKeys: ${event.updatedKeys.join(', ')}');
+
+      await remoteConfig.remoteConfig.activate();
+      setState(() {});
+    });
+
     final items = List<Widget>.generate(
       lenList + 1,
       (index) {

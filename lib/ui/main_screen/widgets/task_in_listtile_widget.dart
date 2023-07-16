@@ -9,7 +9,7 @@ import '../../../models/task_model.dart';
 import '../../../src/themes/src/custom_extension.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
-class TaskInListtileWidget extends StatelessWidget {
+class TaskInListtileWidget extends StatefulWidget {
   final void Function(String?) onChangeTaskTap;
 
   const TaskInListtileWidget({
@@ -29,31 +29,36 @@ class TaskInListtileWidget extends StatelessWidget {
   final DateTime? deadline;
 
   @override
+  State<TaskInListtileWidget> createState() => _TaskInListtileWidgetState();
+}
+
+class _TaskInListtileWidgetState extends State<TaskInListtileWidget> {
+  @override
   Widget build(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     final remoteConfig = locator<FirebaseWorker>().remoteConfig;
     final bool useNewImportantColor = remoteConfig.useNewImportantTaskColor;
-    final Color importantColor = useNewImportantColor
+    Color importantColor = useNewImportantColor
         ? RemoteValues.newImportantTaskColor
         : customColors.red!;
 
     return ListTile(
       horizontalTitleGap: 0,
       leading: Checkbox(
-        value: task.done,
+        value: widget.task.done,
         activeColor: customColors.green,
         checkColor: customColors.white,
         fillColor: MaterialStateProperty.resolveWith(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
-              return task.importance == ImportanceValues.importantGlobal
+              return widget.task.importance == ImportanceValues.importantGlobal
                   ? importantColor
                   : customColors.backSecondary;
             }
             return null;
           },
         ),
-        side: task.importance == ImportanceValues.importantGlobal
+        side: widget.task.importance == ImportanceValues.importantGlobal
             ? BorderSide(
                 color: importantColor,
               )
@@ -61,16 +66,16 @@ class TaskInListtileWidget extends StatelessWidget {
                 color: customColors.supportSeparator!,
               ),
         onChanged: (bool? value) {
-          model.switchCompleted(localId: id);
+          widget.model.switchCompleted(localId: widget.id);
         },
       ),
-      title: formattedTitle,
-      subtitle: (deadline != null)
+      title: widget.formattedTitle,
+      subtitle: (widget.deadline != null)
           ? Text(
               DateFormat(
                 'd MMMM yyyy',
                 context.deviceLocale.toString(),
-              ).format(deadline!),
+              ).format(widget.deadline!),
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: customColors.labelTertiary,
                   ),
@@ -81,8 +86,8 @@ class TaskInListtileWidget extends StatelessWidget {
           Icons.info_outline_rounded,
           color: customColors.labelTertiary,
         ),
-        onPressed: () => onChangeTaskTap(
-          task.id,
+        onPressed: () => widget.onChangeTaskTap(
+          widget.task.id,
         ),
       ),
     );
