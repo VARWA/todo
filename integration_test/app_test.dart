@@ -23,6 +23,7 @@ void main() async {
       find.byType(TextField),
       randomText,
     );
+
     await tester.pump(const Duration(seconds: 5));
 
     await tester.tap(find.byType(TextButton).first);
