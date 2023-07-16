@@ -94,6 +94,15 @@ jobs:
           UDID=$(xcrun xctrace list devices | grep "^${{ matrix.device }}" | awk '{gsub(/[()]/,""); print $NF}')
           echo $UDID
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - uses: actions/checkout@v3
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.10.5'
+          cache: true
+      - run: |
+          echo "${{ secrets.ENV }}" > .env
       - name: Decode firebase_app_id_file.json
         env:
           FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
@@ -106,15 +115,6 @@ jobs:
         env:
           firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
         run: echo "$firebase_options_dart" > lib/firebase_options.dart
-      - uses: actions/checkout@v3
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: '3.10.5'
-          cache: true
-      - run: |
-          echo "${{ secrets.ENV }}" > .env
       - name: Install Flutter dependencies
         run: flutter pub get
       - name: Run integration tests
