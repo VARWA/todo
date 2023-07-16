@@ -35,6 +35,18 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Decode firebase_app_id_file.json
+        env:
+          FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
+        run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/app/firebase_app_id_file.json
+      - name: Decode GoogleService-Info.plist
+        env:
+          GOOGLESERVICE_INFO_PLIST: ${{ secrets.GOOGLESERVICE_INFO_PLIST }}
+        run: echo "$GOOGLESERVICE_INFO_PLIST" > ios/Runner/GoogleService-Info.plist
+      - name: Decode firebase_option
+        env:
+          firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
+        run: echo "$firebase_options_dart" > lib/firebase_options.dart
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.5'
@@ -86,7 +98,7 @@ jobs:
         env:
           FIREBASE_APP_ID_FILE_JSON: ${{ secrets.FIREBASE_APP_ID_FILE_JSON }}
         run: echo "$FIREBASE_APP_ID_FILE_JSON" > ios/app/firebase_app_id_file.json
-      - name: Deode firebase_app_id_file.json
+      - name: Decode GoogleService-Info.plist
         env:
           GOOGLESERVICE_INFO_PLIST: ${{ secrets.GOOGLESERVICE_INFO_PLIST }}
         run: echo "$GOOGLESERVICE_INFO_PLIST" > ios/Runner/GoogleService-Info.plist
