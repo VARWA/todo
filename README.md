@@ -87,5 +87,5 @@ ____
 <img alt="image" src="https://user-images.githubusercontent.com/60575285/253853960-e3479722-de4e-419e-9b64-1d5cd0f8ea55.png" width="320"/>
 <img alt="image" src="https://github.com/VARWA/todo/assets/60575285/9658a0c1-1346-4180-8fdd-2aa6c872128d" width="320"/>
 <img alt="image" src="https://github.com/VARWA/todo/assets/60575285/af4c0dd7-c54f-4fbe-8ee9-f531fdf414d4" width="320"/>
-<img alt="image" src="https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0"/>
+<img alt="image" src="https://github.com/VARWA/todo/assets/60575285/8e6882bc-ee34-4d0e-b27a-cfd0ba3e7cc0" width="320"/>
 
