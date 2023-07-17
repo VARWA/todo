@@ -121,61 +121,14 @@ jobs:
       - name: Run integration tests
         run: flutter test integration_test --verbose
   build:
-    name: Deploy to Firebase
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-      - name: Decode google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
-      - name: Decode firebase_option
-        env:
-          firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
-        run: echo "$firebase_options_dart" > lib/firebase_options.dart
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: '3.10.5'
-          cache: true
-      - run: |
-          echo "${{ secrets.ENV }}" > .env
-      - run: flutter pub get
-      - run: flutter build apk --flavor prod
-      - uses: actions/upload-artifact@v1
-        with:
-          name: app-prod-release
-          path: build/app/outputs/apk/prod/release/app-prod-release.apk
-      - name: Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.APPID_ANDROID}}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: testers
-          file: build/app/outputs/apk/prod/release/app-prod-release.apk
-#  build:
-#    name: Distribution to Firebase
+#    name: Deploy to Firebase
 #    runs-on: ubuntu-latest
 #    steps:
-#      - uses: actions/checkout@v1
-#      - name: Setup Java
-#        uses: actions/setup-java@v3
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-java@v2
 #        with:
 #          distribution: 'zulu'
-#          java-version: '12.x'
-#      - uses: actions/checkout@v3
-#      - name: Setup Flutter SDK
-#        uses: subosito/flutter-action@v2
-#        with:
-#          channel: 'stable'
-#          flutter-version: '3.10.5'
-#          cache: true
-#
-#      - name: build release
+#          java-version: '11'
 #      - name: Decode google-services.json
 #        env:
 #          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
@@ -191,48 +144,91 @@ jobs:
 #          cache: true
 #      - run: |
 #          echo "${{ secrets.ENV }}" > .env
-#      - uses: subosito/flutter-action@v2
-#        with:
-#          channel: "stable"
 #      - run: flutter pub get
-#      - run: flutter build apk --flavor dev
+#      - run: flutter build apk --flavor prod
 #      - uses: actions/upload-artifact@v1
 #        with:
-#          name: app-dev-release
-#          path: build/app/outputs/apk/dev/release/app-dev-release.apk
-#      - name: upload artifact to Firebase App Distribution
+#          name: app-prod-release
+#          path: build/app/outputs/apk/prod/release/app-prod-release.apk
+#      - name: Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
 #        with:
 #          appId: ${{secrets.APPID_ANDROID}}
-#          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TO_DO_1B0A0 }}
+#          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
 #          groups: testers
-#          file: build/app/outputs/apk/dev/release/app-dev-release.apk
-#  android:
-#    name: Integration test (Andriod)
-#    runs-on: macos-11
-#    strategy:
-#      matrix:
-#        api-level:
-#          - 29
-#          # you can add more API level if you want to run your tests on different API
-#      fail-fast: true
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Setup Flutter SDK
-#        uses: subosito/flutter-action@v2
-#        with:
-#          channel: 'stable'
-#          flutter-version: '3.10.5'
-#          cache: true
-#      - run: |
-#          echo "${{ secrets.ENV }}" > .env
-#      - name: Install Flutter dependencies
-#        run: flutter pub get
-#      - name: Run integration tests
-#        # more info on https://github.com/ReactiveCircus/android-emulator-runner
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: ${{ matrix.api-level }}
-#          arch: x86_64
-#          profile: Nexus 6
-#          script: flutter test integration_test --verbose
+#          file: build/app/outputs/apk/prod/release/app-prod-release.apk
+  name: Distribution to Firebase
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v2
+      with:
+        distribution: "zulu"
+        java-version: "11"
+    - name: Decode google-services.json
+      env:
+        GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      run: echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+    - name: Decode firebase_option
+      env:
+        firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
+      run: echo "$firebase_options_dart" > lib/firebase_options.dart
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: '3.10.5'
+        cache: true
+    - run: |
+        echo "${{ secrets.ENV }}" > .env
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: "stable"
+    - run: flutter pub get
+    - run: flutter build apk --flavor prod
+    - uses: actions/upload-artifact@v1
+      with:
+        name: release-apk
+        path: build/app/outputs/apk/prod/release/app-prod-release.apk
+    - name: upload artifact to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{secrets.APPID_ANDROID}}
+        token: ${{secrets.TOKEN}}
+        groups: testers
+        file: build/app/outputs/apk/prod/release/app-prod-release.apk
+  android:
+    name: Integration test (Andriod)
+    runs-on: macos-11
+    strategy:
+      matrix:
+        api-level:
+          - 29
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.10.5'
+          cache: true
+      - run: |
+          echo "${{ secrets.ENV }}" > .env
+      - name: Decode google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+      - name: Decode firebase_option
+        env:
+          firebase_options_dart: ${{secrets.FIREBASE_OPTIONS}}
+        run: echo "$firebase_options_dart" > lib/firebase_options.dart
+      - name: Install Flutter dependencies
+        run: flutter pub get
+      - name: Run integration tests
+        # more info on https://github.com/ReactiveCircus/android-emulator-runner
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          profile: Nexus 6
+          script: flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart --flavor prod
