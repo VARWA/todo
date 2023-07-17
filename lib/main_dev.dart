@@ -33,11 +33,7 @@ Future<void> main() async {
       path: 'assets/translations',
       fallbackLocale: const Locale('ru'),
       assetLoader: const CodegenLoader(),
-      child: const Banner(
-        message: 'dev',
-        location: BannerLocation.topStart,
-        child: MyApp(),
-      ),
+      child: const MyApp(),
     ),
   );
 }

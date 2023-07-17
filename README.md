@@ -3,9 +3,11 @@
 ### *Project for Yandex School*
 
 ___  
+
 - [Link to apk](https://github.com/VARWA/todo/releases/tag/v3.0.0)
 - [Link to Firebase Distribution](https://appdistribution.firebase.dev/i/780d9060a2208e87)
 - [My telegram](https://t.me/lupanovb)
+
 ___
 The project is being actively developed. Backend URL and BEARER token will be needed shortly. Rename
 the file '.env.example' to '.env' and paste the values.
@@ -23,8 +25,15 @@ ___
     - Internationalization support
     - Navigator 2.0
     - Added freezed
-    - Added Github actions
+    - Added Github Actions
+        - linter
+        - formatting
+        - Build (IOS, Android)
+        - Deploy to Firebase App Distribution
     - Added Dark theme
+    - Added Firebase
+    - Added support for large screens
+    - Added support for lansdscape orientation
 
 ___
 
@@ -57,6 +66,18 @@ ___
 
 	- provider
     - get_it
+
+### FIREBASE
+
+    - Analyrics
+    - Remote Config
+    - App Distribution
+    - Crashlytics
+
+### FLAVORS
+
+    - prod
+    - dev
 
 ____  
 

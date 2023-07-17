@@ -135,12 +135,15 @@ class DataClient {
 
   List<Task> _loadTasksFromServerAndInsertIntoDB(
       {required GetAllTasksResponse serverAnswer}) {
-    final formattedTasks =
-        getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+    final formattedTasks = getFormattedTasksFromServerAnswer(
+      serverAnswer: serverAnswer,
+    );
     _logger.v(' Tasks from server: $formattedTasks');
 
     _dbHelper.rewriteAllData(
-        newTasks: formattedTasks, newRevision: serverAnswer.revision);
+      newTasks: formattedTasks,
+      newRevision: serverAnswer.revision,
+    );
 
     return formattedTasks;
   }
@@ -154,9 +157,12 @@ class DataClient {
         list.map((e) => TasksParser.localToGlobalTaskParser(e)).toList();
     int revision = await getLocalRevisionFromDatabase();
     final serverAnswer = await _serverHelper.patchTasksList(
-        revision: revision, list: tasksWithGlobalFormat);
-    final formattedTasks =
-        getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+      revision: revision,
+      list: tasksWithGlobalFormat,
+    );
+    final formattedTasks = getFormattedTasksFromServerAnswer(
+      serverAnswer: serverAnswer,
+    );
     return (formattedTasks, serverAnswer.revision);
   }
 
@@ -191,8 +197,9 @@ class DataClient {
     try {
       GetAllTasksResponse serverAnswer = await loadTasksFromServer();
       _logger.i('Loaded tasks from server');
-      final formattedTasks =
-          getFormattedTasksFromServerAnswer(serverAnswer: serverAnswer);
+      final formattedTasks = getFormattedTasksFromServerAnswer(
+        serverAnswer: serverAnswer,
+      );
       return formattedTasks;
     } on ServerError {
       return [];

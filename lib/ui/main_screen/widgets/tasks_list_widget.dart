@@ -43,62 +43,56 @@ class _TasksListWidgetState extends State<TasksListWidget> {
     });
 
     final items = List<Widget>.generate(
-      lenList + 1,
+      lenList,
       (index) {
-        if (index != lenList) {
-          return Dismissible(
-            key: UniqueKey(),
-            background: Container(
-              color: customColors.green,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 28),
-                  child: Icon(
-                    Icons.done,
-                    color: customColors.white,
-                    size: 18,
-                  ),
+        return Dismissible(
+          key: UniqueKey(),
+          background: Container(
+            color: customColors.green,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 28),
+                child: Icon(
+                  Icons.done,
+                  color: customColors.white,
+                  size: 18,
                 ),
               ),
             ),
-            secondaryBackground: Container(
-              color: customColors.red,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 28),
-                  child: Icon(
-                    Icons.delete,
-                    color: customColors.white,
-                    size: 18,
-                  ),
+          ),
+          secondaryBackground: Container(
+            color: customColors.red,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 28),
+                child: Icon(
+                  Icons.delete,
+                  color: customColors.white,
+                  size: 18,
                 ),
               ),
             ),
-            confirmDismiss: (DismissDirection direction) async {
-              if (direction == DismissDirection.startToEnd) {
-                model.switchCompleted(
-                  localId: model.tasksListForMenu[index].id,
-                );
-              } else {
-                model.deleteTaskWithId(
-                  model.tasksListForMenu[index].id,
-                );
-              }
-              return;
-            },
-            child: TaskInListWidget(
-              id: model.tasksListForMenu[index].id,
-              onChangeTaskTap: widget.onChangeTaskTap,
-            ),
-          );
-        } else {
-          return NewListTileWidget(
+          ),
+          confirmDismiss: (DismissDirection direction) async {
+            direction == DismissDirection.startToEnd
+                ? model.switchCompleted(
+                    localId: model.tasksListForMenu[index].id)
+                : model.deleteTaskWithId(model.tasksListForMenu[index].id);
+            return;
+          },
+          child: TaskInListWidget(
+            id: model.tasksListForMenu[index].id,
             onChangeTaskTap: widget.onChangeTaskTap,
-          );
-        }
+          ),
+        );
       },
+    );
+    items.add(
+      NewListTileWidget(
+        onChangeTaskTap: widget.onChangeTaskTap,
+      ),
     );
     return SliverToBoxAdapter(
       child: Padding(
@@ -106,7 +100,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Material(
-            elevation: 4,
+            elevation: 30,
             shadowColor: Colors.black,
             color: customColors.backSecondary,
             child: Column(
