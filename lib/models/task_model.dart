@@ -45,19 +45,4 @@ class Task with _$Task {
       "lastUpdatedBy": lastUpdatedBy,
     };
   }
-
-  Map<String, Object?> toJsonAnalytics() {
-    return {
-      "id": id,
-      "text": text,
-      "importance": importance,
-      "deadline":
-          deadline != null ? deadline!.millisecondsSinceEpoch ~/ 1000 : 'null',
-      "done": done ? 1 : 0,
-      "color": color,
-      "createdAt": createdAt.millisecondsSinceEpoch ~/ 1000,
-      "changedAt": changedAt.millisecondsSinceEpoch ~/ 1000,
-      "lastUpdatedBy": lastUpdatedBy,
-    };
-  }
 }
