@@ -4,7 +4,7 @@
 
 ___  
 
-- [Link to apk](https://github.com/VARWA/todo/releases/tag/v3.1.1)
+- [Link to apk](https://github.com/VARWA/todo/releases/tag/v3.1.2)
 - [Link to Firebase Distribution](https://appdistribution.firebase.dev/i/780d9060a2208e87)
 - [My telegram](https://t.me/lupanovb)
 
