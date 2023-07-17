@@ -9,26 +9,46 @@ class FirebaseAnalyticsEvents {
 
   void addTask({required Task task}) {
     _instance.logEvent(
-        name: 'new_task_added', parameters: {'task_id': task.id});
+      name: 'new_task_added',
+      parameters: {
+        'task_id': task.id,
+      },
+    );
   }
 
   void updateTask({required Task task}) {
-    _instance
-        .logEvent(name: 'task_updated', parameters: {'task_id': task.id});
+    _instance.logEvent(
+      name: 'task_updated',
+      parameters: {
+        'task_id': task.id,
+      },
+    );
   }
 
   void deleteTask({required Task task}) {
-    _instance
-        .logEvent(name: 'task_deleted', parameters: {'task_id': task.id});
+    _instance.logEvent(
+      name: 'task_deleted',
+      parameters: {
+        'task_id': task.id,
+      },
+    );
   }
 
   void completedStatusUpdate({required Task task}) {
     _instance.logEvent(
-        name: 'task_completed_status_updated',
-        parameters: {'task_id': task.id});
+      name: 'task_completed_status_updated',
+      parameters: {
+        'task_id': task.id,
+      },
+    );
   }
 
   void screenRoutes({required String route}) {
-    _instance.logEvent(name: 'go_to_route', parameters: {'route': route});
+    _instance.logEvent(
+      name: 'go_to_route',
+      parameters: {
+        'route': route,
+      },
+    );
   }
 }
