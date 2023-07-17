@@ -57,7 +57,6 @@ class DataClient {
   Future<List<Task>> loadTasksFromSomeData() async {
     List<Task> tasksFromDB = await loadTasksFromDB();
     _logger.v('Got list from database: $tasksFromDB');
-
     bool hasInternet = await InternetConnectionChecker().hasConnection;
     if (!hasInternet) {
       _logger.i('NO CONNECT TO INTERNET -> load data only from database');
