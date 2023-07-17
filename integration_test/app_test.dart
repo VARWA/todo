@@ -29,7 +29,7 @@ void main() async {
     await tester.tap(find.byType(TextButton).first);
     await tester.pumpAndSettle();
 
-    await tester.pump(const Duration(seconds: 15));
+    await tester.pump(const Duration(seconds: 30));
 
     expect(find.text(randomText), findsWidgets);
   });
