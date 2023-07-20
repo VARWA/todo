@@ -5,7 +5,8 @@ name: Flutter CI
 on:
   push:
     branches:
-      - homework_4
+      - master
+      - homework_5
 
 jobs:
   analyze:
