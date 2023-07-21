@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../di/service_locator.dart';
 import '../firebase/firebase_worker.dart';
+import '../src/device_info.dart';
 import '../src/logger.dart';
 import '../ui/change_task_screen/elements/importance_values.dart';
 import 'task_model.dart';
@@ -12,6 +13,7 @@ class TasksListModel with ChangeNotifier {
   final FirebaseWorker _firebaseWorker = locator<FirebaseWorker>();
   final MyLogger _logger = locator<MyLogger>();
   final DataClient _dataClient = locator<DataClient>();
+  final DeviceInfo _deviceInfo = locator<DeviceInfo>();
 
   List<Task> _tasksList = [];
 
@@ -94,6 +96,7 @@ class TasksListModel with ChangeNotifier {
   }
 
   Future addTask({required Task task, required bool isNew}) async {
+    task = updateLastUpdatedBy(task: task);
     if (isNew) {
       await _dataClient.addNewTaskIntoDB(task);
       _logger.i('Task saved, task: $task');
@@ -105,6 +108,9 @@ class TasksListModel with ChangeNotifier {
     }
     loadTasks();
   }
+
+  Task updateLastUpdatedBy({required Task task}) =>
+      task.copyWith(lastUpdatedBy: _deviceInfo.deviceId);
 
   Task createNewTask() {
     DateTime dateTimeNow = DateTime.now();
