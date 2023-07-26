@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/generated/locale_keys.g.dart';
 
@@ -43,7 +44,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         color: customColors.labelPrimary,
         onPressed: () {
-          Navigator.of(context).pop();
+          context.pop();
         },
       ),
       actions: [
@@ -52,7 +53,7 @@ class RechangeAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: TextButton(
             onPressed: () {
               addTask();
-              Navigator.of(context).pop();
+              context.pop();
             },
             child: Text(
               LocaleKeys.save,

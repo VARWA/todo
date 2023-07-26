@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo/ui/main_screen/widgets/completed_count_widget.dart';
 import 'package:todo/ui/main_screen/widgets/main_app_bar_widget.dart';
 import 'package:todo/ui/main_screen/widgets/tasks_list_widget.dart';
 
 import '../../src/themes/src/custom_extension.dart';
+import '../navigation/routes.dart';
 
 class MainScreenWidget extends StatefulWidget {
-  final void Function(String?) onChangeTaskTap;
-
-  const MainScreenWidget({Key? key, required this.onChangeTaskTap})
-      : super(key: key);
+  const MainScreenWidget({Key? key}) : super(key: key);
 
   @override
   State<MainScreenWidget> createState() => _MainScreenWidgetState();
@@ -22,15 +21,17 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
     return Scaffold(
       backgroundColor: customColors.backPrimary,
-      body: CustomScrollView(
+      body: const CustomScrollView(
         slivers: [
-          const MainAppBarWidget(),
-          const CompletedCountWidget(),
-          TasksListWidget(onChangeTaskTap: widget.onChangeTaskTap),
+          MainAppBarWidget(),
+          CompletedCountWidget(),
+          TasksListWidget(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => widget.onChangeTaskTap(null),
+        onPressed: () => context.push(
+          AppPage.newTask.routePath,
+        ),
         backgroundColor: customColors.blue,
         child: Icon(
           Icons.add,

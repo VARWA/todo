@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo/firebase/firebase_remote_values.dart';
 import 'package:todo/firebase/firebase_worker.dart';
+import 'package:todo/ui/navigation/routes.dart';
 
 import '../../../di/service_locator.dart';
 import '../../../models/task_list_model.dart';
@@ -10,8 +12,6 @@ import '../../../src/themes/src/custom_extension.dart';
 import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListtileWidget extends StatefulWidget {
-  final void Function(String?) onChangeTaskTap;
-
   const TaskInListtileWidget({
     super.key,
     required this.task,
@@ -19,7 +19,6 @@ class TaskInListtileWidget extends StatefulWidget {
     required this.id,
     required this.formattedTitle,
     required this.deadline,
-    required this.onChangeTaskTap,
   });
 
   final Task task;
@@ -86,8 +85,11 @@ class _TaskInListtileWidgetState extends State<TaskInListtileWidget> {
           Icons.info_outline_rounded,
           color: customColors.labelTertiary,
         ),
-        onPressed: () => widget.onChangeTaskTap(
-          widget.task.id,
+        onPressed: () => context.pushNamed(
+          AppPage.changeTask.routeName,
+          pathParameters: {
+            'id': widget.task.id,
+          },
         ),
       ),
     );

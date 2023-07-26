@@ -10,10 +10,11 @@ import '../../change_task_screen/elements/importance_values.dart';
 
 class TaskInListWidget extends StatefulWidget {
   final String id;
-  final void Function(String?) onChangeTaskTap;
 
-  const TaskInListWidget(
-      {super.key, required this.id, required this.onChangeTaskTap});
+  const TaskInListWidget({
+    super.key,
+    required this.id,
+  });
 
   @override
   State<TaskInListWidget> createState() => _TaskInListWidgetState();
@@ -111,7 +112,6 @@ class _TaskInListWidgetState extends State<TaskInListWidget> {
       id: id,
       formattedTitle: formattedTitle,
       deadline: deadline,
-      onChangeTaskTap: widget.onChangeTaskTap,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:todo/data/local_data/db_handler.dart';
+import 'package:todo/models/auth_model.dart';
 import 'package:todo/repository/data_client.dart';
 import 'package:todo/src/device_info.dart';
 import 'package:todo/src/logger.dart';
@@ -11,6 +12,7 @@ import '../src/flavor_mode.dart';
 GetIt locator = GetIt.instance;
 
 void setUpDI() {
+  locator.registerSingleton<AuthModel>(AuthModel());
   locator.registerSingleton<MyLogger>(MyLogger());
   locator.registerSingleton<FirebaseWorker>(FirebaseWorker());
   locator.registerSingleton<DBHandler>(DBHandler());

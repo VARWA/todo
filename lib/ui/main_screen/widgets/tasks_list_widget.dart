@@ -12,12 +12,7 @@ import 'new_list_tile_widget.dart';
 import 'task_in_list_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
-  final void Function(String?) onChangeTaskTap;
-
-  const TasksListWidget({
-    super.key,
-    required this.onChangeTaskTap,
-  });
+  const TasksListWidget({super.key});
 
   @override
   State<TasksListWidget> createState() => _TasksListWidgetState();
@@ -84,15 +79,12 @@ class _TasksListWidgetState extends State<TasksListWidget> {
           },
           child: TaskInListWidget(
             id: model.tasksListForMenu[index].id,
-            onChangeTaskTap: widget.onChangeTaskTap,
           ),
         );
       },
     );
     items.add(
-      NewListTileWidget(
-        onChangeTaskTap: widget.onChangeTaskTap,
-      ),
+      const NewListTileWidget(),
     );
     return SliverToBoxAdapter(
       child: Padding(
